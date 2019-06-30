@@ -54,13 +54,21 @@ beamCalculation = () => {
                 reactionTextA,
                 reactionTextB
             });
-        } 
-        if (pointValue > 0 && uDL === 0){
+        }
+        if (pointValue > 0 && (uDL === 0 || uDL === " ")){
             if (pointValueSpan > 0) {
                 reactionB = (pointValueSpan * pointValue)/span;
-                
-            } else if (pointValueSpan === 0 || pointValueSpan === " "){
+                reactionA = (pointValue - reactionB);
+                console.log("RB = " + reactionB + " point value = " + pointValue);
+                reactionTextA = "RA = " + reactionA + loadUnitsText;
+                reactionTextB = "RB = " + reactionB + loadUnitsText;
 
+                this.setState({
+                    reactionTextA,
+                    reactionTextB
+                });
+            } else if (pointValueSpan === 0 || pointValueSpan === " "){
+                Alert.alert("Please Enter Span for Point Load")
             }}
 
     } else {
@@ -105,7 +113,7 @@ handleTextChange = (newText) => this.setState({value: newText});
                 <TextInput
                     style={styles.inputContainer}
                     placeholder="Enter Point Load"
-                    onChangeText={(pointValue) => this.state.pointValue}
+                    onChangeText={(pointValue) => this.setState({pointValue: pointValue})}
                     keyboardType={'numeric'}/>
 
             <Text style={{fontSize: 14, color: "#000"}}>
@@ -114,7 +122,7 @@ handleTextChange = (newText) => this.setState({value: newText});
                 <TextInput
                     style={styles.inputContainer}
                     placeholder="Enter Point Load Span from left support"
-                    onChangeText={(pointValueSpan) => this.state.pointValueSpan}
+                    onChangeText={(pointValueSpan) => this.setState({pointValueSpan: pointValueSpan})}
                     keyboardType={'numeric'}/>
 
             {/*
