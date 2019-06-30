@@ -1,61 +1,51 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView } from 'react-native';
+import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation } from 'react-native';
 import { Button, Card } from "native-base";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default class HomeScreen extends React.Component {
+export default class BeamCalcScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             
         };
     }
-//the below will add a header, whose properties, ike fontsize, color etc... can be controlled in the App.js
+
     static navigationOptions = {
-      title: "iEngineer"
+        title: "Beam Calculation type"
     }
 
   render() {
   return (
-    <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
             <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate("BeamCalc")
+                this.props.navigation.navigate("SteelBeamCalc")
             }}
             >
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>
-                        Beam Calculation
+                        Steel Beam Calculation
                     </Text>
                </Card>
             </TouchableOpacity> 
             <TouchableOpacity>
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>
-                        Something Else Calculation
+                        Timber Beam Calculation
                     </Text>
                 </Card>
             </TouchableOpacity>
             <TouchableOpacity>
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>
-                        Really Something Else Calculation
+                        Concrete Beam Calculation
                     </Text>
                 </Card>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Yet another Calculation
-                    </Text>
-                </Card>
-            </TouchableOpacity>    
+            </TouchableOpacity> 
         </View>
     </TouchableWithoutFeedback>
-    <View style={styles.empty}></View>
-    </ScrollView>
   );
 }
 }
@@ -73,9 +63,6 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 18,
     paddingTop:20
-  },
-  empty: {
-    height: 500
   },
   header: {
     marginTop: 10,
