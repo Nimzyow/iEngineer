@@ -7,9 +7,6 @@ import ReactionCalc from '../assets/Scripts/ReactionCalc';
 
 var reactionA, reactionB, uDL, span, loadUnits, loadUnitsText, pointValue, pointValueSpan;
 
-
-
-
 export default class SteelBeamCalcScreen extends React.Component {
     constructor(props){
         super(props);
@@ -29,7 +26,6 @@ export default class SteelBeamCalcScreen extends React.Component {
             uDL: "",
             span: ""
         }
-
     }
 
 beamCalculation = () => {
@@ -74,8 +70,6 @@ beamCalculation = () => {
     } else {
         Alert.alert("Please enter beam span")
     }
-
-
     } 
 
 
