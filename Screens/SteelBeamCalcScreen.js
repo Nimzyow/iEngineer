@@ -4,9 +4,6 @@ import { Button } from "native-base";
 import FloatingLabelInput from "./../assets/Scripts/FloatingScript";
 import ReactionCalc from '../assets/Scripts/ReactionCalc';
 
-
-var reactionA, reactionB, uDL, span, loadUnits, loadUnitsText, pointValue, pointValueSpan;
-
 export default class SteelBeamCalcScreen extends React.Component {
     constructor(props){
         super(props);
@@ -34,11 +31,17 @@ export default class SteelBeamCalcScreen extends React.Component {
 beamCalculation = () => {
 
     console.log("beam span is " + this.state.beamSpan);
-    uDL = this.state.uDLValue;
-    span = this.state.beamSpan;
-    loadUnitsText = "KN";
-    pointValue = this.state.pointValue;
-    pointValueSpan = this.state.pointValueSpan;
+    var span = this.state.beamSpan;
+    var uDL = this.state.uDLValue;
+    var pointValue = this.state.pointValue;
+    var pointValueSpan = this.state.pointValueSpan;
+    var partialUDL = this.state.partialUDL;
+    var partialUDLStart = this.state.partialUDLStart;
+    var partialUDLEnd = this.state.partialUDLEnd;
+    var loadUnitsText = "KN";
+    var reactionA;
+    var reactionB;
+
 
     //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
     if (span !== " " || 0){
