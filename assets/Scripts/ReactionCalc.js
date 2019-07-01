@@ -5,7 +5,7 @@ import { Button } from "native-base";
 
 var reactionA, reactionB, uDL, span, loadUnits, loadUnitsText, pointValue, pointValueSpan;
 
-class ReactionCalc extends React.Component{
+export default class ReactionCalc extends React.Component{
 
     beamCalculation = () => {
 
@@ -45,8 +45,9 @@ class ReactionCalc extends React.Component{
     
         //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
         if (span !== " " || 0){
+            
             if (pointValueSpan < span){
-                if ((partialUDLEnd - partialUDLStart) <= beamSpan){
+            if ((partialUDLEnd - partialUDLStart) <= beamSpan){
                 //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
         
                 // **********************UDL*************************
@@ -57,8 +58,7 @@ class ReactionCalc extends React.Component{
             
                 // **********************POINT LOAD *************************
         
-                if (pointValue > 0){
-                    if (pointValueSpan > 0) {
+                if (pointValue > 0){       
                         reactionB = reactionB + (pointValueSpan * pointValue)/span;
                         reactionA = reactionA + (pointValue - reactionB);
                         /*console.log("RB = " + reactionB + " point value = " + pointValue);
@@ -69,17 +69,15 @@ class ReactionCalc extends React.Component{
                             reactionTextA,
                             reactionTextB
                         });*/
-                    } else if (pointValueSpan === 0){
-                        Alert.alert("Please Enter Span for Point Load")
-                    }}
+                    } 
 
                     //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
         
                     // **********************PARTIAL UDL ONLY*************************
-                    
-                    if (partialUDL > 0 && partialUDLStart < partialUDLEnd){
+                    if(partialUDL > 0){
+                    if ( partialUDLStart < partialUDLEnd){
                         
-                            if (partialUDL > 0 && partialUDLStart >= 0 && partialUDLEnd > 0){
+                            if (partialUDLStart >= 0 && partialUDLEnd > 0){
                                 //TODO: Enter formula to perform the partial UDL load only here.
         
                                 } else if (partialUDL === 0 && (partialUDLStart >= 0 || partialUDLEnd > 0)){
@@ -88,13 +86,21 @@ class ReactionCalc extends React.Component{
                                         Alert.alert("Fix Partial UDL dimensions. End of Partial UDL must be greater than 0 and start of partial UDL must be 0 or greater");
                                     }
                                         
-                                            } else if (partialUDL > 0 && partialUDLStart >= partialUDLEnd){
+                                            } else if (partialUDLStart >= partialUDLEnd){
                                                 Alert.alert("Start of partial UDL must be less than end of partial UDL");
                                             }
+                                        }
          
+
+
+
+            this.setState({
+            ...this.state
+            });                        
+                
                 } else if ((partialUDLEnd - partialUDLStart) > beamSpan){
                     Alert.alert("partial UDL length cannot be greater than beam length")
-                    }                        
+                }                        
         
             } else if (pointValueSpan > span) {
                 Alert.alert("Point Load placed outside of Beam");
