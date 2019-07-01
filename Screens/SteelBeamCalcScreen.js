@@ -24,7 +24,10 @@ export default class SteelBeamCalcScreen extends React.Component {
             value: "",
             loadUnitsText: "",
             uDL: "",
-            span: ""
+            span: "",
+            partialUDL: "",
+            partialUDLStart: "",
+            partialUDLEnd: ""
         }
     }
 
@@ -39,6 +42,9 @@ beamCalculation = () => {
     if (span !== " " || 0){
 
     //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
+    
+    // **********************UDL ONLY*************************
+
         if (uDL > 0 && (pointValue === 0 || pointValue === " ") && (pointValueSpan === 0 || pointValueSpan === " ")){
             var convertUDLToPoint = uDL * span;
             reactionB = (convertUDLToPoint*(span / 2))/(span);
@@ -118,6 +124,34 @@ handleTextChange = (newText) => this.setState({value: newText});
                     placeholder="Enter Point Load Span from left support"
                     onChangeText={(pointValueSpan) => this.setState({pointValueSpan: pointValueSpan})}
                     keyboardType={'numeric'}/>
+            
+            <Text style={{fontSize: 14, color: "#000"}}>
+                Enter Partial UDL
+            </Text>
+                <TextInput
+                    style={styles.inputContainer}
+                    placeholder="Enter Partial UDL"
+                    onChangeText={(partialUDL) => this.setState({partialUDL: partialUDL})}
+                    keyboardType={'numeric'}/>
+            
+            <Text style={{fontSize: 14, color: "#000"}}>
+                Position from RA to start of Partial UDL
+            </Text>
+                <TextInput
+                    style={styles.inputContainer}
+                    placeholder="Enter Position to Partial UDL start"
+                    onChangeText={(partialUDLStart) => this.setState({partialUDLStart: partialUDLStart})}
+                    keyboardType={'numeric'}/>
+
+            <Text style={{fontSize: 14, color: "#000"}}>
+                Position from RA to end of Partial UDL
+            </Text>
+                <TextInput
+                    style={styles.inputContainer}
+                    placeholder="Enter Position to Partial UDL end"
+                    onChangeText={(partialUDLEnd) => this.setState({partialUDLEnd: partialUDLEnd})}
+                    keyboardType={'numeric'}/>
+
 
             {/*
             <FloatingLabelInput style={{marginTop: 100}}
