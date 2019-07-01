@@ -39,7 +39,7 @@ beamCalculation = () => {
     loadUnitsText = "KN";
     pointValue = this.state.pointValue;
     pointValueSpan = this.state.pointValueSpan;
-    
+
     //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
     if (span !== " " || 0){
 
@@ -47,7 +47,7 @@ beamCalculation = () => {
     
     // **********************UDL ONLY*************************
 
-        if (uDL > 0 && (pointValue === 0 || pointValue === " ") && (pointValueSpan === 0 || pointValueSpan === " ")){
+        if (uDL > 0 && (pointValue === 0 || pointValue === " ") && (pointValueSpan === 0 || pointValueSpan === " ") && (partialUDL === 0 || partialUDL === " " ) && (partialUDLEnd === 0 || partialUDLEnd === " " || partialUDLStart === " ")){
             var convertUDLToPoint = uDL * span;
             reactionB = (convertUDLToPoint*(span / 2))/(span);
             reactionA = reactionB;
@@ -64,7 +64,7 @@ beamCalculation = () => {
     
     // **********************POINT LOAD ONLY*************************
 
-        if (pointValue > 0 && (uDL === 0 || uDL === " ")){
+        if (pointValue > 0 && (uDL === 0 || uDL === " ") && (partialUDL === 0 || partialUDL === " " ) && (partialUDLEnd === 0 || partialUDLEnd === " " || partialUDLStart === " ")){
             if (pointValueSpan > 0) {
                 reactionB = (pointValueSpan * pointValue)/span;
                 reactionA = (pointValue - reactionB);
@@ -80,20 +80,26 @@ beamCalculation = () => {
                 Alert.alert("Please Enter Span for Point Load")
             }}
         
+            //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
+
             // **********************PARTIAL UDL ONLY*************************
+            
             if (partialUDL > 0 && partialUDLStart < partialUDLEnd){
-            if (partialUDL > 0 && partialUDLStart >= 0 && partialUDLEnd > 0 && (uDL === 0 || uDL === " ") && (pointValue === 0 || pointValue === " ") && (pointValueSpan === 0 || pointValueSpan === " ")){
+                if ((partialUDLEnd - partialUDLStart) <= beamSpan){
+                    if (partialUDL > 0 && partialUDLStart >= 0 && partialUDLEnd > 0 && (uDL === 0 || uDL === " ") && (pointValue === 0 || pointValue === " ") && (pointValueSpan === 0 || pointValueSpan === " ")){
+                        //TODO: Enter formula to perform the partial UDL load only here.
 
-                //TODO: Enter formula to perform the partial UDL load only here.
-
-            } else if ((partialUDL === 0 || partialUDL === " " ) && (partialUDLStart >= 0 || partialUDLEnd > 0)){
-                Alert.alert("you have specified partial UDL span but no partial UDL");
-            } else if (partialUDL > 0  && (partialUDLEnd === 0 || partialUDLEnd > " " || partialUDLStart === " ")){
-                Alert.alert("Fix Partial UDL dimensions. End of Partial UDL must be greater than 0 and start of partial UDL must be 0 or greater");
-            }
-        } else if (partialUDL > 0 && partialUDLStart > partialUDLEnd){
-            Alert.alert("Start of partial UDL must be less than end of partial UDL");
-        }
+                        } else if ((partialUDL === 0 || partialUDL === " " ) && (partialUDLStart >= 0 || partialUDLEnd > 0)){
+                            Alert.alert("you have specified partial UDL span but no partial UDL");
+                            } else if (partialUDL > 0  && (partialUDLEnd === 0 || partialUDLEnd > " " || partialUDLStart === " ")){
+                                Alert.alert("Fix Partial UDL dimensions. End of Partial UDL must be greater than 0 and start of partial UDL must be 0 or greater");
+                            }
+                                } else if ((partialUDLEnd - partialUDLStart) > beamSpan){
+                                Alert.alert("partial UDL length cannot be greater than beam length")
+                                }
+                                    } else if (partialUDL > 0 && partialUDLStart > partialUDLEnd){
+                                        Alert.alert("Start of partial UDL must be less than end of partial UDL");
+                                    }
      
     
     
