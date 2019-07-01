@@ -104,8 +104,6 @@ beamCalculation = () => {
     
     
     
-    
-    
     }
     else {
         Alert.alert("Please enter beam span")
