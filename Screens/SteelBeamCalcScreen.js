@@ -11,20 +11,31 @@ export default class SteelBeamCalcScreen extends React.Component {
     constructor(props){
         super(props);
         this.state={
+            
             reactionA,
             reactionB,
+
             reactionTextA: " ",
             reactionTextB: " ",
+
             uDLValue: " ",
+
             beamSpan: " ",
+
             loadUnits: " ",
+
             pointValue: " ",
             pointValueSpan: " ",
             numberOfPointLoads: " ",
-            value: "",
+
+            //the value below is for floating text only.
+            //value: "",
+
             loadUnitsText: "",
+
             uDL: "",
             span: "",
+
             partialUDL: "",
             partialUDLStart: "",
             partialUDLEnd: ""
@@ -112,8 +123,8 @@ beamCalculation = () => {
     }
 } 
 
-
-handleTextChange = (newText) => this.setState({value: newText});
+//the handle text change below is for floating text 
+//handleTextChange = (newText) => this.setState({value: newText});
 
   render() {
   return (
