@@ -54,8 +54,8 @@ beamCalculation = () => {
         var partialUDLEnd = this.state.partialUDLEnd;
         partialUDLEnd = parseFloat(partialUDLEnd);
         var loadUnitsText = "KN";
-        var reactionA;
-        var reactionB;
+        var reactionA = 0.00;
+        var reactionB = 0.00;
 
         console.log("beam span is " + this.state.beamSpan);
 
@@ -119,7 +119,7 @@ beamCalculation = () => {
                 if (pointValue > 0){
                         
                         var reactionBPointLoad = (pointValueSpan * pointValue)/span;
-                        var reactionAPointLoad = (pointValue - reactionB);
+                        var reactionAPointLoad = (pointValue - reactionBPointLoad);
                         reactionB = reactionB + reactionBPointLoad;
                         reactionA = reactionA + reactionAPointLoad;
                         console.log("Point RB = " + reactionBPointLoad + " Point RA =" + reactionAPointLoad + " point Load = " + pointValue);
