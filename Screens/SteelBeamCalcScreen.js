@@ -39,13 +39,20 @@ beamCalculation = () => {
     
     
     //console.log("UDL is " + this.state.uDLValue);
-        var span = parseFloat( this.state.beamSpan);
+        var span = this.state.beamSpan;
+        span = parseFloat(span);
         var uDL = this.state.uDLValue;
+        uDL = parseFloat(uDL);
         var pointValue = this.state.pointValue;
+        pointValue = parseFloat(pointValue);
         var pointValueSpan = this.state.pointValueSpan;
+        pointValueSpan = parseFloat(pointValueSpan);
         var partialUDL = this.state.partialUDL;
+        partialUDL = parseFloat(partialUDL);
         var partialUDLStart = this.state.partialUDLStart;
+        partialUDLStart = parseFloat(partialUDLStart);
         var partialUDLEnd = this.state.partialUDLEnd;
+        partialUDLEnd = parseFloat(partialUDLEnd);
         var loadUnitsText = "KN";
         var reactionA;
         var reactionB;
@@ -98,17 +105,24 @@ beamCalculation = () => {
         
                 // **********************UDL*************************
                 //console.log("we are at the udl calc point");
+                if (uDL > 0){
                 var convertUDLToPoint = uDL * span;
-                reactionB = (convertUDLToPoint*(span / 2))/(span);
-                reactionA = reactionB;
+                var reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
+                var reactionAUDL = reactionBUDL;
+                reactionB = reactionBUDL;
+                reactionA = reactionAUDL;
                 console.log("UDL RB = " + reactionB);
                 console.log("UDL RA = " + reactionA);
+                }
                 // **********************POINT LOAD *************************
         
-                if (pointValue > 0){       
-                        reactionB = reactionB + (pointValueSpan * pointValue)/span;
-                        reactionA = reactionA + (pointValue - reactionB);
-                        console.log("Point RB = " + reactionB + " Point RA" + reactionA + " point Load = " + pointValue);
+                if (pointValue > 0){
+                        
+                        var reactionBPointLoad = (pointValueSpan * pointValue)/span;
+                        var reactionAPointLoad = (pointValue - reactionB);
+                        reactionB = reactionB + reactionBPointLoad;
+                        reactionA = reactionA + reactionAPointLoad;
+                        console.log("Point RB = " + reactionBPointLoad + " Point RA =" + reactionAPointLoad + " point Load = " + pointValue);
                         /*reactionTextA = "RA = " + reactionA + loadUnitsText;
                         reactionTextB = "RB = " + reactionB + loadUnitsText;
         
@@ -127,7 +141,7 @@ beamCalculation = () => {
                             if (partialUDLStart >= 0 && partialUDLEnd > 0){
                                 //TODO: Enter formula to perform the partial UDL load only here.
                                 var convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
-                                var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) + parseFloat( partialUDLStart);
+                                var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
                                 
                                 console.log("Reaction B = " + reactionB + " before partial udl");
                                 console.log("Reaction A = " + reactionA + " before partial udl");
