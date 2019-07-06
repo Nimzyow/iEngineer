@@ -6,7 +6,7 @@ import ReactionCalc from '../assets/Scripts/ReactionCalc';
 
 var reactionA, reactionB, beamSpan;
 reactionA = 0.00;
-reactionB = 0.00
+reactionB = 0.00;
 
 export default class SteelBeamCalcScreen extends React.Component {
     constructor(props){
@@ -40,7 +40,8 @@ export default class SteelBeamCalcScreen extends React.Component {
     }
 
 beamCalculation = () => {
-    
+        reactionA = 0.00;
+        reactionB = 0.00;
     
     //console.log("UDL is " + this.state.uDLValue);
         var span = this.state.beamSpan;
@@ -193,7 +194,7 @@ beamCalculation = () => {
             ...this.state
             });  */                      
                 
-                } else if ((partialUDLEnd - partialUDLStart) > beamSpan){
+                } else if ((partialUDLEnd - partialUDLStart) > span){
                     Alert.alert("partial UDL length cannot be greater than beam length")
                 }                        
         
@@ -324,15 +325,14 @@ beamCalculation = () => {
         } else {
             console.log("Partial UDL calc skipped");
         }
-        
+        // if there is a partial UDL case and a point load
         if (pointValue > 0 && partialUDL > 0){
+            //if there is a partial UDL case and a point load is placed BEFORE the partial UDL.
             if(pointValueSpan < partialUDLStart) {
-                pointLeft = sFRA - (uDL * (pointValueSpan));
+                pointLeft = sFRA - (uDL * pointValueSpan);
                 console.log("point left: " +pointLeft);
-
                 pointRight = pointLeft - pointValue;
                 console.log("point right: " +pointRight);
-
                 sFPUDL = pointRight - (uDL * (partialUDLStart - pointValueSpan));
                 console.log("What is sFPUDL:" + parseFloat( sFPUDL));
                 sFPUDR = sFPUDL - (partialUDL * (partialUDLEnd - partialUDLStart)) - (uDL * (span - partialUDLEnd));
@@ -343,8 +343,31 @@ beamCalculation = () => {
                     console.log("Shear force for Point and Partial UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
                 } else if (atRB !== reactionB){
                     console.log ("Shear force for Point and Partial UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
+                } 
+                //if a point load falls WITHIN or START or END of partial UDL.
+            } else if (pointValueSpan >= partialUDLStart && pointValueSpan <= partialUDLEnd){
+                sFPUDL = sFRA - (uDL * partialUDLStart);
+                pointLeft = sFPUDL - (uDL * (pointValueSpan - partialUDLStart)) - (partialUDL * (pointValueSpan - partialUDLStart));
+                pointRight = pointLeft - pointValue;
+                sFPUDR = pointRight - (partialUDL * (partialUDLEnd - pointValueSpan)) - (uDL * (partialUDLEnd - pointValueSpan));
+                atRB = sFPUDR - (uDL * (span - partialUDLEnd));
+                if((atRB + reactionB) === 0) {
+                    console.log("Shear force for Point WITHIN Partial UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
+                } else if (atRB !== reactionB){
+                    console.log ("Shear force for Point WITHIN Partial UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
                 }
-            }
+                } else if (pointValueSpan > partialUDLEnd){
+                    sFPUDL = sFRA - (uDL * partialUDLStart);
+                    sFPUDR = sFPUDL - (partialUDL * (partialUDLEnd - partialUDLStart)) - (uDL * (partialUDLEnd - partialUDLStart));
+                    pointLeft = sFPUDR - (uDL * (pointValueSpan - partialUDLEnd));
+                    pointRight = pointLeft - pointValue;
+                    atRB = pointRight - (uDL * (span - pointValueSpan));
+                    if((atRB + reactionB) === 0) {
+                        console.log("Shear force for Point at RIGHT OF PARTIAL UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
+                    } else if (atRB !== reactionB){
+                        console.log ("Shear force for Point at RIGHT OF PARTIAL UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
+                    }
+                }
         } else {
             console.log("Point Value and Partial UDL calc skipped.");
         }
