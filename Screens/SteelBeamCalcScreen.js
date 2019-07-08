@@ -27,7 +27,7 @@ export default class SteelBeamCalcScreen extends React.Component {
             
             reactionTextA: " ", reactionTextB: " ",
 
-            ShearForceTextA: " ", ShearForceTextB: " "
+            ShearForceTextA: " ", ShearForceTextB: " ", ShearForceTextC: " ", ShearForceTextD: " ", ShearForceTextE: " "
             
             //the value below is for floating text only.
             //value: "",   
@@ -39,175 +39,175 @@ export default class SteelBeamCalcScreen extends React.Component {
         obj.beamCalculation();
     }
 
-beamCalculation = () => {
-        reactionA = 0.00;
-        reactionB = 0.00;
+    beamCalculation = () => {
+        
+    reactionA = 0.00;
+    reactionB = 0.00;
     
     //console.log("UDL is " + this.state.uDLValue);
-        var span = this.state.beamSpan;
-        
-        var uDL = this.state.uDLValue;
-        
-        var pointValue = this.state.pointValue;
-        
-        var pointValueSpan = this.state.pointValueSpan;
-        
-        var partialUDL = this.state.partialUDL;
-        
-        var partialUDLStart = this.state.partialUDLStart;
-        
-        var partialUDLEnd = this.state.partialUDLEnd;
-        
-        var loadUnitsText = this.state.loadUnitsText;
+    var span = this.state.beamSpan;
+    
+    var uDL = this.state.uDLValue;
+    
+    var pointValue = this.state.pointValue;
+    
+    var pointValueSpan = this.state.pointValueSpan;
+    
+    var partialUDL = this.state.partialUDL;
+    
+    var partialUDLStart = this.state.partialUDLStart;
+    
+    var partialUDLEnd = this.state.partialUDLEnd;
+    
+    var loadUnitsText = this.state.loadUnitsText;
 
-        console.log("beam span is " + this.state.beamSpan);
+    console.log("beam span is " + this.state.beamSpan);
 
-        if (span === " " || span === ""){
-            this.setState({beamSpan: 0})
-            span = 0.00;
-            //span = this.state.beamSpan;
-        }
-        if (uDL === " " || uDL === ""){
-            this.setState({uDLValue: 0});
-            uDL = 0.00;
-        }
-        if (pointValue === " " || pointValue === ""){
-            this.setState({pointValue: 0});
-            pointValue = 0.00;
-        }
-        if (pointValueSpan === " " || pointValueSpan === ""){
-            this.setState({pointValueSpan: 0.00});
-            pointValueSpan = 0.00;
-        }
-        if (partialUDL === " " || partialUDL === ""){
-            this.setState({partialUDL: 0.00});
-            partialUDL = 0.00;
-        }
-        if (partialUDLStart === " " || partialUDLStart === ""){
-            this.setState({partialUDLStart: 0.00});
-            partialUDLStart = 0.00;
-            //console.log("partialUDLStart = " + partialUDLStart);
-        }
-        if (partialUDLEnd === " " || partialUDLEnd === ""){
-            this.setState({partialUDLEnd: 0.00});
-            partialUDLEnd = 0.00;
-        }
-        
-        span = parseFloat(span);
-        uDL = parseFloat(uDL);
-        pointValue = parseFloat(pointValue);
-        pointValueSpan = parseFloat(pointValueSpan);
-        partialUDL = parseFloat(partialUDL);
-        partialUDLStart = parseFloat(partialUDLStart);
-        partialUDLEnd = parseFloat(partialUDLEnd);
-        //console.log("beam span is " + span);
-       // console.log("UDL is " + uDL);
+    if (span === " " || span === ""){
+        this.setState({beamSpan: 0})
+        span = 0.00;
+        //span = this.state.beamSpan;
+    }
+    if (uDL === " " || uDL === ""){
+        this.setState({uDLValue: 0});
+        uDL = 0.00;
+    }
+    if (pointValue === " " || pointValue === ""){
+        this.setState({pointValue: 0});
+        pointValue = 0.00;
+    }
+    if (pointValueSpan === " " || pointValueSpan === ""){
+        this.setState({pointValueSpan: 0.00});
+        pointValueSpan = 0.00;
+    }
+    if (partialUDL === " " || partialUDL === ""){
+        this.setState({partialUDL: 0.00});
+        partialUDL = 0.00;
+    }
+    if (partialUDLStart === " " || partialUDLStart === ""){
+        this.setState({partialUDLStart: 0.00});
+        partialUDLStart = 0.00;
+        //console.log("partialUDLStart = " + partialUDLStart);
+    }
+    if (partialUDLEnd === " " || partialUDLEnd === ""){
+        this.setState({partialUDLEnd: 0.00});
+        partialUDLEnd = 0.00;
+    }
+    
+    span = parseFloat(span);
+    uDL = parseFloat(uDL);
+    pointValue = parseFloat(pointValue);
+    pointValueSpan = parseFloat(pointValueSpan);
+    partialUDL = parseFloat(partialUDL);
+    partialUDLStart = parseFloat(partialUDLStart);
+    partialUDLEnd = parseFloat(partialUDLEnd);
+    //console.log("beam span is " + span);
+    // console.log("UDL is " + uDL);
 
-        //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
-        if (span !== " " || 0){
-            console.log("first if");
-            if (pointValueSpan <= span){
-                console.log("Second if");
-                console.log("partialUDLEnd is " + partialUDLEnd + "partialUDLStart is " + partialUDLStart)
-            if ((partialUDLEnd - partialUDLStart) <= span){
-                console.log("Third if");
-                //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
-        
-                // **********************UDL*************************
-                //console.log("we are at the udl calc point");
-                if (uDL > 0){
-                var convertUDLToPoint = uDL * span;
-                var reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
-                var reactionAUDL = reactionBUDL;
-                reactionB = reactionBUDL;
-                reactionA = reactionAUDL;
-                console.log("UDL RB = " + reactionB);
-                console.log("UDL RA = " + reactionA);
-                }
-                // **********************POINT LOAD *************************
-        
-                if (pointValue > 0){
+    //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
+    if (span !== " " || 0){
+        console.log("first if");
+        if (pointValueSpan <= span){
+            console.log("Second if");
+            console.log("partialUDLEnd is " + partialUDLEnd + "partialUDLStart is " + partialUDLStart)
+        if ((partialUDLEnd - partialUDLStart) <= span){
+            console.log("Third if");
+            //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
+    
+            // **********************UDL*************************
+            //console.log("we are at the udl calc point");
+            if (uDL > 0){
+            var convertUDLToPoint = uDL * span;
+            var reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
+            var reactionAUDL = reactionBUDL;
+            reactionB = reactionBUDL;
+            reactionA = reactionAUDL;
+            console.log("UDL RB = " + reactionB);
+            console.log("UDL RA = " + reactionA);
+            }
+            // **********************POINT LOAD *************************
+    
+            if (pointValue > 0){
+                    
+                    var reactionBPointLoad = (pointValueSpan * pointValue)/span;
+                    var reactionAPointLoad = (pointValue - reactionBPointLoad);
+                    reactionB = reactionB + reactionBPointLoad;
+                    reactionA = reactionA + reactionAPointLoad;
+                    console.log("Point RB = " + reactionBPointLoad + " Point RA =" + reactionAPointLoad + " point Load = " + pointValue);
+                    /*reactionTextA = "RA = " + reactionA + loadUnitsText;
+                    reactionTextB = "RB = " + reactionB + loadUnitsText;
+    
+                    this.setState({
+                        reactionTextA,
+                        reactionTextB
+                    });*/
+                } 
+
+                //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
+    
+                // **********************PARTIAL UDL ONLY*************************
+                if(partialUDL > 0){
+                if ( partialUDLStart < partialUDLEnd){
+                    
+                    if (partialUDLStart >= 0 && partialUDLEnd > 0){
+                        //TODO: Enter formula to perform the partial UDL load only here.
+                        var convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
+                        var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
                         
-                        var reactionBPointLoad = (pointValueSpan * pointValue)/span;
-                        var reactionAPointLoad = (pointValue - reactionBPointLoad);
-                        reactionB = reactionB + reactionBPointLoad;
-                        reactionA = reactionA + reactionAPointLoad;
-                        console.log("Point RB = " + reactionBPointLoad + " Point RA =" + reactionAPointLoad + " point Load = " + pointValue);
-                        /*reactionTextA = "RA = " + reactionA + loadUnitsText;
-                        reactionTextB = "RB = " + reactionB + loadUnitsText;
-        
-                        this.setState({
-                            reactionTextA,
-                            reactionTextB
-                        });*/
-                    } 
-
-                    //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
-        
-                    // **********************PARTIAL UDL ONLY*************************
-                    if(partialUDL > 0){
-                    if ( partialUDLStart < partialUDLEnd){
+                        console.log("Reaction B = " + reactionB + " before partial udl");
+                        console.log("Reaction A = " + reactionA + " before partial udl");
                         
-                            if (partialUDLStart >= 0 && partialUDLEnd > 0){
-                                //TODO: Enter formula to perform the partial UDL load only here.
-                                var convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
-                                var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
-                                
-                                console.log("Reaction B = " + reactionB + " before partial udl");
-                                console.log("Reaction A = " + reactionA + " before partial udl");
-                                
-                                var reactionBPUDL = ((newPointPosition * convertPUDLtoPoint)/span);
-                                var reactionAPUDL = (convertPUDLtoPoint - reactionBPUDL);
+                        var reactionBPUDL = ((newPointPosition * convertPUDLtoPoint)/span);
+                        var reactionAPUDL = (convertPUDLtoPoint - reactionBPUDL);
 
-                                reactionB = reactionB + reactionBPUDL;
-                                reactionA = reactionA + reactionAPUDL;
-                                
-                                console.log("ReactionA = " + reactionA);
-        
-                                } else if (partialUDL === 0 && (partialUDLStart >= 0 || partialUDLEnd > 0)){
-                                    Alert.alert("you have specified partial UDL span but no partial UDL");
+                        reactionB = reactionB + reactionBPUDL;
+                        reactionA = reactionA + reactionAPUDL;
+                        
+                        console.log("ReactionA = " + reactionA);
+    
+                            } else if (partialUDL === 0 && (partialUDLStart >= 0 || partialUDLEnd > 0)){
+                                Alert.alert("you have specified partial UDL span but no partial UDL");
                                     } else if (partialUDL > 0  && (partialUDLEnd === 0 || partialUDLEnd > " " || partialUDLStart === " ")){
-                                        Alert.alert("Fix Partial UDL dimensions. End of Partial UDL must be greater than 0 and start of partial UDL must be 0 or greater");
-                                    }
-                                        
-                                            } else if (partialUDLStart >= partialUDLEnd){
-                                                Alert.alert("Start of partial UDL must be less than end of partial UDL");
-                                            }
+                                    Alert.alert("Fix Partial UDL dimensions. End of Partial UDL must be greater than 0 and start of partial UDL must be 0 or greater");
+                                }
+                                        } else if (partialUDLStart >= partialUDLEnd){
+                                            Alert.alert("Start of partial UDL must be less than end of partial UDL");
                                         }
-            loadUnitsText = "KN";
-            this.setState({
-                loadUnitsText
-            });
-            reactionTextA = "RA = " + reactionA.toFixed(2) + loadUnitsText;
-            reactionTextB = "RB = " + reactionB.toFixed(2) + loadUnitsText;
-            console.log("Do we get to set all state? YES!")
-            
-            this.setState({
-                reactionTextA,
-                reactionTextB,
-            });
-
-            this.shearForceCalcualtion();
-
-            /*
-            this.setState({
-            ...this.state
-            });  */                      
-                
-                } else if ((partialUDLEnd - partialUDLStart) > span){
-                    Alert.alert("partial UDL length cannot be greater than beam length")
-                }                        
+                            }
+        loadUnitsText = "KN";
+        this.setState({
+            loadUnitsText
+        });
+        reactionTextA = "RA = " + reactionA.toFixed(2) + loadUnitsText;
+        reactionTextB = "RB = " + reactionB.toFixed(2) + loadUnitsText;
+        console.log("Do we get to set all state? YES!")
         
-            } else if (pointValueSpan > span) {
-                Alert.alert("Point Load placed outside of Beam");
-                console.log("pointValueSpan = " + pointValueSpan);
-                console.log("span = " + span);
-                }
-                                                                
-        }
-        else {
-            Alert.alert("Please enter beam span")
-        }
+        this.setState({
+            reactionTextA,
+            reactionTextB,
+        });
+
+        this.shearForceCalcualtion();
+
+        /*
+        this.setState({
+        ...this.state
+        });  */                      
+            
+            } else if ((partialUDLEnd - partialUDLStart) > span){
+                Alert.alert("partial UDL length cannot be greater than beam length")
+            }                        
+    
+        } else if (pointValueSpan > span) {
+            Alert.alert("Point Load placed outside of Beam");
+            console.log("pointValueSpan = " + pointValueSpan);
+            console.log("span = " + span);
+            }
+                                                            
+    }
+    else {
+        Alert.alert("Please enter beam span")
+    }
     } 
 
     shearForceCalcualtion = () => {
@@ -382,6 +382,27 @@ beamCalculation = () => {
 
     }
 
+    bendingMomentCalculation = () => {
+
+        var momentA = 0.00;
+        var momentB = 0.00;
+        var momentC = 0.00;
+        var momentD = 0.00;
+        var momentE = 0.00;
+        var moments = [];
+        
+        // calculate bending moment if point load span is less than partial udl load
+        if (pointvaluespan > 0 && partialUDL === 0) {
+            for(i = 0.00; i < span; i += 0.01){
+                moments.push(
+                    
+
+                )
+            }
+        }
+
+    }
+
 //the handle text change below is for floating text 
 //handleTextChange = (newText) => this.setState({value: newText});
 
@@ -464,13 +485,13 @@ beamCalculation = () => {
             onChangeText = {this.handleTextChange}/>*/}
         
             {/* ---------Display of Reaction results below----------- */}
-            <Text style={{fontSize: 20, padding: 10}}>{this.state.reactionTextA}</Text>
+            <View style = {{flexDirection: "row", justifyContent: "center", borderWidth: 2}}>
+            <Text style={{fontSize: 20, padding: 10, marginEnd: 50}}>{this.state.reactionTextA}</Text>
             <Text style={{fontSize: 20, padding: 10}}>{this.state.reactionTextB}</Text>
-            <Text style ={{fontSize: 20, padding: 10}}>
-            {this.state.ShearForceTextA}</Text>
-            <Text style ={{fontSize: 20, padding: 10}}>
-            {this.state.ShearForceTextB}</Text>
-            
+            </View>
+            <Text style ={{fontSize: 20, padding: 10}}>{this.state.ShearForceTextA}</Text>
+            <Text style ={{fontSize: 20, padding: 10}}>{this.state.ShearForceTextB}</Text>
+
             {/* ---------Button to calculate Reaction ----------- */}
         <View style={styles.button}>
             <Button 
