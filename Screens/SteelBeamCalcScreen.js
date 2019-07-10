@@ -375,7 +375,7 @@ export default class SteelBeamCalcScreen extends React.Component {
         ShearForceTextA = "SFA = " + sFRA.toFixed(2) + loadUnitsText;
         ShearForceTextB = "SFB = " + sFRB.toFixed(2) + loadUnitsText;
         console.log("Do we get to end of Shear calculation? YES!");
-
+        this.bendingMomentCalculation();
         //TODO: shear force for point load before Partial UDL
         //TODO: shear for for point load in partial UDL
         //TODO: shear force for point load after partial UDL.
@@ -384,24 +384,96 @@ export default class SteelBeamCalcScreen extends React.Component {
 
     bendingMomentCalculation = () => {
 
+        var sFRA = reactionA;
+        var sFRB = reactionB;
+
+        var span = this.state.beamSpan;
+        var uDL = this.state.uDLValue;
+        var pointValue = this.state.pointValue;
+        var pointValueSpan = this.state.pointValueSpan;
+        var partialUDL = this.state.partialUDL;
+        var partialUDLStart = this.state.partialUDLStart;
+        var partialUDLEnd = this.state.partialUDLEnd;
+
+        if (span === " " || span === ""){
+            this.setState({beamSpan: 0})
+            span = 0.00;
+            //span = this.state.beamSpan;
+        }
+        if (uDL === " " || uDL === ""){
+            this.setState({uDLValue: 0});
+            uDL = 0.00;
+        }
+        if (pointValue === " " || pointValue === ""){
+            this.setState({pointValue: 0});
+            pointValue = 0.00;
+        }
+        if (pointValueSpan === " " || pointValueSpan === ""){
+            this.setState({pointValueSpan: 0.00});
+            pointValueSpan = 0.00;
+        }
+        if (partialUDL === " " || partialUDL === ""){
+            this.setState({partialUDL: 0.00});
+            partialUDL = 0.00;
+        }
+        if (partialUDLStart === " " || partialUDLStart === ""){
+            this.setState({partialUDLStart: 0.00});
+            partialUDLStart = 0.00;
+            //console.log("partialUDLStart = " + partialUDLStart);
+        }
+        if (partialUDLEnd === " " || partialUDLEnd === ""){
+            this.setState({partialUDLEnd: 0.00});
+            partialUDLEnd = 0.00;
+        }
+
+        span = parseFloat(span);
+        uDL = parseFloat(uDL);
+        pointValue = parseFloat(pointValue);
+        pointValueSpan = parseFloat(pointValueSpan);
+        partialUDL = parseFloat(partialUDL);
+        partialUDLStart = parseFloat(partialUDLStart);
+        partialUDLEnd = parseFloat(partialUDLEnd);
+        sFRA = parseFloat(sFRA);
+        sFRB = parseFloat(sFRB);
+
         var momentA = 0.00;
         var momentB = 0.00;
         var momentC = 0.00;
         var momentD = 0.00;
         var momentE = 0.00;
         var moments = [];
-        
+        var i = 0.00;
         // calculate bending moment if point load span is less than partial udl load
-        if (pointvaluespan > 0 && partialUDL === 0) {
-            for(i = 0.00; i < span; i += 0.01){
-                moments.push(
-                    
-
-                )
+        if (pointValue > 0 && partialUDL === 0) {  
+                if (i <= pointValueSpan){
+                    console.log("bending moment being calculated");
+                    for(i ; i <= pointValueSpan; i += 0.01){
+                    var momcalc = sFRA * i - uDL * i * i / 2;
+                    moments.push(momcalc);
+                    } 
+                    console.log("i is = " + i)
             }
-        }
-
+                 if (i >= pointValueSpan) {
+                    console.log("bending moment 2 being calculated");
+                    console.log("pointvaluespan = " + pointValueSpan);
+                    var n = pointValueSpan + 0.01;
+                    console.log("n is = " + n);
+                    for(n; n <= span ; n += 0.01){
+                        //console.log("second loop is being performed")
+                        var momcalc = (sFRA * n) - (pointValue * (n - pointValueSpan)) - ( uDL * n * n / 2);
+                        moments.push(momcalc);
+                    }
+                }
+            }
+            var maxBend = (Math.max.apply(null, moments)).toFixed(2);
+            var maxBendPos = moments.indexOf((Math.max.apply(null, moments)));
+            var minBend = (Math.min.apply(null, moments)).toFixed(2);
+            var minBendPos = moments.indexOf((Math.min.apply(null, moments)));
+            console.log("Max bending moment = " + maxBend + "KN.m" + " @ " + maxBendPos + "mm");
+            console.log("Min bending moment = " + minBend + "KN.m" + " @ " + minBendPos + "mm");
+            console.log("Bending moment array length = " + moments.length)
     }
+
 
 //the handle text change below is for floating text 
 //handleTextChange = (newText) => this.setState({value: newText});
