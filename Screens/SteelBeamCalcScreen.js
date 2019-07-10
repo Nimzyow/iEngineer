@@ -458,6 +458,21 @@ export default class SteelBeamCalcScreen extends React.Component {
                     }
                 }
             }
+        if( pointValue === 0 && partialUDL > 0) {
+            if (i <= partialUDLStart){
+                for(i; i <= partialUDLStart; i += 0.01){
+                    var momcalc = sFRA * i - uDL * i * i / 2;
+                    moments.push(momcalc);
+                }
+            }
+            if(i >= partialUDLStart && i <= partialUDLEnd){
+                var n = partialUDLStart + 0.01;
+                for(n; n <= span; n += 0.01){
+                    var momcalc = (sFRA * n) - (uDL * n * n / 2) - (partialUDL * (n - partialUDLStart) * (n - partialUDLStart) / 2);
+                    moments.push(momcalc);
+                }
+            }
+        }
             var maxBend = (Math.max.apply(null, moments)).toFixed(2);
             var maxBendPos = moments.indexOf((Math.max.apply(null, moments)));
             var minBend = (Math.min.apply(null, moments)).toFixed(2);
