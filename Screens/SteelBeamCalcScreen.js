@@ -435,12 +435,6 @@ export default class SteelBeamCalcScreen extends React.Component {
         partialUDLEnd = parseFloat(partialUDLEnd);
         sFRA = parseFloat(sFRA);
         sFRB = parseFloat(sFRB);
-
-        var momentA = 0.00;
-        var momentB = 0.00;
-        var momentC = 0.00;
-        var momentD = 0.00;
-        var momentE = 0.00;
         var moments = [];
         var i = 0.00;
         // calculate bending moment if point load span is less than partial udl load
@@ -459,7 +453,6 @@ export default class SteelBeamCalcScreen extends React.Component {
                     var n = pointValueSpan + 0.01;
                     console.log("n is = " + n);
                     for(n; n <= span ; n += 0.01){
-                        //console.log("second loop is being performed")
                         var momcalc = (sFRA * n) - (pointValue * (n - pointValueSpan)) - ( uDL * n * n / 2);
                         moments.push(momcalc);
                     }
