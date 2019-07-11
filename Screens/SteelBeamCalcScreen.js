@@ -435,48 +435,102 @@ export default class SteelBeamCalcScreen extends React.Component {
         partialUDLEnd = parseFloat(partialUDLEnd);
         sFRA = parseFloat(sFRA);
         sFRB = parseFloat(sFRB);
-        var moments = [];
-        var i = 0.00;
-        // calculate bending moment if point load span is less than partial udl load
+        const moments = [];
+        let i = 0.00;
+
+        // calculate bending moment if there is point load and no partial udl
         if (pointValue > 0 && partialUDL === 0) {  
+            //before arriving at point load
                 if (i <= pointValueSpan){
                     console.log("bending moment being calculated");
                     for(i ; i <= pointValueSpan; i += 0.01){
-                    var momcalc = sFRA * i - uDL * i * i / 2;
+                    let momcalc = sFRA * i - uDL * i * i / 2;
                     moments.push(momcalc);
                     } 
                     console.log("i is = " + i)
             }
+            //once we have arrived at point load until end of span.
                  if (i >= pointValueSpan) {
                     console.log("bending moment 2 being calculated");
                     console.log("pointvaluespan = " + pointValueSpan);
-                    var n = pointValueSpan + 0.01;
-                    console.log("n is = " + n);
-                    for(n; n <= span ; n += 0.01){
-                        var momcalc = (sFRA * n) - (pointValue * (n - pointValueSpan)) - ( uDL * n * n / 2);
+                    i = pointValueSpan + 0.01;
+                    console.log("i is = " + i);
+                    for(i; i <= span ; i += 0.01){
+                        let momcalc = (sFRA * i) - (pointValue * (i - pointValueSpan)) - ( uDL * i * i / 2);
                         moments.push(momcalc);
                     }
                 }
             }
+        // calculate bending moment if there is partial UDL and no point load
         if( pointValue === 0 && partialUDL > 0) {
+            //before we reach partial UDL Start
             if (i <= partialUDLStart){
                 for(i; i <= partialUDLStart; i += 0.01){
-                    var momcalc = sFRA * i - uDL * i * i / 2;
+                    let momcalc = sFRA * i - uDL * i * i / 2;
                     moments.push(momcalc);
                 }
             }
+            //once we have reached partial UDL start until partial UDL End
             if(i >= partialUDLStart && i <= partialUDLEnd){
-                var n = partialUDLStart + 0.01;
-                for(n; n <= span; n += 0.01){
-                    var momcalc = (sFRA * n) - (uDL * n * n / 2) - (partialUDL * (n - partialUDLStart) * (n - partialUDLStart) / 2);
+                i = partialUDLStart + 0.01;
+                for(i; i <= partialUDLEnd; i += 0.01){
+                    let momcalc = (sFRA * i) - (uDL * i * i / 2) - (partialUDL * (i - partialUDLStart) * (i - partialUDLStart) / 2);
+                    moments.push(momcalc);
+                }
+            }
+            //once we have reached partial UDL end until end of beam spam
+            if(i >= partialUDLEnd){
+                i = partialUDLEnd + 0.01;
+                for(i; i <= beamSpan; i += 0.01){
+                    let momcalc = (sFRA * i) - (uDL * i * i / 2) - ((partialUDL * (partialUDLEnd - partialUDLStart)) * (i - partialUDLStart - (0.5) * (partialUDLEnd - partialUDLStart)));
                     moments.push(momcalc);
                 }
             }
         }
-            var maxBend = (Math.max.apply(null, moments)).toFixed(2);
-            var maxBendPos = moments.indexOf((Math.max.apply(null, moments)));
-            var minBend = (Math.min.apply(null, moments)).toFixed(2);
-            var minBendPos = moments.indexOf((Math.min.apply(null, moments)));
+        //calculate bending moment if there is point load and partial UDL
+        if (pointValue > 0 && partialUDL > 0){
+            //if point load is before partial UDL
+            if (pointValueSpan < partialUDLStart){
+                //before we reach the start of point load
+                if (i <= pointValueSpan){
+                    //console.log("bending moment being calculated");
+                    for(i ; i <= pointValueSpan; i += 0.01){
+                        let momcalc = sFRA * i - uDL * i * i / 2;
+                        moments.push(momcalc);
+                    }
+                }
+                //after start of point load and before start of partial udl load
+                if (i >= pointValueSpan && i <= partialUDLStart) {
+                    i = pointValueSpan + 0.01;
+                    for (i; i <= partialUDLStart; i += 0.01){
+                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span);
+                        moments.push(momcalc);
+                    }
+                }
+                //after start of partial udl load and until end of partial udl load.
+                if (i >= partialUDLStart && i <= partialUDLEnd){
+                    i = partialUDLStart + 0.01;
+                    for (i; i <= partialUDLEnd; i += 0.01){
+                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (i-partialUDLStart) * (i-partialUDLStart) / 2);
+                        moments.push(momcalc);
+                    }
+                }
+                //end of partial udl load until end of beam span.
+                if (i >= partialUDLEnd && i < span){
+                    i = partialUDLEnd + 0.01;
+                    for (i; i <= span; i += 0.01){
+                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (partialUDLEnd-partialUDLStart)*(i - partialUDLStart - (0.5)*(partialUDLEnd-partialUDLStart)));
+                        moments.push(momcalc);
+                    }
+                }
+            }
+        }
+
+
+            let maxBend = (Math.max.apply(null, moments)).toFixed(2);
+            let maxBendPos = moments.indexOf((Math.max.apply(null, moments)));
+            let minBend = (Math.min.apply(null, moments)).toFixed(2);
+            let minBendPos = moments.indexOf((Math.min.apply(null, moments)));
             console.log("Max bending moment = " + maxBend + "KN.m" + " @ " + maxBendPos + "mm");
             console.log("Min bending moment = " + minBend + "KN.m" + " @ " + minBendPos + "mm");
             console.log("Bending moment array length = " + moments.length)
