@@ -39,6 +39,38 @@ export default class SteelBeamCalcScreen extends React.Component {
         obj.beamCalculation();
     }
 
+    BMPointCalc = ( currentDistance,load, toLoad, beamLength) => {
+        if(load > 0){
+            if (currentDistance > toLoad) {
+                return ((load * currentDistance) / beamLength);
+            } else if (currentDistance <= toLoad) {
+                return 0.00;
+            }
+        } else {
+            return 0.00;
+        }
+    }
+    BMPartialUDLCalc = (currentDistance, partialLoad, distToPartialLoadStart, disToPartialLoadEnd) => {
+        if (partialLoad > 0){
+            if (currentDistance <= distToPartialLoadStart){
+                return 0.00;
+            } else if (currentDistance > distToPartialLoadStart && currentDistance <= disToPartialLoadEnd){
+                return (partialLoad * (currentDistance - distToPartialLoadStart) * (currentDistance - distToPartialLoadStart) / 2);
+            } else if (currentDistance > disToPartialLoadEnd){
+                return (partialLoad * (disToPartialLoadEnd - distToPartialLoadStart) * (currentDistance - distToPartialLoadStart - (0.5) * (disToPartialLoadEnd - distToPartialLoadStart)));
+            } 
+        } else {
+            return 0.00;
+        }
+    }
+    BMUDLCalc = (fullLoad, currentDistance) => {
+        if (fullLoad > 0) {
+            return fullLoad * currentDistance * currentDistance / 2;
+        } else {
+            return 0.00;
+        }
+    }
+
     beamCalculation = () => {
         
     reactionA = 0.00;
@@ -438,14 +470,20 @@ export default class SteelBeamCalcScreen extends React.Component {
         const moments = [];
         let i = 0.00;
 
+        for (i; i <= span; i += 0.01){
+            let momCalc = sFRA * i - (this.BMUDLCalc(uDL, i)) - (this.BMPointCalc(i, pointValue, pointValueSpan, span)) - (this.BMPartialUDLCalc(i, partialUDL, partialUDLStart, partialUDLEnd));
+            moments.push(momCalc);
+        }
+
+        /*
         // calculate bending moment if there is point load and no partial udl
         if (pointValue > 0 && partialUDL === 0) {  
             //before arriving at point load
                 if (i <= pointValueSpan){
                     console.log("bending moment being calculated");
                     for(i ; i <= pointValueSpan; i += 0.01){
-                    let momcalc = sFRA * i - uDL * i * i / 2;
-                    moments.push(momcalc);
+                    let momCalc = sFRA * i - uDL * i * i / 2;
+                    moments.push(momCalc);
                     } 
                     console.log("i is = " + i)
             }
@@ -456,8 +494,8 @@ export default class SteelBeamCalcScreen extends React.Component {
                     i = pointValueSpan + 0.01;
                     console.log("i is = " + i);
                     for(i; i <= span ; i += 0.01){
-                        let momcalc = (sFRA * i) - (pointValue * (i - pointValueSpan)) - ( uDL * i * i / 2);
-                        moments.push(momcalc);
+                        let momCalc = (sFRA * i) - (pointValue * (i - pointValueSpan)) - ( uDL * i * i / 2);
+                        moments.push(momCalc);
                     }
                 }
             }
@@ -466,24 +504,24 @@ export default class SteelBeamCalcScreen extends React.Component {
             //before we reach partial UDL Start
             if (i <= partialUDLStart){
                 for(i; i <= partialUDLStart; i += 0.01){
-                    let momcalc = sFRA * i - uDL * i * i / 2;
-                    moments.push(momcalc);
+                    let momCalc = sFRA * i - uDL * i * i / 2;
+                    moments.push(momCalc);
                 }
             }
             //once we have reached partial UDL start until partial UDL End
             if(i >= partialUDLStart && i <= partialUDLEnd){
                 i = partialUDLStart + 0.01;
                 for(i; i <= partialUDLEnd; i += 0.01){
-                    let momcalc = (sFRA * i) - (uDL * i * i / 2) - (partialUDL * (i - partialUDLStart) * (i - partialUDLStart) / 2);
-                    moments.push(momcalc);
+                    let momCalc = (sFRA * i) - (uDL * i * i / 2) - (partialUDL * (i - partialUDLStart) * (i - partialUDLStart) / 2);
+                    moments.push(momCalc);
                 }
             }
             //once we have reached partial UDL end until end of beam spam
             if(i >= partialUDLEnd){
                 i = partialUDLEnd + 0.01;
                 for(i; i <= beamSpan; i += 0.01){
-                    let momcalc = (sFRA * i) - (uDL * i * i / 2) - ((partialUDL * (partialUDLEnd - partialUDLStart)) * (i - partialUDLStart - (0.5) * (partialUDLEnd - partialUDLStart)));
-                    moments.push(momcalc);
+                    let momCalc = (sFRA * i) - (uDL * i * i / 2) - ((partialUDL * (partialUDLEnd - partialUDLStart)) * (i - partialUDLStart - (0.5) * (partialUDLEnd - partialUDLStart)));
+                    moments.push(momCalc);
                 }
             }
         }
@@ -495,15 +533,15 @@ export default class SteelBeamCalcScreen extends React.Component {
                 if (i <= pointValueSpan){
                     //console.log("bending moment being calculated");
                     for(i ; i <= pointValueSpan; i += 0.01){
-                        let momcalc = sFRA * i - uDL * i * i / 2;
-                        moments.push(momcalc);
+                        let momCalc = sFRA * i - uDL * i * i / 2;
+                        moments.push(momCalc);
                     }
                 }
                 //after start of point load and before start of partial udl load
                 if (i >= pointValueSpan && i <= partialUDLStart) {
                     i = pointValueSpan + 0.01;
                     for (i; i <= partialUDLStart; i += 0.01){
-                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span);
+                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span);
                         moments.push(momcalc);
                     }
                 }
@@ -511,20 +549,21 @@ export default class SteelBeamCalcScreen extends React.Component {
                 if (i >= partialUDLStart && i <= partialUDLEnd){
                     i = partialUDLStart + 0.01;
                     for (i; i <= partialUDLEnd; i += 0.01){
-                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (i-partialUDLStart) * (i-partialUDLStart) / 2);
-                        moments.push(momcalc);
+                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (i-partialUDLStart) * (i-partialUDLStart) / 2);
+                        moments.push(momCalc);
                     }
                 }
                 //end of partial udl load until end of beam span.
                 if (i >= partialUDLEnd && i < span){
                     i = partialUDLEnd + 0.01;
                     for (i; i <= span; i += 0.01){
-                        let momcalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (partialUDLEnd-partialUDLStart)*(i - partialUDLStart - (0.5)*(partialUDLEnd-partialUDLStart)));
-                        moments.push(momcalc);
+                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (partialUDLEnd-partialUDLStart)*(i - partialUDLStart - (0.5)*(partialUDLEnd-partialUDLStart)));
+                        moments.push(momCalc);
                     }
                 }
             }
         }
+        */
 
 
             let maxBend = (Math.max.apply(null, moments)).toFixed(2);
