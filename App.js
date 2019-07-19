@@ -5,13 +5,15 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import HomeScreen from './Screens/HomeScreen';
 import SteelBeamCalcScreen from './Screens/SteelBeamCalcScreen';
 import BeamCalcScreen from './Screens/BeamCalcScreen';
+import LoadDeterminationScreen from "./Screens/LoadDeterminationScreen";
 
 const MainNavigator = createStackNavigator(
   //FIRST ARGUMENT: screens we want to switch to
     {
   Home: {screen:HomeScreen},
   BeamCalc: {screen: BeamCalcScreen},
-  SteelBeamCalc: {screen: SteelBeamCalcScreen} 
+  SteelBeamCalc: {screen: SteelBeamCalcScreen},
+  LoadDetermination: {screen: LoadDeterminationScreen},
   }, 
   //SECOND ARGUMENT - what the default Navigation bar at the top of the phone should look like.
   {

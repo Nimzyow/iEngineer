@@ -1,7 +1,7 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView } from 'react-native';
+import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Card } from "native-base";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+//import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class HomeScreen extends React.Component {
     constructor(props){
@@ -20,6 +20,7 @@ export default class HomeScreen extends React.Component {
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
+          
             <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("BeamCalc")
@@ -31,13 +32,20 @@ export default class HomeScreen extends React.Component {
                     </Text>
                </Card>
             </TouchableOpacity> 
-            <TouchableOpacity>
+            
+            
+            <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("LoadDetermination")
+            }}
+            >
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>
                         Something Else Calculation
                     </Text>
                 </Card>
             </TouchableOpacity>
+            
             <TouchableOpacity>
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>

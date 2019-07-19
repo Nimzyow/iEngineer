@@ -6,14 +6,12 @@ export default class SBWallCheckScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            
         };
     }
 //the below will add a header, whose properties, ike fontsize, color etc... can be controlled in the App.js
     static navigationOptions = {
       title: "iEngineer"
     }
-
   render() {
   return (
     <View>

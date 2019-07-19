@@ -1,12 +1,17 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation } from 'react-native';
+import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView } from 'react-native';
 import { Button } from "native-base";
-import FloatingLabelInput from "./../assets/Scripts/FloatingScript";
+import { LineChart, Grid, AreaChart, Path } from "react-native-svg-charts";
+import { Defs, ClipPath, LinearGradient, Rect, Stop } from "react-native-svg";
+import * as shape from "d3-shape"
+
 import ReactionCalc from '../assets/Scripts/ReactionCalc';
 
-var reactionA, reactionB, beamSpan;
+var reactionA, reactionB;
 reactionA = 0.00;
 reactionB = 0.00;
+const moments = [];
+const shearForce = [];
 
 export default class SteelBeamCalcScreen extends React.Component {
     constructor(props){
@@ -27,22 +32,33 @@ export default class SteelBeamCalcScreen extends React.Component {
             
             reactionTextA: " ", reactionTextB: " ",
 
-            ShearForceTextA: " ", ShearForceTextB: " ", ShearForceTextC: " ", ShearForceTextD: " ", ShearForceTextE: " "
-            
-            //the value below is for floating text only.
-            //value: "",   
+            ShearForceTextA: " ", ShearForceTextB: " ",
+
+            MaxBendingText: " ", MinBendingText: " "
         }
     obj = new ReactionCalc();
+    }
+
+    componentWillMount(){
+        this.resetValues();
     }
 
     callFunction = () => {
         obj.beamCalculation();
     }
 
-    BMPointCalc = ( currentDistance,load, toLoad, beamLength) => {
+    resetValues = () => {
+        moments.length = 0;
+        shearForce.length = 0;
+        reactionA = 0.00;
+        reactionB = 0.00;
+        console.log("reset values");
+    }
+
+    BMPointCalc = ( currentDistance,load, toLoad) => {
         if(load > 0){
             if (currentDistance > toLoad) {
-                return ((load * currentDistance) / beamLength);
+                return (load * (currentDistance - toLoad));
             } else if (currentDistance <= toLoad) {
                 return 0.00;
             }
@@ -71,12 +87,49 @@ export default class SteelBeamCalcScreen extends React.Component {
         }
     }
 
+    shearForceReaction = (shearForce) => {
+        return shearForce;
+    }
+
+    shearForcePointCalc = (currentDistance, pointLoad, pointLoadDistance) => {
+        if(pointLoad > 0){
+        if (currentDistance < pointLoadDistance){
+            return 0.00;
+        } else if (currentDistance >= pointLoadDistance){
+            return pointLoad;
+        }
+    } else { 
+        return 0.00;
+    }
+}
+
+    shearForcePartialUDL = (currentDistance, partialUDLStart, partialUDLEnd, partialUDL) => {
+        if(partialUDL > 0){
+        if (currentDistance >= partialUDLStart && currentDistance <= partialUDLEnd){
+            let result = (partialUDL * (currentDistance - partialUDLStart));
+            return result;
+            } else if (currentDistance > partialUDLEnd) {
+                return (partialUDL * (partialUDLEnd - partialUDLStart));
+                } else if (currentDistance < partialUDLStart) {
+                    return 0.00;
+        }
+    } else {
+        return 0.00;
+    }
+}
+
+    shearForceFullUDL = (currentDistance, uDL) => {
+        if (uDL > 0){
+        return uDL * currentDistance;
+    } else { 
+        return 0.00;
+    }
+}
+
     beamCalculation = () => {
         
-    reactionA = 0.00;
-    reactionB = 0.00;
+    this.resetValues();
     
-    //console.log("UDL is " + this.state.uDLValue);
     var span = this.state.beamSpan;
     
     var uDL = this.state.uDLValue;
@@ -93,12 +146,9 @@ export default class SteelBeamCalcScreen extends React.Component {
     
     var loadUnitsText = this.state.loadUnitsText;
 
-    console.log("beam span is " + this.state.beamSpan);
-
     if (span === " " || span === ""){
         this.setState({beamSpan: 0})
         span = 0.00;
-        //span = this.state.beamSpan;
     }
     if (uDL === " " || uDL === ""){
         this.setState({uDLValue: 0});
@@ -119,7 +169,6 @@ export default class SteelBeamCalcScreen extends React.Component {
     if (partialUDLStart === " " || partialUDLStart === ""){
         this.setState({partialUDLStart: 0.00});
         partialUDLStart = 0.00;
-        //console.log("partialUDLStart = " + partialUDLStart);
     }
     if (partialUDLEnd === " " || partialUDLEnd === ""){
         this.setState({partialUDLEnd: 0.00});
@@ -133,29 +182,22 @@ export default class SteelBeamCalcScreen extends React.Component {
     partialUDL = parseFloat(partialUDL);
     partialUDLStart = parseFloat(partialUDLStart);
     partialUDLEnd = parseFloat(partialUDLEnd);
-    //console.log("beam span is " + span);
-    // console.log("UDL is " + uDL);
 
     //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
     if (span !== " " || 0){
-        console.log("first if");
+        
         if (pointValueSpan <= span){
-            console.log("Second if");
-            console.log("partialUDLEnd is " + partialUDLEnd + "partialUDLStart is " + partialUDLStart)
         if ((partialUDLEnd - partialUDLStart) <= span){
-            console.log("Third if");
             //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
     
             // **********************UDL*************************
-            //console.log("we are at the udl calc point");
+            
             if (uDL > 0){
             var convertUDLToPoint = uDL * span;
             var reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
             var reactionAUDL = reactionBUDL;
             reactionB = reactionBUDL;
             reactionA = reactionAUDL;
-            console.log("UDL RB = " + reactionB);
-            console.log("UDL RA = " + reactionA);
             }
             // **********************POINT LOAD *************************
     
@@ -165,14 +207,6 @@ export default class SteelBeamCalcScreen extends React.Component {
                     var reactionAPointLoad = (pointValue - reactionBPointLoad);
                     reactionB = reactionB + reactionBPointLoad;
                     reactionA = reactionA + reactionAPointLoad;
-                    console.log("Point RB = " + reactionBPointLoad + " Point RA =" + reactionAPointLoad + " point Load = " + pointValue);
-                    /*reactionTextA = "RA = " + reactionA + loadUnitsText;
-                    reactionTextB = "RB = " + reactionB + loadUnitsText;
-    
-                    this.setState({
-                        reactionTextA,
-                        reactionTextB
-                    });*/
                 } 
 
                 //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
@@ -186,17 +220,11 @@ export default class SteelBeamCalcScreen extends React.Component {
                         var convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
                         var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
                         
-                        console.log("Reaction B = " + reactionB + " before partial udl");
-                        console.log("Reaction A = " + reactionA + " before partial udl");
-                        
                         var reactionBPUDL = ((newPointPosition * convertPUDLtoPoint)/span);
                         var reactionAPUDL = (convertPUDLtoPoint - reactionBPUDL);
 
                         reactionB = reactionB + reactionBPUDL;
                         reactionA = reactionA + reactionAPUDL;
-                        
-                        console.log("ReactionA = " + reactionA);
-    
                             } else if (partialUDL === 0 && (partialUDLStart >= 0 || partialUDLEnd > 0)){
                                 Alert.alert("you have specified partial UDL span but no partial UDL");
                                     } else if (partialUDL > 0  && (partialUDLEnd === 0 || partialUDLEnd > " " || partialUDLStart === " ")){
@@ -212,19 +240,14 @@ export default class SteelBeamCalcScreen extends React.Component {
         });
         reactionTextA = "RA = " + reactionA.toFixed(2) + loadUnitsText;
         reactionTextB = "RB = " + reactionB.toFixed(2) + loadUnitsText;
-        console.log("Do we get to set all state? YES!")
+        console.log("Do we get to set all state for reactions? YES!")
         
         this.setState({
             reactionTextA,
             reactionTextB,
         });
 
-        this.shearForceCalcualtion();
-
-        /*
-        this.setState({
-        ...this.state
-        });  */                      
+        this.shearForceCalcualtion();                    
             
             } else if ((partialUDLEnd - partialUDLStart) > span){
                 Alert.alert("partial UDL length cannot be greater than beam length")
@@ -234,23 +257,17 @@ export default class SteelBeamCalcScreen extends React.Component {
             Alert.alert("Point Load placed outside of Beam");
             console.log("pointValueSpan = " + pointValueSpan);
             console.log("span = " + span);
-            }
-                                                            
+            }                                                    
     }
     else {
         Alert.alert("Please enter beam span")
-    }
+        }
     } 
 
     shearForceCalcualtion = () => {
         
 
         var sFRA = reactionA;
-        var sFRB = reactionB;
-        console.log("Shear force at RA= "+sFRA);
-        console.log("Shear force at RB= "+sFRB);
-        var atRA;
-        var atRB;
         var span = this.state.beamSpan;
         var uDL = this.state.uDLValue;
         var pointValue = this.state.pointValue;
@@ -291,11 +308,8 @@ export default class SteelBeamCalcScreen extends React.Component {
         }
         
         var loadUnitsText = "KN";
-        var pointLeft;
-        var pointRight;
-        var uDLMiddleSF;
-        var sFPUDL;
-        var sFPUDR;
+        //reset shearforce array if it was already populated. This is so we dont add to the array from previous calculation
+        //shearForce.length = 0;
 
         span = parseFloat(span);
         uDL = parseFloat(uDL);
@@ -312,113 +326,27 @@ export default class SteelBeamCalcScreen extends React.Component {
         atRA = parseFloat(0);
         atRB = parseFloat(0);
         sFRA = parseFloat(sFRA);
-        sFRB = parseFloat(sFRB);
-       // var uDLMiddleSFR = 0;
-
-        //if there is a UDL and Point load case.
-        if (pointValue > 0 && partialUDL === 0){
-            pointLeft = sFRA - (uDL * pointValueSpan);
-            pointRight = pointLeft - pointValue;
-            atRB = pointRight - ((span - pointValueSpan) * uDL);
-            if((atRB + reactionB) === 0) {
-                console.log("Shear force for point load and UDL is correct." + "\nRB: " + sFRB + " and shear force at RB is " + atRB);
-            } else if (atRB !== reactionB){
-                console.log ("Shear force for point load and UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB is " + atRB);
-            }
-        } else {
-            console.log("UDL calc and Point Load calc skipped");
-        }
-        //if there is a UDL case only
-        if (uDL > 0 && pointValue === 0 && partialUDL === 0){
-            uDLMiddleSF =  sFRA - (uDL *(span/2));
-            console.log("UDL ONLY SF @ middle = " + uDLMiddleSF);
-            atRB = uDLMiddleSF - (uDL * (span/2));
-            if((atRB + reactionB) === 0) {
-                console.log("Shear force for point load and UDL is correct." + "\nRB: " + sFRB + " and shear force at RB is " + atRB);
-            } else if (atRB !== reactionB){
-                console.log ("Shear force for point load and UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB is " + atRB);
-            }   
-        } else {
-            console.log("UDL calc ONLY skipped");
-        }
-        //if there is a partial UDL case and UDL case.
-        if (partialUDL > 0 && pointValue === 0){
-            sFPUDL = sFRA - (uDL * (partialUDLStart));
-            
-            sFPUDR = sFRA - (partialUDL * (partialUDLEnd - partialUDLStart)) - (uDL * (partialUDLEnd));
-            
-            console.log("SF @ start pUDL = " + sFPUDL + "\nSF @ end pUDL = " + sFPUDR);
-            atRB = parseFloat((sFPUDR - (uDL * (span - partialUDLEnd))));
-            if((atRB + reactionB) === 0) {
-                console.log("Shear force for Partial IDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-            } else if (atRB !== reactionB){
-                console.log ("Shear force for Partial UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-            }
-        } else {
-            console.log("Partial UDL calc skipped");
-        }
-        // if there is a partial UDL case and a point load
-        if (pointValue > 0 && partialUDL > 0){
-            //if there is a partial UDL case and a point load is placed BEFORE the partial UDL.
-            if(pointValueSpan < partialUDLStart) {
-                pointLeft = sFRA - (uDL * pointValueSpan);
-                console.log("point left: " +pointLeft);
-                pointRight = pointLeft - pointValue;
-                console.log("point right: " +pointRight);
-                sFPUDL = pointRight - (uDL * (partialUDLStart - pointValueSpan));
-                console.log("What is sFPUDL:" + parseFloat( sFPUDL));
-                sFPUDR = sFPUDL - (partialUDL * (partialUDLEnd - partialUDLStart)) - (uDL * (span - partialUDLEnd));
-                console.log("What is sFPUDR:" + sFPUDR);
-                atRB = (sFPUDR - (uDL * (span - partialUDLEnd)));
-                console.log(sFPUDR);
-                if((atRB + reactionB) === 0) {
-                    console.log("Shear force for Point and Partial UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                } else if (atRB !== reactionB){
-                    console.log ("Shear force for Point and Partial UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                } 
-                //if a point load falls WITHIN or START or END of partial UDL.
-            } else if (pointValueSpan >= partialUDLStart && pointValueSpan <= partialUDLEnd){
-                sFPUDL = sFRA - (uDL * partialUDLStart);
-                pointLeft = sFPUDL - (uDL * (pointValueSpan - partialUDLStart)) - (partialUDL * (pointValueSpan - partialUDLStart));
-                pointRight = pointLeft - pointValue;
-                sFPUDR = pointRight - (partialUDL * (partialUDLEnd - pointValueSpan)) - (uDL * (partialUDLEnd - pointValueSpan));
-                atRB = sFPUDR - (uDL * (span - partialUDLEnd));
-                if((atRB + reactionB) === 0) {
-                    console.log("Shear force for Point WITHIN Partial UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                } else if (atRB !== reactionB){
-                    console.log ("Shear force for Point WITHIN Partial UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                }
-                } else if (pointValueSpan > partialUDLEnd){
-                    sFPUDL = sFRA - (uDL * partialUDLStart);
-                    sFPUDR = sFPUDL - (partialUDL * (partialUDLEnd - partialUDLStart)) - (uDL * (partialUDLEnd - partialUDLStart));
-                    pointLeft = sFPUDR - (uDL * (pointValueSpan - partialUDLEnd));
-                    pointRight = pointLeft - pointValue;
-                    atRB = pointRight - (uDL * (span - pointValueSpan));
-                    if((atRB + reactionB) === 0) {
-                        console.log("Shear force for Point at RIGHT OF PARTIAL UDL is correct." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                    } else if (atRB !== reactionB){
-                        console.log ("Shear force for Point at RIGHT OF PARTIAL UDL is NOT CORRECT." + "\nRB: " + sFRB + " and shear force at RB: " + atRB);
-                    }
-                }
-        } else {
-            console.log("Point Value and Partial UDL calc skipped.");
+       
+        for (let i = 0.00; i <= span; i += 0.01){
+            let shearCalc = this.shearForceReaction(sFRA) - this.shearForcePointCalc(i, pointValue, pointValueSpan) - this.shearForcePartialUDL(i, partialUDLStart, partialUDLEnd, partialUDL) - this.shearForceFullUDL(i, uDL);
+            shearForce.push(shearCalc);
         }
 
-        ShearForceTextA = "SFA = " + sFRA.toFixed(2) + loadUnitsText;
-        ShearForceTextB = "SFB = " + sFRB.toFixed(2) + loadUnitsText;
-        console.log("Do we get to end of Shear calculation? YES!");
+        let shearMax = (Math.max.apply(null, shearForce)).toFixed(2);
+        let shearMin = (Math.min.apply(null, shearForce)).toFixed(2);
+        ShearForceTextA = "SFMax = " + shearMax + loadUnitsText;
+        ShearForceTextB = "SFMin = " + shearMin + loadUnitsText;
+
+        this.setState({
+            ShearForceTextA,
+            ShearForceTextB,
+        });
         this.bendingMomentCalculation();
-        //TODO: shear force for point load before Partial UDL
-        //TODO: shear for for point load in partial UDL
-        //TODO: shear force for point load after partial UDL.
-
     }
 
     bendingMomentCalculation = () => {
 
         var sFRA = reactionA;
-        var sFRB = reactionB;
-
         var span = this.state.beamSpan;
         var uDL = this.state.uDLValue;
         var pointValue = this.state.pointValue;
@@ -428,16 +356,16 @@ export default class SteelBeamCalcScreen extends React.Component {
         var partialUDLEnd = this.state.partialUDLEnd;
 
         if (span === " " || span === ""){
-            this.setState({beamSpan: 0})
+            this.setState({beamSpan: 0.00})
             span = 0.00;
             //span = this.state.beamSpan;
         }
         if (uDL === " " || uDL === ""){
-            this.setState({uDLValue: 0});
+            this.setState({uDLValue: 0.00});
             uDL = 0.00;
         }
         if (pointValue === " " || pointValue === ""){
-            this.setState({pointValue: 0});
+            this.setState({pointValue: 0.00});
             pointValue = 0.00;
         }
         if (pointValueSpan === " " || pointValueSpan === ""){
@@ -466,113 +394,33 @@ export default class SteelBeamCalcScreen extends React.Component {
         partialUDLStart = parseFloat(partialUDLStart);
         partialUDLEnd = parseFloat(partialUDLEnd);
         sFRA = parseFloat(sFRA);
-        sFRB = parseFloat(sFRB);
-        const moments = [];
+        
+
+        //bending moment array is reset to 0 so that moments from previous calculation doesnt carry over to new calculation.
+        //moments.length = 0;
+        
         let i = 0.00;
 
         for (i; i <= span; i += 0.01){
-            let momCalc = sFRA * i - (this.BMUDLCalc(uDL, i)) - (this.BMPointCalc(i, pointValue, pointValueSpan, span)) - (this.BMPartialUDLCalc(i, partialUDL, partialUDLStart, partialUDLEnd));
+            let momCalc = (sFRA * i - (this.BMUDLCalc(uDL, i)) - (this.BMPointCalc(i, pointValue, pointValueSpan)) - (this.BMPartialUDLCalc(i, partialUDL, partialUDLStart, partialUDLEnd))) * -1;
             moments.push(momCalc);
         }
-
-        /*
-        // calculate bending moment if there is point load and no partial udl
-        if (pointValue > 0 && partialUDL === 0) {  
-            //before arriving at point load
-                if (i <= pointValueSpan){
-                    console.log("bending moment being calculated");
-                    for(i ; i <= pointValueSpan; i += 0.01){
-                    let momCalc = sFRA * i - uDL * i * i / 2;
-                    moments.push(momCalc);
-                    } 
-                    console.log("i is = " + i)
-            }
-            //once we have arrived at point load until end of span.
-                 if (i >= pointValueSpan) {
-                    console.log("bending moment 2 being calculated");
-                    console.log("pointvaluespan = " + pointValueSpan);
-                    i = pointValueSpan + 0.01;
-                    console.log("i is = " + i);
-                    for(i; i <= span ; i += 0.01){
-                        let momCalc = (sFRA * i) - (pointValue * (i - pointValueSpan)) - ( uDL * i * i / 2);
-                        moments.push(momCalc);
-                    }
-                }
-            }
-        // calculate bending moment if there is partial UDL and no point load
-        if( pointValue === 0 && partialUDL > 0) {
-            //before we reach partial UDL Start
-            if (i <= partialUDLStart){
-                for(i; i <= partialUDLStart; i += 0.01){
-                    let momCalc = sFRA * i - uDL * i * i / 2;
-                    moments.push(momCalc);
-                }
-            }
-            //once we have reached partial UDL start until partial UDL End
-            if(i >= partialUDLStart && i <= partialUDLEnd){
-                i = partialUDLStart + 0.01;
-                for(i; i <= partialUDLEnd; i += 0.01){
-                    let momCalc = (sFRA * i) - (uDL * i * i / 2) - (partialUDL * (i - partialUDLStart) * (i - partialUDLStart) / 2);
-                    moments.push(momCalc);
-                }
-            }
-            //once we have reached partial UDL end until end of beam spam
-            if(i >= partialUDLEnd){
-                i = partialUDLEnd + 0.01;
-                for(i; i <= beamSpan; i += 0.01){
-                    let momCalc = (sFRA * i) - (uDL * i * i / 2) - ((partialUDL * (partialUDLEnd - partialUDLStart)) * (i - partialUDLStart - (0.5) * (partialUDLEnd - partialUDLStart)));
-                    moments.push(momCalc);
-                }
-            }
-        }
-        //calculate bending moment if there is point load and partial UDL
-        if (pointValue > 0 && partialUDL > 0){
-            //if point load is before partial UDL
-            if (pointValueSpan < partialUDLStart){
-                //before we reach the start of point load
-                if (i <= pointValueSpan){
-                    //console.log("bending moment being calculated");
-                    for(i ; i <= pointValueSpan; i += 0.01){
-                        let momCalc = sFRA * i - uDL * i * i / 2;
-                        moments.push(momCalc);
-                    }
-                }
-                //after start of point load and before start of partial udl load
-                if (i >= pointValueSpan && i <= partialUDLStart) {
-                    i = pointValueSpan + 0.01;
-                    for (i; i <= partialUDLStart; i += 0.01){
-                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span);
-                        moments.push(momcalc);
-                    }
-                }
-                //after start of partial udl load and until end of partial udl load.
-                if (i >= partialUDLStart && i <= partialUDLEnd){
-                    i = partialUDLStart + 0.01;
-                    for (i; i <= partialUDLEnd; i += 0.01){
-                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (i-partialUDLStart) * (i-partialUDLStart) / 2);
-                        moments.push(momCalc);
-                    }
-                }
-                //end of partial udl load until end of beam span.
-                if (i >= partialUDLEnd && i < span){
-                    i = partialUDLEnd + 0.01;
-                    for (i; i <= span; i += 0.01){
-                        let momCalc = sFRA * i - (uDL * i * i / 2) - ((pointValue * (i - partialUDLStart))/span) - (partialUDL * (partialUDLEnd-partialUDLStart)*(i - partialUDLStart - (0.5)*(partialUDLEnd-partialUDLStart)));
-                        moments.push(momCalc);
-                    }
-                }
-            }
-        }
-        */
-
-
             let maxBend = (Math.max.apply(null, moments)).toFixed(2);
             let maxBendPos = moments.indexOf((Math.max.apply(null, moments)));
             let minBend = (Math.min.apply(null, moments)).toFixed(2);
             let minBendPos = moments.indexOf((Math.min.apply(null, moments)));
-            console.log("Max bending moment = " + maxBend + "KN.m" + " @ " + maxBendPos + "mm");
-            console.log("Min bending moment = " + minBend + "KN.m" + " @ " + minBendPos + "mm");
-            console.log("Bending moment array length = " + moments.length)
+            console.log("Max bending moment = " + maxBend + "KN.m" + " @ " + maxBendPos + "cm");
+            console.log("Min bending moment = " + minBend + "KN.m" + " @ " + minBendPos + "cm");
+            console.log("Bending moment array length = " + moments.length);
+
+            MinBendingText = "Min BM = " + (maxBend + "KN" + " @ " + maxBendPos + "cm");
+            MaxBendingText = "Max BM = " + (minBend + "KN" + " @ " + minBendPos + "cm");
+
+            this.setState({
+                MinBendingText,
+                MaxBendingText
+            })
+
     }
 
 
@@ -580,13 +428,56 @@ export default class SteelBeamCalcScreen extends React.Component {
 //handleTextChange = (newText) => this.setState({value: newText});
 
   render() {
+    const indexToClipFrom = 10
+
+    const Gradient = () => (
+        <Defs key={ 'defs' }>
+            <LinearGradient id={ 'gradient' } x1={ '0%' } y={ '0%' } x2={ '0%' } y2={ '100%' }>
+                <Stop offset={ '0%' } stopColor={ 'rgb(134, 65, 244)' } stopOpacity={ 0.8 }/>
+                <Stop offset={ '100%' } stopColor={ 'rgb(134, 65, 244)' } stopOpacity={ 0.2 }/>
+            </LinearGradient>
+        </Defs>
+    )
+
+    const Clips = ({ x, width }) => (
+        <Defs key={ 'clips' }>
+            <ClipPath id={ 'clip-path-1' } key={ '0' }>
+                <Rect x={ 0 } y={ '0' } width={ x(indexToClipFrom) } height={ '100%' }/>
+            </ClipPath>
+            <ClipPath id="clip-path-2" key={ '1' }>
+                <Rect x={ x(indexToClipFrom) } y={ '0' } width={ width - x(indexToClipFrom) } height={ '100%' }/>
+            </ClipPath>
+        </Defs>
+    )
+
+    const Line = ({ line }) => (
+        <Path
+            key={ 'line' }
+            d={ line }
+            stroke={ 'green' }
+            fill={ 'none' }
+            clipPath={ 'url(#clip-path-1)' }
+        />
+    )
+
+    const DashedLine = ({ line }) => (
+        <Path
+            key={ 'dashed-line' }
+            stroke={ 'green' }
+            d={ line }
+            fill={ 'none' }
+            clipPath={ 'url(#clip-path-2)' }
+            strokeDasharray={ [ 4, 4 ] }
+        />
+    )
   return (
+      <ScrollView>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
         <View style={styles.header}>
             <Text style={styles.headerText}>Calculation of a simply supported beam with a UDL load.</Text>      
         </View>  
-            <Text style={{fontSize: 14, color: "#000"}}>Enter Beam Span</Text>
+            <Text style={{fontSize: 14, color: "#000"}}>Enter Beam Span (m)</Text>
             
 
             <TextInput 
@@ -597,7 +488,7 @@ export default class SteelBeamCalcScreen extends React.Component {
 
 
             <Text style={{fontSize: 14, color: "#000"}}>
-                Enter UDL
+                Enter UDL (KN/m)
             </Text>
                 <TextInput 
                     style={styles.inputContainer}
@@ -606,7 +497,7 @@ export default class SteelBeamCalcScreen extends React.Component {
                     keyboardType={'numeric'}/>
 
             <Text style={{fontSize: 14, color: "#000"}}>
-                Enter Point Load
+                Enter Point Load (KN)
             </Text>
                 <TextInput
                     style={styles.inputContainer}
@@ -615,7 +506,7 @@ export default class SteelBeamCalcScreen extends React.Component {
                     keyboardType={'numeric'}/>
 
             <Text style={{fontSize: 14, color: "#000"}}>
-                Enter Point Load Span
+                Enter Point Load Span (m)
             </Text>
                 <TextInput
                     style={styles.inputContainer}
@@ -624,7 +515,7 @@ export default class SteelBeamCalcScreen extends React.Component {
                     keyboardType={'numeric'}/>
             
             <Text style={{fontSize: 14, color: "#000"}}>
-                Enter Partial UDL
+                Enter Partial UDL (KN/m)
             </Text>
                 <TextInput
                     style={styles.inputContainer}
@@ -633,7 +524,7 @@ export default class SteelBeamCalcScreen extends React.Component {
                     keyboardType={'numeric'}/>
             
             <Text style={{fontSize: 14, color: "#000"}}>
-                Position from RA to start of Partial UDL
+                Position from RA to start of Partial UDL (m)
             </Text>
                 <TextInput
                     style={styles.inputContainer}
@@ -642,7 +533,7 @@ export default class SteelBeamCalcScreen extends React.Component {
                     keyboardType={'numeric'}/>
 
             <Text style={{fontSize: 14, color: "#000"}}>
-                Position from RA to end of Partial UDL
+                Position from RA to end of Partial UDL (m)
             </Text>
                 <TextInput
                     style={styles.inputContainer}
@@ -657,13 +548,19 @@ export default class SteelBeamCalcScreen extends React.Component {
                 value = {this.state.value}
             onChangeText = {this.handleTextChange}/>*/}
         
-            {/* ---------Display of Reaction results below----------- */}
+            {/* ---------Display results below----------- */}
             <View style = {{flexDirection: "row", justifyContent: "center", borderWidth: 2}}>
             <Text style={{fontSize: 20, padding: 10, marginEnd: 50}}>{this.state.reactionTextA}</Text>
             <Text style={{fontSize: 20, padding: 10}}>{this.state.reactionTextB}</Text>
             </View>
+            <View style = {{flexDirection: "row", justifyContent: "center", borderWidth: 2}}>
             <Text style ={{fontSize: 20, padding: 10}}>{this.state.ShearForceTextA}</Text>
             <Text style ={{fontSize: 20, padding: 10}}>{this.state.ShearForceTextB}</Text>
+            </View>
+            <View style = {{flexDirection: "column", justifyContent: "center", borderWidth: 2}}>
+            <Text style ={{fontSize: 20, padding: 10}}>{this.state.MaxBendingText}</Text>
+            <Text style ={{fontSize: 20, padding: 10}}>{this.state.MinBendingText}</Text>
+            </View>
 
             {/* ---------Button to calculate Reaction ----------- */}
         <View style={styles.button}>
@@ -673,11 +570,30 @@ export default class SteelBeamCalcScreen extends React.Component {
                 onPress={() => {
                 this.beamCalculation()
                 }}>
-                    <Text style={{fontSize: 20}}>Calculate Reactions</Text>
+                    <Text style={{fontSize: 20}}>Calculate Forces</Text>
             </Button>       
         </View>
+        <LineChart
+                style={{ height: 200, marginLeft: 10, marginRight: 10 }}
+                data={ moments }
+                svg={{ stroke: 'rgb(134, 65, 244)' }}
+                contentInset={{ top: 20, bottom: 20 }}
+            >
+                <Grid/>
+            </LineChart>
+            <AreaChart
+                style={{ height: 200, marginLeft: 10, marginRight: 10 }}
+                data={ shearForce }
+                contentInset={{ top: 30, bottom: 30 }}
+                curve={ shape.curveNatural }
+                svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                contentInset={contentInset = { top: 20, bottom: 20 }}
+            >
+                <Grid/>
+            </AreaChart>
     </View>
 </TouchableWithoutFeedback>
+</ScrollView>
   );
 }
 }
