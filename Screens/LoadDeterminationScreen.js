@@ -45,17 +45,36 @@ export default class LoadDeterminationScreen extends React.Component {
             value={this.state.toggleWallSwitch}
             />
         </View>
+
+        {/* Conditional rendering in the below curly braces. */}
         {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
             this.state.toggleWallSwitch &&
-            <View style={{flexDirection:"row", justifyContent:"space-around"}} >
-                <Image style={styles.imageContainer}
-                source= {require("../assets/Images/cavity_brick_block.png")} />
-                <Image style={styles.imageContainer}
-                source= {require("../assets/Images/cavity_block_block.png")} />
-                
+            <View>
+                <View>
+                    <Text>
+                        Please select wall type
+                    </Text>
+                </View>
+                <View style={{flexDirection:"row", justifyContent:"space-around"}} >
+                    <TouchableOpacity
+                    onPress={() => {}}
+                    >
+                        <Image style={styles.imageContainer}
+                        source= {require("../assets/Images/cavity_brick_block.png")} />
+                        <Text>Cavity Wall</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => {}}
+                    >
+                        <Image style={styles.imageContainer}
+                        source= {require("../assets/Images/cavity_block_block.png")} />     
+                        <Text>Solid Wall</Text>
+                    </TouchableOpacity>      
+                </View>
             </View>
         }
+
         <View style={styles.toggleContainer}>
             <Text style={styles.textToggle}>
                 Is the beam carrying a floor?
