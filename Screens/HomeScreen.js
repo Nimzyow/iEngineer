@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
             >
                 <Card style={styles.cardContainer}>
                     <Text style={styles.cardText}>
-                        Something Else Calculation
+                        Beam Checker
                     </Text>
                 </Card>
             </TouchableOpacity>
