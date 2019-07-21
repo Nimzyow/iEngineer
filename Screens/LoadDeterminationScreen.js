@@ -10,7 +10,7 @@ export default class LoadDeterminationScreen extends React.Component {
 
             lengthUnits: "m",
 
-            toggleWallSwitch: true,
+            toggleWallSwitch: false,
             toggleFloorSwitch: false,
             toggleRoofSwitch: false,
 
@@ -65,6 +65,11 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBrickPropSelect: false,
             solidBlockSelect: true,
             solidBlockPropSelect: false,
+
+            timberInternalSelect: true,
+            timberInternalPropSelect: false,
+            timberExternalSelect: true,
+            timberExternalPropSelect: false,
 
             wallHeightReady: false,
             wallHeightText: "",
@@ -123,8 +128,6 @@ export default class LoadDeterminationScreen extends React.Component {
             timberWallSelect: false,
             timberWallProp: false,
             wallHeightReady: false,
-            timberWallSelect: false,
-            timberWallProp: false,
             wallHeightReady: false,
             solidBlockPropSelect: true,
             solidBrickPropSelect: true,
@@ -144,8 +147,15 @@ export default class LoadDeterminationScreen extends React.Component {
             solidWallProp: false,
             timberWallSelect: true,
             timberWallProp: true,
+            timberInternalSelect: true,
+            timberExternalSelect: true,
             solidBlockPropSelect: false,
-            solidBrickPropSelect: false
+            solidBrickPropSelect: false,
+            wallHeightReady: false,
+            wallHeightText: "",
+            FinalWallSelection: "",
+            brickBlockPropSelect: false,
+            blockBlockPropSelect: false
         })
     }
 
@@ -190,6 +200,28 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBlockPropSelect: true,
             wallHeightReady: true,
             FinalWallSelection: "Solid Block Wall"
+        })
+    }
+
+    timberInternalSelect = () => {
+        this.setState({
+            timberInternalSelect: true,
+            timberInternalPropSelect: true,
+            timberExternalSelect: false,
+            timberExternalPropSelect: false,
+            wallHeightReady: true,
+            FinalWallSelection: "Internal timber wall"
+        })
+    }
+
+    timberExternalSelect = () => {
+        this.setState({
+            timberInternalSelect: false,
+            timberInternalPropSelect: false,
+            timberExternalSelect: true,
+            timberExternalPropSelect: true,
+            wallHeightReady: true,
+            FinalWallSelection: "External timber wall"
         })
     }
 
@@ -312,6 +344,37 @@ export default class LoadDeterminationScreen extends React.Component {
                 </View>
             </View>
         }
+        {/* The below is conditional rendering for if TIMBER WALL is selected. */}
+        {
+            this.state.timberWallProp &&
+            <View>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>
+                        Please select Timber Wall type
+                    </Text>
+                </View>
+                <View style={{flexDirection:"row", justifyContent:"space-around"}} >
+                    <TouchableOpacity
+                    onPress={() => {this.timberInternalSelect()}}
+                    >
+                        <Image style={ this.state.timberInternalSelect || this.state.timberInternalPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        source= {require("../assets/Images/cavity_brick_block.png")} />
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{fontSize:16}}>Internal</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => {this.timberExternalSelect()}}
+                    >
+                        <Image style={ this.state.timberExternalSelect || this.state.timberExternalPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        source= {require("../assets/Images/cavity_block_block.png")} />     
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{fontSize:16}}>External</Text>
+                        </View>
+                    </TouchableOpacity>    
+                </View>
+            </View>
+        }
         {/* The below is conditional rendering for when we want WALL HEIGHT from the user. */}
         {
             this.state.wallHeightReady  &&
@@ -322,14 +385,18 @@ export default class LoadDeterminationScreen extends React.Component {
                     </Text>
                 </View>
                 <View style={{flexDirection:"column", marginTop: 15, marginBottom:15}} >
-                    <Form>
-                        <Item success style={{marginLeft: 115, marginRight: 115}}>
-                            <Input placeholder='wall height (m)'
+                    <Form style={{flex:1}}>
+                        <Item success style={{marginLeft: 165, marginRight: 165}}>
+                            <Input placeholder=''
                             onChangeText = {(wallHeightText) => this.setState({wallHeightText})}
                             value = {this.state.wallHeightText}
                             keyboardType="number-pad"/>
-                            <Icon name= {this.state.wallHeightText > 0 ?  'checkmark-circle' : ''} />
-                        </Item> 
+                            <Icon name= {this.state.wallHeightText > 0 ?  '' : ''} />
+                        </Item>
+                        <View style={{marginLeft: 220, position:"absolute", top:14}}>
+                            <Text style={{fontSize:19,
+      fontFamily: 'Arial Hebrew'}}>m</Text>
+                        </View>
                     </Form>
                 </View>
                 <View style={{marginTop:12, alignItems:"center"}}>
@@ -353,8 +420,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     <Text>Wall Selection Successful</Text>
                 </Button>
         }
-           
-        
+{/* The below switch is for selection of floor. for details about how the switch works, scroll up to the first switch, for wall. */}
 
         <View style={styles.toggleContainer}>
             <Text style={styles.textToggle}>
@@ -374,6 +440,35 @@ export default class LoadDeterminationScreen extends React.Component {
                 value={this.state.toggleRoofSwitch}
                 />
         </View>
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {
+            this.state.wallHeightText === 0 || this.state.wallHeightText === "" &&
+                <View style={{flex:1, marginTop: 180, marginBottom: 40}}>
+                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
+                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
+                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
+                        </Button>
+                    </View>
+                </View>
+
+        }
+        {/* The below is conditional for BEAM CHECK CONDITIONS MET */}
+        {
+            this.state.wallHeightText > 0 &&
+                <View style={{marginTop: 40, marginBottom: 40}}>
+                    <View style={{flexDirection:"row", justifyContent:"center"}}>
+                        <Button 
+                        onPress={() => {}} 
+                        rounded 
+                        success 
+                        style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
+                            <Text style={styles.headerText}>Check my beam</Text>
+                        </Button>
+                    </View>
+                </View>
+
+        }
+
         <View style={styles.empty}></View>
         </ScrollView>
         </KeyboardAvoidingView>
@@ -385,8 +480,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    //alignItems: "flex-start"
-    //justifyContent: 'center',
+    
+    flexDirection:"column",
+    justifyContent: 'flex-end',
+    //alignItems:"flex-end",
+    //borderWidth:1
   },
   header:{
     alignItems:"center", 
@@ -398,7 +496,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial Hebrew'
   },
   toggleContainer: {
-    marginTop:15,
+    marginTop:35,
     flexDirection:"row",
     //borderWidth:1,
     justifyContent: "space-between"
