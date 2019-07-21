@@ -3,8 +3,6 @@ import { Image ,Keyboard, StyleSheet, Text, View, Switch ,TextInput, TouchableWi
 import { Button, Card, Form, Item, Input, Label, Icon } from "native-base";
 import { Header } from 'react-navigation';
 
-let wallHeightText;
-
 export default class LoadDeterminationScreen extends React.Component {
     constructor (props){
         super(props);
