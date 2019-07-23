@@ -35,7 +35,18 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightReady: false,
             wallHeightText: "",
 
-            FinalWallSelection:""
+            FinalWallSelection:"",
+
+//          ALL FLOOR STATES
+
+            timberFloorSelect: true,
+            timberFloorProp: false,
+            concreteFloorSelect: true,
+            concreteFloorProp: false,
+
+            floorLengthReady:false,
+            floorLengthText: "",
+            FinalFloorSelection: ""
             
         }
     }
@@ -431,6 +442,80 @@ export default class LoadDeterminationScreen extends React.Component {
                 value={this.state.toggleFloorSwitch}
                 />
         </View>
+
+{/* Conditional rendering in the below curly braces for Floor selection. */}
+        {
+            //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
+            this.state.toggleFloorSwitch &&
+            <View>
+                <View>
+                    <TouchableOpacity
+                    onPress={() => {}}
+                    style={{flex:1,flexDirection:"row"}}
+                    >
+                        <Image
+                        resizeMode="contain" 
+                        source= {require("../assets/Images/timber_floor_for_app.png")}
+                        style={ this.state.timberFloorSelect || this.state.timberFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                         />
+                    </TouchableOpacity>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{fontSize:16}}>Timber Floor Joist</Text>
+                        </View>
+                    <TouchableOpacity
+                    onPress={() => {}}
+                    style={{flex:1,flexDirection:"row"}}
+                    >
+                        <Image
+                        resizeMode="contain" 
+                        source= {require("../assets/Images/concrete_floor_for_app.png")}
+                        style={ this.state.concreteFloorSelect || this.state.concreteFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                         />
+                    </TouchableOpacity>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{fontSize:16}}>Reinforced Concrete Floor</Text>
+                        </View>    
+                </View>
+            </View>
+        }
+        {/* The below is conditional rendering for when we want FLOOR LENGTH from the user. */}
+        {
+            this.state.floorLengthReady  &&
+            <View>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>
+                        Please enter floor length estimate (m)
+                    </Text>
+                </View>
+                <View style={{flexDirection:"column", marginTop: 15, marginBottom:15}} >
+                    <Form style={{flex:1}}>
+                        <Item success style={{marginLeft: 165, marginRight: 165}}>
+                            <Input placeholder=''
+                            onChangeText = {(floorLengthText) => this.setState({floorLengthText})}
+                            value = {this.state.floorLengthText}
+                            keyboardType="number-pad"/>
+                            <Icon name= {this.state.floorLengthText > 0 ?  '' : ''} />
+                        </Item>
+                        <View style={{marginLeft: 220, position:"absolute", top:14}}>
+                            <Text style={{fontSize:19,
+      fontFamily: 'Arial Hebrew'}}>m</Text>
+                        </View>
+                    </Form>
+                </View>
+                <View style={{marginTop:12, alignItems:"center"}}>
+                    <Text style={{fontSize:17,
+      fontFamily: 'Arial Hebrew'}}>
+                        Floor selected = {this.state.FinalFloorSelection}
+
+                    </Text>
+                    <Text style={{fontSize:17,
+      fontFamily: 'Arial Hebrew', marginTop: 12}}>
+                        Floor Length = {this.state.floorLengthText}m
+                    </Text>
+                </View>
+            </View>
+        }
+
         <View style={styles.toggleContainer}>
             <Text style={styles.textToggle}>
                 Is the beam carrying a Roof?
@@ -521,6 +606,19 @@ const styles = StyleSheet.create({
     marginTop:40,
     marginBottom: 20
   },
+  imageContainerHorizontal: {
+    flex:1,
+    //alignSelf:"stretch",
+    //width: null,
+    //height: null,
+    
+    //width: 300, 
+    height: 200,
+    //borderWidth: 1,
+    //marginTop:40,
+    //marginBottom: 20
+    
+  },
   imageDeselect: {
     resizeMode:"contain", 
     width: 100, 
@@ -529,6 +627,15 @@ const styles = StyleSheet.create({
     marginTop:40,
     marginBottom: 20,
     opacity:0.2
+  },
+  imageContainerHorizontalDeselect: {
+    resizeMode:"contain", 
+    //width: 300, 
+    //height: 100,
+    //borderWidth: 1,
+    marginTop:40,
+    marginBottom: 20,
+    opacity: 0.2
   },
   empty:{
       height: 200
