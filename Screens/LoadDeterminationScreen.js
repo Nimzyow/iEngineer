@@ -122,6 +122,7 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightReady: false,
             wallHeightText: "",
 
+//One thing to remember is that setState is usually Asynchronus. So all variables that I set to change will happen in exactly the same time, not 1 by 1 like when you normally call normal methods. if we want to call a method DIRECTLY AFTER setState, that is after the variables have been set, a callback function has to be created in the manner shown below. this will insure that the method will contain the newley set variables rather than the variables prior.
             FinalWallSelection:""}, () => {this.beamCheckLogic()});
             
     }
@@ -557,6 +558,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     placeholder="Height(m)"
                     onChangeText={(wallHeightText) => this.setState({wallHeightText})}
                     value={this.state.wallHeightText}
+                    keyboardType="number-pad"
                     />
                 <Button 
                 onPress={this.beamCheckLogic}
@@ -650,6 +652,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     placeholder="Length(m)"
                     onChangeText={(floorLengthText) => this.setState({floorLengthText})}
                     value={this.state.floorLengthText}
+                    keyboardType="number-pad"
                     />
                 <Button 
                 onPress={this.beamCheckLogic}
