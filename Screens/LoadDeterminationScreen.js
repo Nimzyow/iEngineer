@@ -323,8 +323,9 @@ export default class LoadDeterminationScreen extends React.Component {
             floorLengthReady: true,
             floorLengthText: "",
             finalFloorSelection: "Timber Floor Joist",
+            floorSelectionSucess: false,
 
-        })
+        }, () => {this.beamCheckLogic()})
     }
 
     RConcreteFloorSelect = () => {
@@ -336,12 +337,18 @@ export default class LoadDeterminationScreen extends React.Component {
             floorLengthReady: true,
             floorLengthText: "",
             finalFloorSelection: "Reinforced Concrete Floor",
-
-        })
+            floorSelectionSucess: false
+        }, () => this.beamCheckLogic())
     }
 
     flatRoofSelect = () => {
-
+            this.setState({
+            flatRoofSelect:true,
+            flatRoofProp: true,
+            pitchedRoofSelect: false,
+            pitchedRoofProp: false,
+            flatRoofLengthReady: true,
+            })
     }
 
     pitchedRoofSelect = () => {
@@ -356,42 +363,40 @@ export default class LoadDeterminationScreen extends React.Component {
 
     }
 
-    changeWallHeight = (text) => {
-        this.setState({wallHeightText: text});
-        console.log("wall height " + this.state.wallHeightText);
-        this.beamCheckLogic();
+    changeWallHeight = (wallHeightText) => {
+        this.setState({wallHeightText: wallHeightText}, () => {this.beamCheckLogic()});
     }
 
-    changeFloorLength = (text) => {
-        this.setState({floorLengthText: text})
-        this.beamCheckLogic();
+    changeFloorLength = (floorLengthText) => {
+        this.setState({floorLengthText: floorLengthText}, () => this.beamCheckLogic());       
     }
 
-    changeFlatRoofLength = (text) => {
-        this.setState({flatRoofLengthText: text})
-        this.beamCheckLogic();
+    changeFlatRoofLength = (flatRoofLengthText) => {
+        this.setState({flatRoofLengthText: flatRoofLengthText}, () => this.beamCheckLogic());
     }
 
-    changePitchedRoofLength = (text) => {
-        this.setState({PitchedRoofLengthText: text})
-        this.beamCheckLogic();
+    changePitchedRoofLength = (PitchedRoofLengthText) => {
+        this.setState({PitchedRoofLengthText: PitchedRoofLengthText}, () => this.beamCheckLogic());
     }
 
     beamCheckLogic = () => {
-        
-        console.log("Beam check logic method has been called");
-        console.log(typeof this.state.wallHeightText + " " + this.state.wallHeightText);
         if(this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0){
             this.setState({beamCheckReady: true});
-            console.log("beamCheckReady is true");
+            //console.log("beamCheckReady is true");
         } else {
             this.setState({beamCheckReady: false});
-            console.log("beamCheckReady is false");
+            //console.log("beamCheckReady is false");
         }
 
         this.state.wallHeightText > 0 ? this.setState({wallSelectionSuccess: true}) : this.setState({wallSelectionSuccess: false});
 
+        this.state.floorLengthText > 0 ? this.setState({floorSelectionSucess: true}) : this.setState({floorSelectionSucess: false});
+
+        this.state.flatRoofLengthText > 0 ? this.setState({flatRoofSelectionSuccess: true}) : this.setState({flatRoofSelectionSuccess: false});
+
+        this.state.PitchedRoofLengthText > 0 ? this.setState({pitchedRoofSelectionSuccess: true}) : this.setState({pitchedRoofSelectionSuccess: false});
     }
+
   
     render() {
   return (
@@ -556,16 +561,15 @@ export default class LoadDeterminationScreen extends React.Component {
                     <TextInput
                     style={{width:100, borderBottomWidth:1}}
                     placeholder="Height(m)"
-                    onChangeText={(wallHeightText) => this.setState({wallHeightText})}
+                    onChangeText={(wallHeightText) => this.changeWallHeight(wallHeightText)}
                     value={this.state.wallHeightText}
                     keyboardType="number-pad"
                     />
-                <Button 
-                onPress={this.beamCheckLogic}
-                >
-                    <Text>Tap to confirm height</Text>
-                </Button>
-                </View>
+                    <View style={{ justifyContent:"center"}}>
+                        <Text style={{fontSize:20}}>m</Text>
+                    </View>
+                </View>    
+                
                 <View style={{marginTop:12, alignItems:"center"}}>
                     <Text style={{fontSize:17,
       fontFamily: 'Arial Hebrew'}}>
@@ -646,19 +650,16 @@ export default class LoadDeterminationScreen extends React.Component {
                         Please enter floor length estimate (m)
                     </Text>
                 </View>
-                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center"}}>
+                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center", marginTop:8}}>
                     <TextInput
-                    style={{width:100, borderBottomWidth:1}}
+                    style={{width:30, borderBottomWidth:1, fontSize:20}}
                     placeholder="Length(m)"
-                    onChangeText={(floorLengthText) => this.setState({floorLengthText})}
+                    onChangeText={(floorLengthText) => this.changeFloorLength(floorLengthText)}
                     value={this.state.floorLengthText}
                     keyboardType="number-pad"
                     />
-                <Button 
-                onPress={this.beamCheckLogic}
-                >
-                    <Text>Tap to confirm Length</Text>
-                </Button>
+                    <View style={{ justifyContent:"center"}}>
+                    <Text style={{fontSize:20}}>m</Text></View>
                 </View>
                 <View style={{marginTop:12, alignItems:"center"}}>
                     <Text style={{fontSize:17,
@@ -675,13 +676,12 @@ export default class LoadDeterminationScreen extends React.Component {
         }
         {/* The below is conditional for SUCCESSFUL selection of FLOOR LOAD */}
         {
-            this.state.floorLengthText > 0 &&
+            this.state.floorSelectionSucess &&
 
                 <Button block success style={{marginTop: 20, marginBottom: 20}}>
                     <Text>Floor Selection Successful</Text>
                 </Button>
         }
-
         <View style={styles.toggleContainer}>
             <Text style={styles.textToggle}>
                 Is the beam carrying a Roof?
@@ -771,9 +771,17 @@ export default class LoadDeterminationScreen extends React.Component {
                 </View>
             </View>
         }
+        {/*
+            TODO: if timber flat roof is selected we need user to enter length       
+        */}
+        {/*
+            TODO: if concrete flat roof is selected we need user to enter length
+        */}
+        {/*
+            TODO: if Pitched roof is selected, we need to figure out what parameters to enter to make pitched roof calcs work. 
+        */}
         {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
-        {
-            
+        {     
             !this.state.beamCheckReady  &&
                 <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
                     <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
@@ -782,7 +790,6 @@ export default class LoadDeterminationScreen extends React.Component {
                         </Button>
                     </View>
                 </View>
-
         }
         {/* The below is conditional for BEAM CHECK CONDITIONS MET */}
         {
