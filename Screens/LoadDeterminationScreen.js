@@ -10,7 +10,8 @@ export default class LoadDeterminationScreen extends React.Component {
 
             lengthUnits: "m",
 
-            toggleWallSwitch: false,
+//          ALL SWITCHES
+            toggleSwitch: false,
             toggleFloorSwitch: false,
             toggleRoofSwitch: false,
 
@@ -35,6 +36,7 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightReady: false,
             wallHeightText: "",
 
+            wallSelectionSuccess: false,
             FinalWallSelection:"",
 
 //          ALL FLOOR STATES
@@ -48,7 +50,10 @@ export default class LoadDeterminationScreen extends React.Component {
             floorLengthText: "",
             finalFloorSelection: "",
 
+            floorSelectionSucess: false,
+
 //          ALL ROOF STATES
+            // Flat Roof states
 
             flatRoofSelect: true,
             flatRoofProp: false,
@@ -63,6 +68,14 @@ export default class LoadDeterminationScreen extends React.Component {
             flatRoofLengthReady: false,
             flatRoofLengthText: "",
             FinalFlatRoofSelection: "",
+            flatRoofSelectionSuccess: false,
+
+            // Pitched Roof states
+            PitchedRoofLengthReady: false,
+            PitchedRoofLengthText: "",
+            FinalPitchedRoofSelection: "",
+            pitchedRoofSelectionSuccess: false,
+
             
 //          BEAM CHECK STATUS
 
@@ -109,7 +122,8 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightReady: false,
             wallHeightText: "",
 
-            FinalWallSelection:""})
+            FinalWallSelection:""}, () => {this.beamCheckLogic()});
+            
     }
 
     resetFloorValues = () => {
@@ -148,6 +162,7 @@ export default class LoadDeterminationScreen extends React.Component {
         });
         if(!value){
             this.resetWallValues();
+            this.beamCheckLogic();
         }
         console.log("Wall switch is: " + value);
     }
@@ -339,6 +354,43 @@ export default class LoadDeterminationScreen extends React.Component {
     concreteFlatRoofJoistSelect = () => {
 
     }
+
+    changeWallHeight = (text) => {
+        this.setState({wallHeightText: text});
+        console.log("wall height " + this.state.wallHeightText);
+        this.beamCheckLogic();
+    }
+
+    changeFloorLength = (text) => {
+        this.setState({floorLengthText: text})
+        this.beamCheckLogic();
+    }
+
+    changeFlatRoofLength = (text) => {
+        this.setState({flatRoofLengthText: text})
+        this.beamCheckLogic();
+    }
+
+    changePitchedRoofLength = (text) => {
+        this.setState({PitchedRoofLengthText: text})
+        this.beamCheckLogic();
+    }
+
+    beamCheckLogic = () => {
+        
+        console.log("Beam check logic method has been called");
+        console.log(typeof this.state.wallHeightText + " " + this.state.wallHeightText);
+        if(this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0){
+            this.setState({beamCheckReady: true});
+            console.log("beamCheckReady is true");
+        } else {
+            this.setState({beamCheckReady: false});
+            console.log("beamCheckReady is false");
+        }
+
+        this.state.wallHeightText > 0 ? this.setState({wallSelectionSuccess: true}) : this.setState({wallSelectionSuccess: false});
+
+    }
   
     render() {
   return (
@@ -499,20 +551,18 @@ export default class LoadDeterminationScreen extends React.Component {
                         Please enter wall height estimate (m)
                     </Text>
                 </View>
-                <View style={{flexDirection:"column", marginTop: 15, marginBottom:15}} >
-                    <Form style={{flex:1}}>
-                        <Item success style={{marginLeft: 165, marginRight: 165}}>
-                            <Input placeholder=''
-                            onChangeText = {(wallHeightText) => this.setState({wallHeightText})}
-                            value = {this.state.wallHeightText}
-                            keyboardType="number-pad"/>
-                            <Icon name= {this.state.wallHeightText > 0 ?  '' : ''} />
-                        </Item>
-                        <View style={{marginLeft: 220, position:"absolute", top:14}}>
-                            <Text style={{fontSize:19,
-      fontFamily: 'Arial Hebrew'}}>m</Text>
-                        </View>
-                    </Form>
+                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center"}}>
+                    <TextInput
+                    style={{width:100, borderBottomWidth:1}}
+                    placeholder="Height(m)"
+                    onChangeText={(wallHeightText) => this.setState({wallHeightText})}
+                    value={this.state.wallHeightText}
+                    />
+                <Button 
+                onPress={this.beamCheckLogic}
+                >
+                    <Text>Tap to confirm height</Text>
+                </Button>
                 </View>
                 <View style={{marginTop:12, alignItems:"center"}}>
                     <Text style={{fontSize:17,
@@ -529,9 +579,9 @@ export default class LoadDeterminationScreen extends React.Component {
         }
         {/* The below is conditional for SUCCESSFUL selection of WALL LOAD */}
         {
-            this.state.wallHeightText > 0 &&
+            this.state.wallSelectionSuccess &&
 
-                <Button block success style={{marginTop: 20, marginBottom: 20}}>
+                <Button block success onPress={this.beamCheckLogic} style={{marginTop: 20, marginBottom: 20}}>
                     <Text>Wall Selection Successful</Text>
                 </Button>
         }
@@ -594,20 +644,18 @@ export default class LoadDeterminationScreen extends React.Component {
                         Please enter floor length estimate (m)
                     </Text>
                 </View>
-                <View style={{flexDirection:"column", marginTop: 15, marginBottom:15}} >
-                    <Form style={{flex:1}}>
-                        <Item success style={{marginLeft: 165, marginRight: 165}}>
-                            <Input placeholder=''
-                            onChangeText = {(floorLengthText) => this.setState({floorLengthText})}
-                            value = {this.state.floorLengthText}
-                            keyboardType="number-pad"/>
-                            <Icon name= {this.state.floorLengthText > 0 ?  '' : ''} />
-                        </Item>
-                        <View style={{marginLeft: 220, position:"absolute", top:14}}>
-                            <Text style={{fontSize:19,
-      fontFamily: 'Arial Hebrew'}}>m</Text>
-                        </View>
-                    </Form>
+                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center"}}>
+                    <TextInput
+                    style={{width:100, borderBottomWidth:1}}
+                    placeholder="Length(m)"
+                    onChangeText={(floorLengthText) => this.setState({floorLengthText})}
+                    value={this.state.floorLengthText}
+                    />
+                <Button 
+                onPress={this.beamCheckLogic}
+                >
+                    <Text>Tap to confirm Length</Text>
+                </Button>
                 </View>
                 <View style={{marginTop:12, alignItems:"center"}}>
                     <Text style={{fontSize:17,
@@ -668,7 +716,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     >
 
                     {/*TODO: change below picture to a piched roof picture */}
-                    
+
                         <Image
                         resizeMode="contain"
                         source= {require("../assets/Images/concrete_floor_for_app.png")}
@@ -724,7 +772,7 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             
             !this.state.beamCheckReady  &&
-                <View style={{flex:1, marginTop: 180, marginBottom: 40}}>
+                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
                     <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
                         <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
                             <Text style={styles.headerText}>Cannot check my beam yet </Text>
