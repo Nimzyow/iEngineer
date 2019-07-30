@@ -2,7 +2,7 @@ import React from 'react';
 import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Card } from "native-base";
 
-export default class HomeScreen extends React.Component {
+export default class SteelBeamListScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -11,7 +11,7 @@ export default class HomeScreen extends React.Component {
     }
 //the below will add a header, whose properties, ike fontsize, color etc... can be controlled in the App.js
     static navigationOptions = {
-      title: "iEngineer"
+      title: "Steel Beam Selection"
     }
 
   render() {
@@ -20,45 +20,7 @@ export default class HomeScreen extends React.Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           
-            <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("BeamCalc")
-            }}
-            >
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Beam Calculation
-                    </Text>
-               </Card>
-            </TouchableOpacity> 
-            
-            
-            <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("LoadDetermination")
-            }}
-            >
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Beam Checker
-                    </Text>
-                </Card>
-            </TouchableOpacity>
-            
-            <TouchableOpacity>
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Really Something Else Calculation
-                    </Text>
-                </Card>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Yet another Calculation
-                    </Text>
-                </Card>
-            </TouchableOpacity>    
+            <Text>Steel Beam List Screen</Text>    
         </View>
     </TouchableWithoutFeedback>
     <View style={styles.empty}></View>

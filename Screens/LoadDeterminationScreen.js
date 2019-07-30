@@ -188,6 +188,7 @@ export default class LoadDeterminationScreen extends React.Component {
         console.log("Roof switch is: " + value);
     }
 
+//below function for when CAVITY WALL is selected
     cavityWallSelect = () => {
         this.setState({
             cavityWallSelect: true,
@@ -208,6 +209,7 @@ export default class LoadDeterminationScreen extends React.Component {
         })
     }
 
+    //below function if SOLID WALL is selected
     solidWallSelect = () => {
         this.setState({
             cavityWallSelect: false,
@@ -227,7 +229,8 @@ export default class LoadDeterminationScreen extends React.Component {
             blockBlockPropSelect: false
         })
     }
-    
+
+//below function for if TIMBER WALL is selected.
     timberWallSelect = () => {
         this.setState({
             cavityWallSelect: false,
@@ -347,7 +350,7 @@ export default class LoadDeterminationScreen extends React.Component {
             flatRoofProp: true,
             pitchedRoofSelect: false,
             pitchedRoofProp: false,
-            flatRoofLengthReady: true,
+            flatRoofLengthReady: false,
             })
     }
 
@@ -356,11 +359,25 @@ export default class LoadDeterminationScreen extends React.Component {
     }
     
     timberFlatRoofJoistSelect = () => {
-
+        this.setState({
+        timberFlatRoofSelect: true,
+        timberFlatRoofProp: true,
+        concreteFlatRoofSelect: false,
+        concreteFlatRoofProp: false,
+        flatRoofLengthReady: true,
+        FinalFlatRoofSelection: "Timber Flat Roof"
+    })
     }
 
     concreteFlatRoofJoistSelect = () => {
-
+        this.setState({
+            timberFlatRoofSelect: false,
+            timberFlatRoofProp: false,
+            concreteFlatRoofSelect: true,
+            concreteFlatRoofProp: true,
+            flatRoofLengthReady: true,
+            FinalFlatRoofSelection: "Concrete Flat Roof"
+        })
     }
 
     changeWallHeight = (wallHeightText) => {
@@ -559,7 +576,7 @@ export default class LoadDeterminationScreen extends React.Component {
                 </View>
                 <View style={{flex:1 ,flexDirection:"row", justifyContent:"center"}}>
                     <TextInput
-                    style={{width:100, borderBottomWidth:1}}
+                    style={{width:100, borderBottomWidth:1, fontSize:20}}
                     placeholder="Height(m)"
                     onChangeText={(wallHeightText) => this.changeWallHeight(wallHeightText)}
                     value={this.state.wallHeightText}
@@ -773,7 +790,39 @@ export default class LoadDeterminationScreen extends React.Component {
         }
         {/*
             TODO: if timber flat roof is selected we need user to enter length       
-        */}
+        */
+            this.state.flatRoofLengthReady &&
+
+            <View>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>
+                        Please enter Flat Roof length estimate (m)
+                    </Text>
+                </View>
+                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center", marginTop:8}}>
+                    <TextInput
+                    style={{width:30, borderBottomWidth:1, fontSize:20}}
+                    placeholder="Length(m)"
+                    onChangeText={(flatRoofLengthText) => this.changeFlatRoofLength(flatRoofLengthText)}
+                    value={this.state.flatRoofLengthText}
+                    keyboardType="number-pad"
+                    />
+                    <View style={{ justifyContent:"center"}}>
+                    <Text style={{fontSize:20}}>m</Text></View>
+                </View>
+                <View style={{marginTop:12, alignItems:"center"}}>
+                    <Text style={{fontSize:17,
+      fontFamily: 'Arial Hebrew'}}>
+                        Floor selected = {this.state.FinalFlatRoofSelection}
+
+                    </Text>
+                    <Text style={{fontSize:17,
+      fontFamily: 'Arial Hebrew', marginTop: 12}}>
+                        Floor Length = {this.state.flatRoofLengthText}m
+                    </Text>
+                </View>
+            </View>
+       }
         {/*
             TODO: if concrete flat roof is selected we need user to enter length
         */}

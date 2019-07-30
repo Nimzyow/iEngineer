@@ -6,6 +6,7 @@ import HomeScreen from './Screens/HomeScreen';
 import SteelBeamCalcScreen from './Screens/SteelBeamCalcScreen';
 import BeamCalcScreen from './Screens/BeamCalcScreen';
 import LoadDeterminationScreen from "./Screens/LoadDeterminationScreen";
+import SteelBeamListScreen from "./Screens/SteelBeamListScreen"
 
 const MainNavigator = createStackNavigator(
   //FIRST ARGUMENT: screens we want to switch to
@@ -14,6 +15,7 @@ const MainNavigator = createStackNavigator(
   BeamCalc: {screen: BeamCalcScreen},
   SteelBeamCalc: {screen: SteelBeamCalcScreen},
   LoadDetermination: {screen: LoadDeterminationScreen},
+  SteelList: {screen: SteelBeamListScreen}
   }, 
   //SECOND ARGUMENT - what the default Navigation bar at the top of the phone should look like.
   {
