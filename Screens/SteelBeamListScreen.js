@@ -16,7 +16,8 @@ export default class SteelBeamListScreen extends React.Component {
 
   render() {
 
-    
+    {/* The first step to transferring props is to create a button press of some sort that has on onPress event like the following onPress={this.props.navigation.navigate("LoadDetermination",{beamSelect: this.state.beamSelect}}
+    The method is a simple navigation method that we use to navigate between different screens. this method accepts two arguments, the first is the navigation page, and the second is the props we wish to send over. so in the below examples, we want to send an object with a name of beamSelect and we define that as this.state.beamSelect. We make changes to the beamselect State before we cann on the navigation method to make the changes we want to the state before passing it over. So this will now pass the object to the other screen but we need to define a const variable to accep this object. Now we are ready for step 2, in loaddeterminationscreen.  */}
 
   return (
     <ScrollView>

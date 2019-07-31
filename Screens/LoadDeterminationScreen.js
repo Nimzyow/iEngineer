@@ -420,10 +420,10 @@ export default class LoadDeterminationScreen extends React.Component {
   
     render() {
 
+        {/*Principle of passing props from one screen to another. This is step 2. We receive props here. Go to SteelBeamListScreen for step 1, where we send props to here
+        Now that we have reached step 2, we need to get props from the previous screen. we get it here by defining a const called beamSelect, in this case, and using the method navigation.getParam("beamSelect", "Tap to select steel beam") which accepts two arguments. The first is the "beamSelect which is the name within the object, labelled in the previous screen. the second is the default value we want to set this const variable to be. so in the end, the beamSelect in the previous screen is stored in the const beamSelect.  " */}
         const {navigation} = this.props;
         const beamSelect = navigation.getParam("beamSelect", "Tap to select steel beam");
-        console.log("beam select value is "+ beamSelect);
-
   return (
     <KeyboardAvoidingView 
             keyboardVerticalOffset= {Header.HEIGHT + 20} style = {styles.container}
