@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image ,Keyboard, StyleSheet, Text, View, Switch ,TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert, Animation, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Button, Card, Form, Item, Input, Label, Icon } from "native-base";
+import { Image ,Keyboard, StyleSheet, View, Switch ,TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert, Animation, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Button, Card, Form, Item, Input, Label, Icon, Text } from "native-base";
 import { Header } from 'react-navigation';
 
 export default class LoadDeterminationScreen extends React.Component {
@@ -9,6 +9,9 @@ export default class LoadDeterminationScreen extends React.Component {
         this.state={
 
             lengthUnits: "m",
+
+//          BEAM SELECTION
+            beamSelect: "Please tap to select beam",
 
 //          ALL SWITCHES
             toggleSwitch: false,
@@ -416,19 +419,41 @@ export default class LoadDeterminationScreen extends React.Component {
 
   
     render() {
+
+        const {navigation} = this.props;
+        const beamSelect = navigation.getParam("beamSelect", "Tap to select steel beam");
+        console.log("beam select value is "+ beamSelect);
+
   return (
     <KeyboardAvoidingView 
             keyboardVerticalOffset= {Header.HEIGHT + 20} style = {styles.container}
             behavior="padding" enabled>
         <ScrollView>
-        <View style={styles.toggleContainer}>
-            <Text style={styles.textToggle}>
-                Is the beam carrying a wall?</Text>
-                {/* The below switch component REQUIRES two callbacks, onValueChange and value. The onValueChange callback will call the toggleSwitchWall function which will change the value of the toggleWallSwitch state. The togglewallSwitch state is the value (a boolean) that the switch renders.  */}
-            <Switch style={styles.Switch}
-            onValueChange = {this.toggleSwitchWall}
-            value={this.state.toggleWallSwitch}
-            />
+            <View style={{flex: 1, flexDirection: "column",  alignItems:"center"}}>
+                <View style={{marginTop:20, marginBottom:10}}>
+                <Text style={{fontSize:25, fontStyle:"normal", fontWeight:"bold"}}>Beam Selection</Text>
+                </View>
+                <Button iconRight block light
+                onPress={() => {
+                    this.props.navigation.navigate("SteelList")
+                }}>
+                    <Text>{beamSelect}</Text>
+                    <Icon name='arrow-forward' />
+                </Button>
+                <View style={{marginTop:20}}>
+                <Text style={{fontSize:25, fontStyle:"normal", fontWeight:"bold"}}>Load Selection</Text>
+                </View>
+            </View>
+            <View style={styles.toggleContainer}>
+
+{/* TODO: We need a button or something else that the user can press to move to the other screen and select from the list of beams. */} 
+                <Text style={styles.textToggle}>
+                    Is the beam carrying a wall?</Text>
+                    {/* The below switch component REQUIRES two callbacks, onValueChange and value. The onValueChange callback will call the toggleSwitchWall function which will change the value of the toggleWallSwitch state. The togglewallSwitch state is the value (a boolean) that the switch renders.  */}
+                <Switch style={styles.Switch}
+                onValueChange = {this.toggleSwitchWall}
+                value={this.state.toggleWallSwitch}
+                />
         </View>
 
         {/* Conditional rendering in the below curly braces. */}
@@ -895,7 +920,7 @@ const styles = StyleSheet.create({
   textToggle:{
       //justifyContent:"center"
       //border:1
-      marginTop: 4,
+      //marginTop: 4,
       fontSize:19,
       fontFamily: 'Arial Hebrew'
   },
