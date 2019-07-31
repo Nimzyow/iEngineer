@@ -12,6 +12,7 @@ export default class LoadDeterminationScreen extends React.Component {
 
 //          BEAM SELECTION
             beamSelect: "Please tap to select beam",
+            beamSelected: "",
 
 //          ALL SWITCHES
             toggleSwitch: false,
@@ -400,12 +401,12 @@ export default class LoadDeterminationScreen extends React.Component {
     }
 
     beamCheckLogic = () => {
-        if(this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0){
+        if((this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0) && this.state.beamSelected !== this.state.beamSelect){
             this.setState({beamCheckReady: true});
-            //console.log("beamCheckReady is true");
+            console.log("beamCheckReady is true");
         } else {
             this.setState({beamCheckReady: false});
-            //console.log("beamCheckReady is false");
+            console.log("beamCheckReady is false");
         }
 
         this.state.wallHeightText > 0 ? this.setState({wallSelectionSuccess: true}) : this.setState({wallSelectionSuccess: false});
@@ -423,7 +424,8 @@ export default class LoadDeterminationScreen extends React.Component {
         {/*Principle of passing props from one screen to another. This is step 2. We receive props here. Go to SteelBeamListScreen for step 1, where we send props to here
         Now that we have reached step 2, we need to get props from the previous screen. we get it here by defining a const called beamSelect, in this case, and using the method navigation.getParam("beamSelect", "Tap to select steel beam") which accepts two arguments. The first is the "beamSelect which is the name within the object, labelled in the previous screen. the second is the default value we want to set this const variable to be. so in the end, the beamSelect in the previous screen is stored in the const beamSelect.  " */}
         const {navigation} = this.props;
-        const beamSelect = navigation.getParam("beamSelect", "Tap to select steel beam");
+        const beamSelect = navigation.getParam("beamSelect", this.state.beamSelect);
+        
   return (
     <KeyboardAvoidingView 
             keyboardVerticalOffset= {Header.HEIGHT + 20} style = {styles.container}
@@ -856,7 +858,29 @@ export default class LoadDeterminationScreen extends React.Component {
         */}
         {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
         {     
-            !this.state.beamCheckReady  &&
+            !this.state.beamCheckReady  && beamSelect === this.state.beamSelect &&
+                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
+                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
+                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
+                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
+                        </Button>
+                    </View>
+                </View>
+        }
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {     
+            this.state.beamCheckReady  && beamSelect === this.state.beamSelect &&
+                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
+                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
+                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
+                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
+                        </Button>
+                    </View>
+                </View>
+        }
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {     
+            !this.state.beamCheckReady  && beamSelect !== this.state.beamSelect &&
                 <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
                     <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
                         <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
@@ -867,7 +891,7 @@ export default class LoadDeterminationScreen extends React.Component {
         }
         {/* The below is conditional for BEAM CHECK CONDITIONS MET */}
         {
-            this.state.beamCheckReady &&
+            this.state.beamCheckReady && beamSelect !== this.state.beamSelect &&
                 <View style={{marginTop: 40, marginBottom: 40}}>
                     <View style={{flexDirection:"row", justifyContent:"center"}}>
                         <Button 
