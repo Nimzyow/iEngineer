@@ -26,6 +26,7 @@ export default class beamCheckScreen extends React.Component {
                                 flatRoofLength: this.state.flatRoofLengthText, */}
     
     const {navigation} = this.props;
+    const sectionSize = navigation.getParam("sectionSize", 0);
     const sectionLength = navigation.getParam("sectionLength", 0);
     const wallType = navigation.getParam("wallType", 0);
     const wallHeight = navigation.getParam("wallHeight", 0);
@@ -34,11 +35,15 @@ export default class beamCheckScreen extends React.Component {
     const flatRoofType = navigation.getParam("flatRoofType", 0);
     const flatRoofLength = navigation.getParam("flatRoofLenght", 0);
     
+    
+   console.log(sectionSize + " " + sectionLength + " " + wallType + " " + wallHeight + " " + floorType + " " + floorLength + " " + flatRoofType + " " + flatRoofLength)
+
   return (
     <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <Text>Let's now check if the beam selected is ok.</Text>
+                <Text>{sectionSize}</Text>
             </View>
         </TouchableWithoutFeedback>
         <View style={styles.empty}></View>

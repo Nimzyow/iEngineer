@@ -922,7 +922,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     <View style={{flexDirection:"row", justifyContent:"center"}}>
                         <Button 
                         onPress={() => {
-                            this.props.navigation.navigate("beamCheck"),{
+                            this.props.navigation.navigate("beamCheck",{
                                 sectionSize: beamSelect,
                                 sectionLength: this.state.beamLengthText,
                                 wallType: this.state.FinalWallSelection,
@@ -931,7 +931,7 @@ export default class LoadDeterminationScreen extends React.Component {
                                 floorLength: this.state.floorLengthText,
                                 flatRoofType: this.state.FinalFlatRoofSelection,
                                 flatRoofLength: this.state.flatRoofLengthText, 
-                            };
+                            });
                         }} 
                         rounded 
                         success 
