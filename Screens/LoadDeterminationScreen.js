@@ -13,6 +13,7 @@ export default class LoadDeterminationScreen extends React.Component {
 //          BEAM SELECTION
             beamSelect: "Please tap to select beam",
             beamSelected: "",
+            beamLengthText: "1",
 
 //          ALL SWITCHES
             toggleSwitch: false,
@@ -400,6 +401,10 @@ export default class LoadDeterminationScreen extends React.Component {
         this.setState({PitchedRoofLengthText: PitchedRoofLengthText}, () => this.beamCheckLogic());
     }
 
+    changeBeamLength = (beamLengthText) => {
+        this.setState({beamLengthText: beamLengthText})
+    }
+
     beamCheckLogic = () => {
         if((this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0) && this.state.beamSelected !== this.state.beamSelect){
             this.setState({beamCheckReady: true});
@@ -442,6 +447,27 @@ export default class LoadDeterminationScreen extends React.Component {
                     <Text>{beamSelect}</Text>
                     <Icon name='arrow-forward' />
                 </Button>
+                {
+                beamSelect !== this.state.beamSelect &&
+
+                <View style={{flex:1}}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>
+                            Please enter beam length estimate (m)
+                        </Text>
+                    </View>
+                    <View style={{flexDirection:"row",justifyContent: "center"}}>
+                        <TextInput
+                        style={{width:30, borderBottomWidth:1, fontSize:20, }}
+                        //placeholder="Length(m)"
+                        onChangeText={(beamLengthText) => this.changeBeamLength(beamLengthText)}
+                        value={this.state.beamLengthText}
+                        keyboardType="number-pad"
+                        />
+                        <Text style={{fontSize:20}}>m</Text>
+                    </View>
+                </View>
+                    }
                 <View style={{marginTop:20}}>
                 <Text style={{fontSize:25, fontStyle:"normal", fontWeight:"bold"}}>Load Selection</Text>
                 </View>

@@ -123,16 +123,16 @@ export default class SteelBeamListScreen extends React.Component {
                     }}>
                     <Text>254 x 254 x 167kg</Text>
                 </ListItem>
+                <ListItem itemDivider>
+                    <Text>305x305mm</Text>
+                </ListItem>   
                 <ListItem button onPress={() => {
                     this.setState({beamSelect: "305x305x97kg"}, () => {
                     this.props.navigation.navigate("LoadDetermination",{beamSelect: this.state.beamSelect});    
                     })
                     }}>
                     <Text>305 x 305 x 97kg</Text>
-                </ListItem>
-                <ListItem itemDivider>
-                    <Text>305x305mm</Text>
-                </ListItem>    
+                </ListItem> 
                 <ListItem button onPress={() => {
                     this.setState({beamSelect: "305x305x118kg"}, () => {
                     this.props.navigation.navigate("LoadDetermination",{beamSelect: this.state.beamSelect});    
