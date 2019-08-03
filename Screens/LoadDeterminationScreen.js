@@ -921,7 +921,18 @@ export default class LoadDeterminationScreen extends React.Component {
                 <View style={{marginTop: 40, marginBottom: 40}}>
                     <View style={{flexDirection:"row", justifyContent:"center"}}>
                         <Button 
-                        onPress={() => {}} 
+                        onPress={() => {
+                            this.props.navigation.navigate("beamCheck"),{
+                                sectionSize: beamSelect,
+                                sectionLength: this.state.beamLengthText,
+                                wallType: this.state.FinalWallSelection,
+                                wallHeight: this.state.wallHeightText,
+                                floorType: this.state.finalFloorSelection,
+                                floorLength: this.state.floorLengthText,
+                                flatRoofType: this.state.FinalFlatRoofSelection,
+                                flatRoofLength: this.state.flatRoofLengthText, 
+                            };
+                        }} 
                         rounded 
                         success 
                         style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>

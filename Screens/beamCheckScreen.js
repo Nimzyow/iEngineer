@@ -15,6 +15,25 @@ export default class beamCheckScreen extends React.Component {
     }
 
   render() {
+
+    {/*sectionSize: beamSelect,
+                                sectionLength: this.state.beamLengthText,
+                                wallType: this.state.FinalWallSelection,
+                                wallHeight: this.state.wallHeightText,
+                                floorType: this.state.finalFloorSelection,
+                                floorLength: this.state.floorLengthText,
+                                flatRoofType: this.state.FinalFlatRoofSelection,
+                                flatRoofLength: this.state.flatRoofLengthText, */}
+    
+    const {navigation} = this.props;
+    const sectionLength = navigation.getParam("sectionLength", 0);
+    const wallType = navigation.getParam("wallType", 0);
+    const wallHeight = navigation.getParam("wallHeight", 0);
+    const floorType = navigation.getParam("floorType", 0);
+    const floorLength = navigation.getParam("floorLength", 0);
+    const flatRoofType = navigation.getParam("flatRoofType", 0);
+    const flatRoofLength = navigation.getParam("flatRoofLenght", 0);
+    
   return (
     <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
