@@ -14,17 +14,16 @@ export default class beamCheckScreen extends React.Component {
       title: "Beam Checker"
     }
 
-  render() {
+    udlDefCalc = (load, length, inertia) => {
+        let deflection = ((5 * load * length * length * length) / (384 * 210 * inertia))/1000000
+        return deflection;
+    }
+    pointDefCalc = (load, length, inertia) => {
+        let deflection = ((1 * load * length * length * length) / (48 * 210 * inertia)) / 1000000
+        return deflection;
+    }
 
-    {/*sectionSize: beamSelect,
-                                sectionLength: this.state.beamLengthText,
-                                wallType: this.state.FinalWallSelection,
-                                wallHeight: this.state.wallHeightText,
-                                floorType: this.state.finalFloorSelection,
-                                floorLength: this.state.floorLengthText,
-                                flatRoofType: this.state.FinalFlatRoofSelection,
-                                flatRoofLength: this.state.flatRoofLengthText, */}
-    
+  render() {
     const {navigation} = this.props;
     const sectionSize = navigation.getParam("sectionSize", 0);
     const sectionLength = navigation.getParam("sectionLength", 0);
@@ -34,9 +33,9 @@ export default class beamCheckScreen extends React.Component {
     const floorLength = navigation.getParam("floorLength", 0);
     const flatRoofType = navigation.getParam("flatRoofType", 0);
     const flatRoofLength = navigation.getParam("flatRoofLenght", 0);
-    
-    
-   console.log(sectionSize + " " + sectionLength + " " + wallType + " " + wallHeight + " " + floorType + " " + floorLength + " " + flatRoofType + " " + flatRoofLength)
+
+    let deflection = this.udlDefCalc(15000, 10000, 45730);
+    console.log("deflection is " + deflection);
 
   return (
     <ScrollView>
@@ -55,9 +54,7 @@ export default class beamCheckScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    //alignItems: "flex-start"
-    //justifyContent: 'center',
+    backgroundColor: '#fff'
   },
   
 });
