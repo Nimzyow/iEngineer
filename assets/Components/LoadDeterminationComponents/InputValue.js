@@ -7,7 +7,7 @@ const InputValue = (props) => {
         <View style={styles.textContainer}>
             <TextInput
                 style={styles.textInp}
-                //placeholder="Length(m)"
+                placeholder={props.placeholder}
                 onChangeText={props.changeTextHandler}
                 value={props.current}
                 keyboardType="number-pad"/>
@@ -18,6 +18,7 @@ const InputValue = (props) => {
 
 const styles = StyleSheet.create({
     textContainer: {
+        flex: 1,
         flexDirection:"row",
         justifyContent: "center"
     },

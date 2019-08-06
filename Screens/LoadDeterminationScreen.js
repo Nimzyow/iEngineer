@@ -7,7 +7,9 @@ import {Header} from "react-navigation";
 import NormalText from "../assets/Components/NormalText";
 import Headering from "../assets/Components/Headering";
 import SuccessfulSelection from "../assets/Components/LoadDeterminationComponents/SuccessfulSelection";
+import FinalSelections from "../assets/Components/LoadDeterminationComponents/FinalSelections";
 import WallDisplay from "../assets/Components/LoadDeterminationComponents/WallDisplay";
+import FloorDisplay from "../assets/Components/LoadDeterminationComponents/FloorDisplay";
 import InputValue from "../assets/Components/LoadDeterminationComponents/InputValue";
 import Toggle from "../assets/Components/LoadDeterminationComponents/Toggle";
 import BeamCheckNO from "../assets/Components/LoadDeterminationComponents/BeamCheckNO";
@@ -473,20 +475,16 @@ export default class LoadDeterminationScreen extends React.Component {
                 {
                 beamSelect !== this.state.beamSelect &&
 
-                <View style={{flex:1}}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>
-                            Please enter beam length estimate (m)
-                        </Text>
+                    <View style={{flex:1}}>
+                        <NormalText 
+                        message="Please enter beam length estimate (m)"/>         
+                        <InputValue 
+                        changeTextHandler={(beamLengthText) => this.changeBeamLength(beamLengthText)}
+                        current={this.state.beamLengthText}/> 
                     </View>
-                    <InputValue 
-                    changeTextHandler={(beamLengthText) => this.changeBeamLength(beamLengthText)}
-                    current={this.state.beamLengthText}/> 
-                </View>
-                    }
-                <Headering
-                headerName="Load Selection"
-                />
+                }
+                    <Headering
+                    headerName="Load Selection"/>
             </View>
             
 
@@ -601,52 +599,35 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.wallHeightReady  &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please enter wall height estimate (m)
-                    </Text>
-                </View>
-                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center"}}>
-                    <TextInput
-                    style={{width:100, borderBottomWidth:1, fontSize:20}}
-                    placeholder="Height(m)"
-                    onChangeText={(wallHeightText) => this.changeWallHeight(wallHeightText)}
-                    value={this.state.wallHeightText}
-                    keyboardType="number-pad"
-                    />
-                    <View style={{ justifyContent:"center"}}>
-                        <Text style={{fontSize:20}}>m</Text>
-                    </View>
-                </View>    
-                
-                <View style={{marginTop:12, alignItems:"center"}}>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew'}}>
-                        Wall selected = {this.state.FinalWallSelection}
-
-                    </Text>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew', marginTop: 12}}>
-                        Wall height = {this.state.wallHeightText}m
-                    </Text>
-                </View>
+                <NormalText 
+                    message="Please enter wall height estimate (m)"
+                />
+                <InputValue 
+                    changeTextHandler={(wallHeightText) => this.changeWallHeight(wallHeightText)}
+                    current={this.state.wallHeightText}
+                    placeholder="Height(m)"/>
+                <FinalSelections 
+                    selected="Wall Selected = "
+                    selectedType={this.state.FinalWallSelection}
+                    units="m"
+                    selectedParam="Wall Height = "
+                    selectedParamValue={this.state.wallHeightText}/>
             </View>
         }
         {/* The below is conditional for SUCCESSFUL selection of WALL LOAD */}
         {
             this.state.wallSelectionSuccess &&
                 <View>
-                <SuccessfulSelection 
-                successText="Wall Selection Successful"
-                />
+                    <SuccessfulSelection 
+                    successText="Wall Selection Successful"/>  
                 </View>
         }
 {/* The below switch is for selection of floor. for details about how the switch works, scroll up to the first switch, for wall. */}
 
         <Toggle 
-        toggleText="Is the beam carrying a floor?"
-        switchChange={this.toggleSwitchFloor}
-        current={this.state.toggleFloorSwitch}
+            toggleText="Is the beam carrying a floor?"
+            switchChange={this.toggleSwitchFloor}
+            current={this.state.toggleFloorSwitch}
         />
 
 {/* Conditional rendering in the below curly braces for Floor selection. */}
@@ -654,36 +635,21 @@ export default class LoadDeterminationScreen extends React.Component {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
             this.state.toggleFloorSwitch &&
             <View>
-                <View style={{alignItems:"center", marginTop:15}}>
-                            <Text style={{fontSize:21}}>Please Select Floor</Text>
-                        </View>  
+                <NormalText 
+                    message="Please select floor type"/>
                 <View>
-                    <TouchableOpacity
-                    onPress={() => {this.timberFloorJoistSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-                        <Image
-                        resizeMode="contain" 
-                        source= {require("../assets/Images/timber_floor_for_app.png")}
-                        style={ this.state.timberFloorSelect || this.state.timberFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                    </TouchableOpacity>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Timber Floor Joist</Text>
-                        </View>
-                    <TouchableOpacity
-                    onPress={() => {this.RConcreteFloorSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-                        <Image
-                        resizeMode="contain" 
-                        source= {require("../assets/Images/concrete_floor_for_app.png")}
-                        style={ this.state.concreteFloorSelect || this.state.concreteFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                    </TouchableOpacity>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Reinforced Concrete Floor</Text>
-                        </View>    
+                    <FloorDisplay 
+                        onPress={() => {this.timberFloorJoistSelect()}}
+                        styleChange={this.state.timberFloorSelect || this.state.timberFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/timber_floor_for_app.png")}
+                        text="Timber Floor Joist"
+                        resizeMode="contain"/>
+                    <FloorDisplay 
+                        onPress={() => {this.RConcreteFloorSelect()}}
+                        styleChange={this.state.concreteFloorSelect || this.state.concreteFloorProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/concrete_floor_for_app.png")}
+                        text="Concrete Floor"
+                        resizeMode="contain"/>    
                 </View>
             </View>
         }
@@ -940,6 +906,7 @@ const styles = StyleSheet.create({
   imageContainerHorizontal: {
     flex:1,
     height: 200,
+    borderWidth:1
   },
   imageDeselect: {
     resizeMode:"contain", 
