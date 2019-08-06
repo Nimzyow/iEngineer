@@ -1,9 +1,13 @@
 import React from 'react';
 import { Image ,Keyboard, StyleSheet, View, Switch ,TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert, Animation, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Button, Card, Form, Item, Input, Label, Icon, Text } from "native-base";
-import Headering from "../assets/Components/Headering";
 import {Header} from "react-navigation";
+
+
+import NormalText from "../assets/Components/NormalText";
+import Headering from "../assets/Components/Headering";
 import SuccessfulSelection from "../assets/Components/LoadDeterminationComponents/SuccessfulSelection";
+import WallDisplay from "../assets/Components/LoadDeterminationComponents/WallDisplay";
 import InputValue from "../assets/Components/LoadDeterminationComponents/InputValue";
 import Toggle from "../assets/Components/LoadDeterminationComponents/Toggle";
 import BeamCheckNO from "../assets/Components/LoadDeterminationComponents/BeamCheckNO";
@@ -437,6 +441,10 @@ export default class LoadDeterminationScreen extends React.Component {
         this.props.navigation.navigate(nav,transfer)
     }
 
+    styleChangeHandler = () => {
+       return this.state.cavityWallSelect || this.state.cavityWallProp ? styles.imageContainer : styles.imageDeselect
+    }
+
   
     render() {
 
@@ -495,39 +503,28 @@ export default class LoadDeterminationScreen extends React.Component {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
             this.state.toggleWallSwitch &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please select wall type
-                    </Text>
-                </View>
+                <NormalText 
+                message="Please select wall type"
+                />
                 <View style={{flexDirection:"row", justifyContent:"space-around"}} >
-                    <TouchableOpacity
-                    onPress={() => {this.cavityWallSelect()}}
-                    >
-                        <Image style={ this.state.cavityWallSelect || this.state.cavityWallProp ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_brick_block.png")} />
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Cavity Wall</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={() => {this.solidWallSelect()}}
-                    >
-                        <Image style={ this.state.solidWallSelect || this.state.solidWallProp ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_block_block.png")} />     
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Solid Wall</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={() => {this.timberWallSelect()}}
-                    >
-                        <Image style={ this.state.timberWallSelect || this.state.timberWallProp ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/timber_wall_for_app.png")} />     
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Timber Wall</Text>
-                        </View>
-                    </TouchableOpacity>      
+                    <WallDisplay 
+                        onPress={() => {this.cavityWallSelect()}}
+                        styleChange={this.state.cavityWallSelect || this.state.cavityWallProp ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/cavity_brick_block.png")}
+                        text="Cavity Wall"
+                    />
+                    <WallDisplay 
+                        onPress={() => {this.solidWallSelect()}}
+                        styleChange={this.state.solidWallSelect || this.state.solidWallProp ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/cavity_block_block.png")}
+                        text="Solid Wall"
+                    />
+                    <WallDisplay 
+                        onPress={() => {this.timberWallSelect()}}
+                        styleChange={this.state.timberWallSelect || this.state.timberWallProp ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/timber_wall_for_app.png")}
+                        text="Timber Wall"
+                    />      
                 </View>
             </View>
         }
@@ -535,30 +532,22 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.cavityWallProp &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please select Cavity Wall type
-                    </Text>
-                </View>
+                <NormalText 
+                message="Please select Cavity Wall type"
+                />
                 <View style={{flexDirection:"row", justifyContent:"space-around"}} >
-                    <TouchableOpacity
-                    onPress={() => {this.brickBlockSelect()}}
-                    >
-                        <Image style={ this.state.brickBlockSelect || this.state.brickBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_brick_block.png")} />
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Brick + Block </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={() => {this.BlockBlockSelect()}}
-                    >
-                        <Image style={ this.state.blockBlockSelect || this.state.blockBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_block_block.png")} />     
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Block + Block </Text>
-                        </View>
-                    </TouchableOpacity>    
+                    <WallDisplay 
+                        onPress={() => {this.brickBlockSelect()}}
+                        styleChange={this.state.brickBlockSelect || this.state.brickBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/cavity_brick_block.png")}
+                        text="Brick + Block"
+                        />
+                    <WallDisplay 
+                        onPress={() => {this.BlockBlockSelect()}}
+                        styleChange={this.state.blockBlockSelect || this.state.blockBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/cavity_block_block.png")}
+                        text="Block + Block"
+                        />   
                 </View>
             </View>
         }
@@ -566,30 +555,22 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.solidWallProp &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please select Solid Wall type
-                    </Text>
-                </View>
+                <NormalText 
+                message="Please select Solid Wall type"
+                />
                 <View style={{flexDirection:"row", justifyContent:"space-around"}} >
-                    <TouchableOpacity
-                    onPress={() => {this.solidBrickSelect()}}
-                    >
-                        <Image style={ this.state.solidBrickSelect || this.state.solidBrickPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/solid_brick_wall_for_app.png")} />
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Brick Wall </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={() => {this.solidBlockSelect()}}
-                    >
-                        <Image style={ this.state.solidBlockSelect || this.state.solidBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/solid_block_wall_for_app.png")} />     
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Block Wall </Text>
-                        </View>
-                    </TouchableOpacity>    
+                    <WallDisplay 
+                        onPress={() => {this.solidBrickSelect()}}
+                        styleChange={this.state.solidBrickSelect || this.state.solidBrickPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/solid_brick_wall_for_app.png")}
+                        text="Solid Brick Wall"
+                        />
+                    <WallDisplay 
+                        onPress={() => {this.solidBlockSelect()}}
+                        styleChange={this.state.solidBlockSelect || this.state.solidBlockPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/solid_block_wall_for_app.png")}
+                        text="Solid Block Wall"
+                        />    
                 </View>
             </View>
         }
@@ -597,30 +578,22 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.timberWallProp &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please select Timber Wall type
-                    </Text>
-                </View>
+                <NormalText 
+                message="Please select Timber Wall type"
+                />
                 <View style={{flexDirection:"row", justifyContent:"space-around"}} >
-                    <TouchableOpacity
-                    onPress={() => {this.timberInternalSelect()}}
-                    >
-                        <Image style={ this.state.timberInternalSelect || this.state.timberInternalPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_brick_block.png")} />
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Internal</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={() => {this.timberExternalSelect()}}
-                    >
-                        <Image style={ this.state.timberExternalSelect || this.state.timberExternalPropSelect ? styles.imageContainer : styles.imageDeselect}
-                        source= {require("../assets/Images/cavity_block_block.png")} />     
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>External</Text>
-                        </View>
-                    </TouchableOpacity>    
+                    <WallDisplay 
+                        onPress={() => {this.timberInternalSelect()}}
+                        styleChange={this.state.timberInternalSelect || this.state.timberInternalPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/timber_wall_for_app.png")}
+                        text="Internal Timber Wall"
+                        />
+                    <WallDisplay 
+                        onPress={() => {this.timberExternalSelect()}}
+                        styleChange={this.state.timberExternalSelect || this.state.timberExternalPropSelect ? styles.imageContainer : styles.imageDeselect}
+                        image={require("../assets/Images/timber_wall_for_app.png")}
+                        text="External Timber Wall"
+                        />   
                 </View>
             </View>
         }
