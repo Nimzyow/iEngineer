@@ -3,7 +3,6 @@ import { Image ,Keyboard, StyleSheet, View, Switch ,TextInput, TouchableWithoutF
 import { Button, Card, Form, Item, Input, Label, Icon, Text } from "native-base";
 import {Header} from "react-navigation";
 
-
 import NormalText from "../assets/Components/NormalText";
 import Headering from "../assets/Components/Headering";
 import SuccessfulSelection from "../assets/Components/LoadDeterminationComponents/SuccessfulSelection";
@@ -51,7 +50,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBlockPropSelect: false,
 
             wallHeightReady: false,
-            wallHeightText: "",
+            wallHeightText: "1",
 
             wallSelectionSuccess: false,
             FinalWallSelection:"",
@@ -64,7 +63,7 @@ export default class LoadDeterminationScreen extends React.Component {
             concreteFloorProp: false,
 
             floorLengthReady:false,
-            floorLengthText: "",
+            floorLengthText: "1",
             finalFloorSelection: "",
 
             floorSelectionSucess: false,
@@ -83,13 +82,13 @@ export default class LoadDeterminationScreen extends React.Component {
             concreteFlatRoofProp: false,
 
             flatRoofLengthReady: false,
-            flatRoofLengthText: "",
+            flatRoofLengthText: "1",
             FinalFlatRoofSelection: "",
             flatRoofSelectionSuccess: false,
 
             // Pitched Roof states
             PitchedRoofLengthReady: false,
-            PitchedRoofLengthText: "",
+            PitchedRoofLengthText: "1",
             FinalPitchedRoofSelection: "",
             pitchedRoofSelectionSuccess: false,
 
@@ -465,9 +464,7 @@ export default class LoadDeterminationScreen extends React.Component {
                 headerName="Beam Selection"
                 />
                 <Button iconRight block light
-                onPress={() => {
-                    this.navigateTo("SteelList")
-                }}>
+                    onPress={() => {this.navigateTo("SteelList")}}>
                     <Text>{beamSelect}</Text>
                     <Icon name='arrow-forward' />
                 </Button>
@@ -484,7 +481,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     </View>
                 }
                     <Headering
-                    headerName="Load Selection"/>
+                        headerName="Load Selection"/>
             </View>
             
 
@@ -600,12 +597,10 @@ export default class LoadDeterminationScreen extends React.Component {
             this.state.wallHeightReady  &&
             <View>
                 <NormalText 
-                    message="Please enter wall height estimate (m)"
-                />
+                    message="Please enter wall height estimate (m)"/>      
                 <InputValue 
                     changeTextHandler={(wallHeightText) => this.changeWallHeight(wallHeightText)}
-                    current={this.state.wallHeightText}
-                    placeholder="Height(m)"/>
+                    current={this.state.wallHeightText}/>
                 <FinalSelections 
                     selected="Wall Selected = "
                     selectedType={this.state.FinalWallSelection}
@@ -617,10 +612,10 @@ export default class LoadDeterminationScreen extends React.Component {
         {/* The below is conditional for SUCCESSFUL selection of WALL LOAD */}
         {
             this.state.wallSelectionSuccess &&
-                <View>
-                    <SuccessfulSelection 
+            <View>
+                <SuccessfulSelection 
                     successText="Wall Selection Successful"/>  
-                </View>
+            </View>
         }
 {/* The below switch is for selection of floor. for details about how the switch works, scroll up to the first switch, for wall. */}
 
@@ -661,8 +656,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     message="Please enter floor length estimate (m)"/>
                 <InputValue 
                     changeTextHandler={(floorLengthText) => this.changeFloorLength(floorLengthText)}
-                    current={this.state.floorLengthText}
-                    placeholder="Length(m)"/>
+                    current={this.state.floorLengthText}/>
                 <FinalSelections 
                     selected="Floor Selected = "
                     selectedType={this.state.finalFloorSelection}
@@ -674,17 +668,15 @@ export default class LoadDeterminationScreen extends React.Component {
         {/* The below is conditional for SUCCESSFUL selection of FLOOR LOAD */}
         {
             this.state.floorSelectionSucess &&
-
             <View>
                 <SuccessfulSelection 
                     successText="Floor Selection Successful"/>
             </View>
         }
         <Toggle 
-        toggleText="Is the beam carrying a roof?"
-        switchChange={this.toggleSwitchRoof}
-        current={this.state.toggleRoofSwitch}
-        />
+            toggleText="Is the beam carrying a roof?"
+            switchChange={this.toggleSwitchRoof}
+            current={this.state.toggleRoofSwitch}/>
         {/* Conditional rendering in the below curly braces for  ROOF selection. */}
         {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
@@ -738,8 +730,7 @@ export default class LoadDeterminationScreen extends React.Component {
                         message="Please enter Flat Roof length estimate (m)"/>
                     <InputValue 
                         changeTextHandler={(flatRoofLengthText) => this.changeFlatRoofLength(flatRoofLengthText)}
-                        current={this.state.flatRoofLengthText}
-                        placeholder="Length(m)"/>
+                        current={this.state.flatRoofLengthText}/>        
                     <FinalSelections 
                         selected="Flat Roof Selected = "
                         selectedType={this.state.FinalFlatRoofSelection}
@@ -796,7 +787,11 @@ export default class LoadDeterminationScreen extends React.Component {
                         floorType: this.state.finalFloorSelection,
                         floorLength: this.state.floorLengthText,
                         flatRoofType: this.state.FinalFlatRoofSelection,
-                        flatRoofLength: this.state.flatRoofLengthText, 
+                        flatRoofLength: this.state.flatRoofLengthText,
+                        wallSuccess: this.state.wallSelectionSuccess,
+                        floorSuccess: this.state.floorSelectionSucess,
+                        flatRoofSuccess: this.state.flatRoofSelectionSuccess,
+                        pitchedRoofSuccess: this.state.pitchedRoofSelectionSuccess 
                         })
                     }
                 }
@@ -812,21 +807,11 @@ export default class LoadDeterminationScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    
+    backgroundColor: '#fff',  
     flexDirection:"column",
     justifyContent: 'flex-end',
     //alignItems:"flex-end",
     //borderWidth:1
-  },
-  header:{
-    alignItems:"center", 
-    //borderWidth:1, 
-    marginTop:30
-  },
-  headerText: {
-    fontSize:19,
-    fontFamily: 'Arial Hebrew'
   },
   imageContainer: {
     resizeMode:"contain", 
