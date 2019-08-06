@@ -1,7 +1,13 @@
 import React from 'react';
 import { Image ,Keyboard, StyleSheet, View, Switch ,TextInput, TouchableWithoutFeedback, TouchableOpacity, Alert, Animation, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Button, Card, Form, Item, Input, Label, Icon, Text } from "native-base";
-import { Header } from 'react-navigation';
+import Headering from "../assets/Components/Headering";
+import {Header} from "react-navigation";
+import SuccessfulSelection from "../assets/Components/LoadDeterminationComponents/SuccessfulSelection";
+import InputValue from "../assets/Components/LoadDeterminationComponents/InputValue";
+import Toggle from "../assets/Components/LoadDeterminationComponents/Toggle";
+import BeamCheckNO from "../assets/Components/LoadDeterminationComponents/BeamCheckNO";
+import BeamCheckYes from "../assets/Components/LoadDeterminationComponents/BeamCheckYes";
 
 export default class LoadDeterminationScreen extends React.Component {
     constructor (props){
@@ -423,6 +429,14 @@ export default class LoadDeterminationScreen extends React.Component {
         this.state.PitchedRoofLengthText > 0 ? this.setState({pitchedRoofSelectionSuccess: true}) : this.setState({pitchedRoofSelectionSuccess: false});
     }
 
+    navigateTo = (nav) => {
+        this.props.navigation.navigate(nav);
+    }
+
+    navigateToWithProps = (nav, transfer) => {
+        this.props.navigation.navigate(nav,transfer)
+    }
+
   
     render() {
 
@@ -437,16 +451,17 @@ export default class LoadDeterminationScreen extends React.Component {
             behavior="padding" enabled>
         <ScrollView>
             <View style={{flex: 1, flexDirection: "column",  alignItems:"center"}}>
-                <View style={{marginTop:20, marginBottom:10}}>
-                <Text style={{fontSize:25, fontStyle:"normal", fontWeight:"bold"}}>Beam Selection</Text>
-                </View>
+                <Headering 
+                headerName="Beam Selection"
+                />
                 <Button iconRight block light
                 onPress={() => {
-                    this.props.navigation.navigate("SteelList")
+                    this.navigateTo("SteelList")
                 }}>
                     <Text>{beamSelect}</Text>
                     <Icon name='arrow-forward' />
                 </Button>
+                {/* The below conditional rendering is for if a section size is selected, we just want to prompt the user to enter the length of the beam */}
                 {
                 beamSelect !== this.state.beamSelect &&
 
@@ -456,33 +471,24 @@ export default class LoadDeterminationScreen extends React.Component {
                             Please enter beam length estimate (m)
                         </Text>
                     </View>
-                    <View style={{flexDirection:"row",justifyContent: "center"}}>
-                        <TextInput
-                        style={{width:30, borderBottomWidth:1, fontSize:20, }}
-                        //placeholder="Length(m)"
-                        onChangeText={(beamLengthText) => this.changeBeamLength(beamLengthText)}
-                        value={this.state.beamLengthText}
-                        keyboardType="number-pad"
-                        />
-                        <Text style={{fontSize:20}}>m</Text>
-                    </View>
+                    <InputValue 
+                    changeTextHandler={(beamLengthText) => this.changeBeamLength(beamLengthText)}
+                    current={this.state.beamLengthText}/> 
                 </View>
                     }
-                <View style={{marginTop:20}}>
-                <Text style={{fontSize:25, fontStyle:"normal", fontWeight:"bold"}}>Load Selection</Text>
-                </View>
-            </View>
-            <View style={styles.toggleContainer}>
-
-{/* TODO: We need a button or something else that the user can press to move to the other screen and select from the list of beams. */} 
-                <Text style={styles.textToggle}>
-                    Is the beam carrying a wall?</Text>
-                    {/* The below switch component REQUIRES two callbacks, onValueChange and value. The onValueChange callback will call the toggleSwitchWall function which will change the value of the toggleWallSwitch state. The togglewallSwitch state is the value (a boolean) that the switch renders.  */}
-                <Switch style={styles.Switch}
-                onValueChange = {this.toggleSwitchWall}
-                value={this.state.toggleWallSwitch}
+                <Headering
+                headerName="Load Selection"
                 />
-        </View>
+            </View>
+            
+
+{/* TODO: We need a button or something else that the user can press to move to the other screen and select from the list of beams. */}
+        
+        <Toggle 
+        toggleText="Is the beam carrying a wall?"
+        switchChange={this.toggleSwitchWall}
+        current={this.state.toggleWallSwitch}
+        />
 
         {/* Conditional rendering in the below curly braces. */}
         {
@@ -656,22 +662,19 @@ export default class LoadDeterminationScreen extends React.Component {
         {/* The below is conditional for SUCCESSFUL selection of WALL LOAD */}
         {
             this.state.wallSelectionSuccess &&
-
-                <Button block success onPress={this.beamCheckLogic} style={{marginTop: 20, marginBottom: 20}}>
-                    <Text>Wall Selection Successful</Text>
-                </Button>
+                <View>
+                <SuccessfulSelection 
+                successText="Wall Selection Successful"
+                />
+                </View>
         }
 {/* The below switch is for selection of floor. for details about how the switch works, scroll up to the first switch, for wall. */}
 
-        <View style={styles.toggleContainer}>
-            <Text style={styles.textToggle}>
-                Is the beam carrying a floor?
-            </Text>
-                <Switch style={styles.Switch}
-                onValueChange = {this.toggleSwitchFloor}
-                value={this.state.toggleFloorSwitch}
-                />
-        </View>
+        <Toggle 
+        toggleText="Is the beam carrying a floor?"
+        switchChange={this.toggleSwitchFloor}
+        current={this.state.toggleFloorSwitch}
+        />
 
 {/* Conditional rendering in the below curly braces for Floor selection. */}
         {
@@ -748,19 +751,17 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.floorSelectionSucess &&
 
-                <Button block success style={{marginTop: 20, marginBottom: 20}}>
-                    <Text>Floor Selection Successful</Text>
-                </Button>
+            <View>
+            <SuccessfulSelection 
+            successText="Floor Selection Successful"
+            />
+            </View>
         }
-        <View style={styles.toggleContainer}>
-            <Text style={styles.textToggle}>
-                Is the beam carrying a Roof?
-            </Text>
-                <Switch style={styles.Switch}
-                onValueChange = {this.toggleSwitchRoof}
-                value={this.state.toggleRoofSwitch}
-                />
-        </View>
+        <Toggle 
+        toggleText="Is the beam carrying a roof?"
+        switchChange={this.toggleSwitchRoof}
+        current={this.state.toggleRoofSwitch}
+        />
         {/* Conditional rendering in the below curly braces for  ROOF selection. */}
         {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
@@ -882,64 +883,52 @@ export default class LoadDeterminationScreen extends React.Component {
         {/*
             TODO: if Pitched roof is selected, we need to figure out what parameters to enter to make pitched roof calcs work. 
         */}
-        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET if wall and section are NOT selected */}
         {     
-            !this.state.beamCheckReady  && beamSelect === this.state.beamSelect &&
-                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
-                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
-                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
-                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
-                        </Button>
-                    </View>
-                </View>
+            !this.state.beamCheckReady  && beamSelect === this.state.beamSelect && 
+                <BeamCheckNO 
+                    alertMessage= {"Please select beam and load (e.g wall load, floor load etc...)"}
+                    buttonMessage="Cannot check my beam yet"
+                    />
         }
-        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET if load is selected but NO section size defined */}
         {     
             this.state.beamCheckReady  && beamSelect === this.state.beamSelect &&
-                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
-                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
-                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
-                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
-                        </Button>
-                    </View>
-                </View>
+                <BeamCheckNO 
+                    alertMessage= {"Please select beam"}
+                    buttonMessage="Cannot check my beam yet"
+                    />
         }
-        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET */}
+        {/* The below is conditional for BEAM CHECK CONDITIONS NOT MET if load is NOT selected but section size is defined */}
         {     
             !this.state.beamCheckReady  && beamSelect !== this.state.beamSelect &&
-                <View style={{flex:1, marginTop: 40, marginBottom: 40}}>
-                    <View style={{flexDirection:"row", justifyContent:"center", alignItems:"flex-end"}}>
-                        <Button onPress={() => {Alert.alert("Please select what your beam is carrying")}} rounded light style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
-                            <Text style={styles.headerText}>Cannot check my beam yet </Text>
-                        </Button>
-                    </View>
-                </View>
+                <BeamCheckNO 
+                    alertMessage= {"Please select load (e.g wall load, floor load etc...)"}
+                    buttonMessage="Cannot check my beam yet"
+                    />
         }
         {/* The below is conditional for BEAM CHECK CONDITIONS MET */}
         {
             this.state.beamCheckReady && beamSelect !== this.state.beamSelect &&
-                <View style={{marginTop: 40, marginBottom: 40}}>
-                    <View style={{flexDirection:"row", justifyContent:"center"}}>
-                        <Button 
-                        onPress={() => {
-                            this.props.navigation.navigate("beamCheck",{
-                                sectionSize: beamSelect,
-                                sectionLength: this.state.beamLengthText,
-                                wallType: this.state.FinalWallSelection,
-                                wallHeight: this.state.wallHeightText,
-                                floorType: this.state.finalFloorSelection,
-                                floorLength: this.state.floorLengthText,
-                                flatRoofType: this.state.FinalFlatRoofSelection,
-                                flatRoofLength: this.state.flatRoofLengthText, 
-                            });
-                        }} 
-                        rounded 
-                        success 
-                        style={{alignItems:"center",  paddingLeft:10, paddingRight:10}}>
-                            <Text style={styles.headerText}>Check my beam</Text>
-                        </Button>
-                    </View>
-                </View>
+                
+                <BeamCheckYes 
+                buttonMessage="Check my beam"
+                onPress={() => 
+                    {this.navigateToWithProps(
+                        "beamCheck",       
+                        {
+                        sectionSize: beamSelect,
+                        sectionLength: this.state.beamLengthText,
+                        wallType: this.state.FinalWallSelection,
+                        wallHeight: this.state.wallHeightText,
+                        floorType: this.state.finalFloorSelection,
+                        floorLength: this.state.floorLengthText,
+                        flatRoofType: this.state.FinalFlatRoofSelection,
+                        flatRoofLength: this.state.flatRoofLengthText, 
+                        })
+                    }
+                }
+                />      
         }
         <View style={styles.empty}></View>
         </ScrollView>
@@ -961,29 +950,11 @@ const styles = StyleSheet.create({
   header:{
     alignItems:"center", 
     //borderWidth:1, 
-    marginTop:40
+    marginTop:30
   },
   headerText: {
     fontSize:19,
     fontFamily: 'Arial Hebrew'
-  },
-  toggleContainer: {
-    marginTop:35,
-    flexDirection:"row",
-    //borderWidth:1,
-    justifyContent: "space-between"
-    //alignItems:"flex-end",
-
-  },
-  Switch:{
-      //marginTop: 12
-  },
-  textToggle:{
-      //justifyContent:"center"
-      //border:1
-      //marginTop: 4,
-      fontSize:19,
-      fontFamily: 'Arial Hebrew'
   },
   imageContainer: {
     resizeMode:"contain", 
