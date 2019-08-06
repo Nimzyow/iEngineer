@@ -1,7 +1,6 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Card } from "native-base";
-import HomeCards from "../assets/Components/HomeComponents/HomeCards";
 
 export default class HomeScreen extends React.Component {
     constructor(props){
@@ -9,45 +8,28 @@ export default class HomeScreen extends React.Component {
         this.state = {
             
         };
+
+        const steelBeam = {
+            name: "152x152x37kg",
+            thicknessMax: 11.5,
+            designStrength: 275,
+            //sectionDepth is between filelts
+            sectionDepth: 123.6,
+            sectionWidth: 154.4,
+            
+        }
+
     }
 //the below will add a header, whose properties, ike fontsize, color etc... can be controlled in the App.js
     static navigationOptions = {
       title: "iEngineer"
     }
 
-    navigateToHandler = (nav) => {
-      this.props.navigation.navigate(nav)
-    }
-
   render() {
   return (
-    <ScrollView>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-            <HomeCards 
-              navigateTo={() => {this.navigateToHandler("BeamCalc")}}
-              cardName="Beam Calc"
-            />
-            <HomeCards 
-              navigateTo={() => {this.navigateToHandler("LoadDetermination")}}
-              cardName="Beam Checker"
-            />
-            <HomeCards 
-              navigateTo={() => {this.navigateToHandler("LoadDetermination")}}
-              cardName="Beam Checker"
-            />
-            <HomeCards 
-              navigateTo={() => {}}
-              cardName="Something Else"
-            />
-            <HomeCards 
-              navigateTo={() => {}}
-              cardName="Really Something Else"
-            />   
+        <View style={styles.container}>      
+           <Text>Beam Object</Text>   
         </View>
-    </TouchableWithoutFeedback>
-    <View style={styles.empty}></View>
-    </ScrollView>
   );
 }
 }

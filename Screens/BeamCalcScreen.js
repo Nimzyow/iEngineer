@@ -1,7 +1,6 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert, Animation } from 'react-native';
-import { Button, Card } from "native-base";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Keyboard, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import HomeCards from "../assets/Components/HomeComponents/HomeCards";
 
 export default class BeamCalcScreen extends React.Component {
     constructor(props){
@@ -15,39 +14,30 @@ export default class BeamCalcScreen extends React.Component {
         title: "Beam Calculation type"
     }
 
+    navigateToHandler = (nav) => {
+      this.props.navigation.navigate(nav)
+    }
+
   render() {
-  return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-            <TouchableOpacity
-            onPress={() => {
-                this.props.navigation.navigate("SteelBeamCalc")
-            }}
-            >
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Steel Beam Calculation
-                    </Text>
-               </Card>
-            </TouchableOpacity> 
-            <TouchableOpacity>
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Timber Beam Calculation
-                    </Text>
-                </Card>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Card style={styles.cardContainer}>
-                    <Text style={styles.cardText}>
-                        Concrete Beam Calculation
-                    </Text>
-                </Card>
-            </TouchableOpacity> 
-        </View>
-    </TouchableWithoutFeedback>
-  );
-}
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <HomeCards 
+              navigateTo={() => {this.navigateToHandler("SteelBeamCalc")}}
+              cardName="Steel Beam Calculation"
+            />
+            <HomeCards 
+              navigateTo={() => {}}
+              cardName="Timber Beam Calculation"
+            />
+            <HomeCards 
+              navigateTo={() => {}}
+              cardName="Concrete Beam Calculation"
+            /> 
+          </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -56,47 +46,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     //alignItems: "flex-start"
     //justifyContent: 'center',
-  },
-  cardContainer: {
-    height: 230
-  },
-  cardText: {
-    fontSize: 18,
-    paddingTop:20
-  },
-  header: {
-    marginTop: 10,
-    marginBottom:10
-    
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  spanText: {
-      flex: 1,
-    //borderWidth: 2,
-    marginTop: 20,
-    alignItems: "flex-start",
-    //width: Dimensions.get('window').width,
-  },
-  button: {
-    flex: 1,
-    justifyContent: "flex-start",
-   // borderWidth: 2,
-    marginBottom: 36
-  },
-  text: {
-      margin: 3,
-      padding: 20
-  },
-  inputContainer: {
-    height: 26,
-    fontSize: 20, 
-    color: 'gray', 
-    borderBottomWidth:1, 
-    padding: 3
   }
-  
 });
