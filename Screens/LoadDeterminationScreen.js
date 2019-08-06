@@ -657,33 +657,18 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.floorLengthReady  &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please enter floor length estimate (m)
-                    </Text>
-                </View>
-                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center", marginTop:8}}>
-                    <TextInput
-                    style={{width:30, borderBottomWidth:1, fontSize:20}}
-                    placeholder="Length(m)"
-                    onChangeText={(floorLengthText) => this.changeFloorLength(floorLengthText)}
-                    value={this.state.floorLengthText}
-                    keyboardType="number-pad"
-                    />
-                    <View style={{ justifyContent:"center"}}>
-                    <Text style={{fontSize:20}}>m</Text></View>
-                </View>
-                <View style={{marginTop:12, alignItems:"center"}}>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew'}}>
-                        Floor selected = {this.state.finalFloorSelection}
-
-                    </Text>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew', marginTop: 12}}>
-                        Floor Length = {this.state.floorLengthText}m
-                    </Text>
-                </View>
+                <NormalText 
+                    message="Please enter floor length estimate (m)"/>
+                <InputValue 
+                    changeTextHandler={(floorLengthText) => this.changeFloorLength(floorLengthText)}
+                    current={this.state.floorLengthText}
+                    placeholder="Length(m)"/>
+                <FinalSelections 
+                    selected="Floor Selected = "
+                    selectedType={this.state.finalFloorSelection}
+                    units="m"
+                    selectedParam="Floor Length = "
+                    selectedParamValue={this.state.floorLengthText}/>
             </View>
         }
         {/* The below is conditional for SUCCESSFUL selection of FLOOR LOAD */}
@@ -691,9 +676,8 @@ export default class LoadDeterminationScreen extends React.Component {
             this.state.floorSelectionSucess &&
 
             <View>
-            <SuccessfulSelection 
-            successText="Floor Selection Successful"
-            />
+                <SuccessfulSelection 
+                    successText="Floor Selection Successful"/>
             </View>
         }
         <Toggle 
@@ -706,39 +690,21 @@ export default class LoadDeterminationScreen extends React.Component {
             //the below works because in JavaScript, true && expression always evaluates to expression, and false && expression always evaluates to false. Therefore, if the condition is true, the element right after && will appear in the output. If it is false, React will ignore and skip it.
             this.state.toggleRoofSwitch &&
             <View>
-                <View style={{alignItems:"center", marginTop:15}}>
-                            <Text style={{fontSize:21}}>Please Select Roof Type</Text>
-                        </View>  
+                <NormalText 
+                    message="Please Select Roof Type"/>  
                 <View>
-                    <TouchableOpacity
-                    onPress={() => {this.flatRoofSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-                        <Image
-                        resizeMode="contain" 
-                        source= {require("../assets/Images/timber_floor_for_app.png")}
-                        style={ this.state.flatRoofSelect || this.state.flatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                    </TouchableOpacity>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Flat Roof </Text>
-                        </View>
-                    <TouchableOpacity
-                    onPress={() => {this.pitchedRoofSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-
-                    {/*TODO: change below picture to a piched roof picture */}
-
-                        <Image
-                        resizeMode="contain"
-                        source= {require("../assets/Images/concrete_floor_for_app.png")}
-                        style={ this.state.pitchedRoofSelect || this.state.pitchedRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                    </TouchableOpacity>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16}}>Pitched Roof</Text>
-                        </View>    
+                    <FloorDisplay 
+                        onPress={() => {this.flatRoofSelect()}}
+                        styleChange={this.state.flatRoofSelect || this.state.flatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/timber_floor_for_app.png")}
+                        text="Flat Roof"
+                        resizeMode="contain"/>
+                    <FloorDisplay 
+                        onPress={() => {this.pitchedRoofSelect()}}
+                        styleChange={this.state.pitchedRoofSelect || this.state.pitchedRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/timber_floor_for_app.png")}
+                        text="Pitched Roof"
+                        resizeMode="contain"/>   
                 </View>
             </View>
         }
@@ -746,73 +712,40 @@ export default class LoadDeterminationScreen extends React.Component {
         {
             this.state.flatRoofProp &&
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please select Flat Roof type
-                    </Text>
-                </View>
-                <View >
-                <TouchableOpacity
-                    onPress={() => {this.timberFlatRoofJoistSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-                        <Image
-                        resizeMode="contain" 
-                        source= {require("../assets/Images/timber_floor_for_app.png")}
-                        style={ this.state.timberFlatRoofSelect || this.state.timberFlatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                </TouchableOpacity>
-                    <View style={{alignItems:"center"}}>
-                        <Text style={{fontSize:16}}>Timber Flat Roof</Text>
-                    </View>
-                    <TouchableOpacity
-                    onPress={() => {this.concreteFlatRoofJoistSelect()}}
-                    style={{flex:1,flexDirection:"row"}}
-                    >
-                        <Image
-                        resizeMode="contain" 
-                        source= {require("../assets/Images/concrete_floor_for_app.png")}
-                        style={ this.state.concreteFlatRoofSelect || this.state.concreteFlatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
-                         />
-                </TouchableOpacity>  
-                    <View style={{alignItems:"center"}}>
-                        <Text style={{fontSize:16}}>Concrete Flat Roof</Text>
-                    </View>  
+                <NormalText 
+                    message="Please Select Flat Roof Type"/> 
+                <View>
+                    <FloorDisplay 
+                        onPress={() => {this.timberFlatRoofJoistSelect()}}
+                        styleChange={this.state.timberFlatRoofSelect || this.state.timberFlatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/timber_floor_for_app.png")}
+                        text="Timber Flat Roof"
+                        resizeMode="contain"/>
+                    <FloorDisplay 
+                        onPress={() => {this.concreteFlatRoofJoistSelect()}}
+                        styleChange={this.state.concreteFlatRoofSelect || this.state.concreteFlatRoofProp ? styles.imageContainerHorizontal : styles.imageContainerHorizontalDeselect}
+                        image={require("../assets/Images/concrete_floor_for_app.png")}
+                        text="Concrete Flat Roof"
+                        resizeMode="contain"/>
                 </View>
             </View>
         }
-        {/*
-            TODO: if timber flat roof is selected we need user to enter length       
-        */
+        {/*TODO: if timber flat roof is selected we need user to enter length*/
             this.state.flatRoofLengthReady &&
-
             <View>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>
-                        Please enter Flat Roof length estimate (m)
-                    </Text>
-                </View>
-                <View style={{flex:1 ,flexDirection:"row", justifyContent:"center", marginTop:8}}>
-                    <TextInput
-                    style={{width:30, borderBottomWidth:1, fontSize:20}}
-                    placeholder="Length(m)"
-                    onChangeText={(flatRoofLengthText) => this.changeFlatRoofLength(flatRoofLengthText)}
-                    value={this.state.flatRoofLengthText}
-                    keyboardType="number-pad"
-                    />
-                    <View style={{ justifyContent:"center"}}>
-                    <Text style={{fontSize:20}}>m</Text></View>
-                </View>
-                <View style={{marginTop:12, alignItems:"center"}}>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew'}}>
-                        Floor selected = {this.state.FinalFlatRoofSelection}
-
-                    </Text>
-                    <Text style={{fontSize:17,
-      fontFamily: 'Arial Hebrew', marginTop: 12}}>
-                        Floor Length = {this.state.flatRoofLengthText}m
-                    </Text>
+                <View>
+                    <NormalText 
+                        message="Please enter Flat Roof length estimate (m)"/>
+                    <InputValue 
+                        changeTextHandler={(flatRoofLengthText) => this.changeFlatRoofLength(flatRoofLengthText)}
+                        current={this.state.flatRoofLengthText}
+                        placeholder="Length(m)"/>
+                    <FinalSelections 
+                        selected="Flat Roof Selected = "
+                        selectedType={this.state.FinalFlatRoofSelection}
+                        units="m"
+                        selectedParam="Flat Roof Length = "
+                        selectedParamValue={this.state.flatRoofLengthText}/>
                 </View>
             </View>
        }
