@@ -16,11 +16,10 @@ export default class beamCheckScreen extends React.Component {
               wallHeightText: "",
   
               wallSelectionSuccess: false,
-              FinalWallSelection:"",
+              finalWallSelection:"",
   
   //          ALL FLOOR STATES
   
-              floorLengthReady:false,
               floorLengthText: "1",
               finalFloorSelection: "",
   
@@ -30,12 +29,14 @@ export default class beamCheckScreen extends React.Component {
               // Flat Roof states
   
               flatRoofLengthText: "1",
-              FinalFlatRoofSelection: "",              
+              finalFlatRoofSelection: "",
+              flatRoofSelectionSuccess: false,              
   
               // Pitched Roof states
               
               PitchedRoofLengthText: "1",
               FinalPitchedRoofSelection: "",
+              pitchedRoofSelectionSuccess: false,
            
   //          BEAM CHECK STATUS
   
@@ -48,26 +49,38 @@ export default class beamCheckScreen extends React.Component {
     }
 
     componentWillMount(){
-      this.setState({
-
-      })
       const {navigation} = this.props;
-      const sectionSize = navigation.getParam("sectionSize", 0);
-      const sectionLength = navigation.getParam("sectionLength", 0);
-      const wallType = navigation.getParam("wallType", 0);
-      const wallHeight = navigation.getParam("wallHeight", 0);
-      const floorType = navigation.getParam("floorType", 0);
-      const floorLength = navigation.getParam("floorLength", 0);
-      const flatRoofType = navigation.getParam("flatRoofType", 0);
-      const flatRoofLength = navigation.getParam("flatRoofLenght", 0);
-      const wallSuccess = navigation.getParam("wallSuccess", 0);
-      const floorSuccess = navigation.getParam("floorSuccess", 0);
-      const flatRoofSuccess = navigation.getParam("flatRoofSuccess", 0);
-      const pitchedRoofSuccess = navigation.getParam("pitchedRoofSuccess", 0);
+      const beamSelect = navigation.getParam("sectionSize", 0);
+      const beamLengthText = navigation.getParam("sectionLength", 0);
+      const finalWallSelection = navigation.getParam("wallType", 0);
+      const wallHeightText = navigation.getParam("wallHeight", 0);
+      const finalFloorSelection = navigation.getParam("floorType", 0);
+      const floorLengthText = navigation.getParam("floorLength", 0);
+      const finalFlatRoofSelection = navigation.getParam("flatRoofType", 0);
+      const flatRoofLengthText = navigation.getParam("flatRoofLenght", 0);
+      //below are booleans
+      const wallSelectionSuccess = navigation.getParam("wallSuccess", 0);
+      const floorSelectionSucess = navigation.getParam("floorSuccess", 0);
+      const flatRoofSelectionSuccess = navigation.getParam("flatRoofSuccess", 0);
+      const pitchedRoofSelectionSuccess = navigation.getParam("pitchedRoofSuccess", 0);
       const deadLoad = this.loadingDeterminationDead();
       const liveLoad = this.loadingDeterminationLive();
       console.log("Dead Load = " + deadLoad);
       console.log("Live Load = " + liveLoad);
+      this.setState({
+        beamSelect: beamSelect,
+        beamLengthText: beamLengthText,
+        wallHeightText: wallHeightText,
+        finalWallSelection: finalWallSelection,
+        floorLengthText: floorLengthText,
+        finalFloorSelection: finalFloorSelection,
+        flatRoofLengthText: flatRoofLengthText,
+        finalFlatRoofSelection: finalFlatRoofSelection,
+        //below are booleans
+        floorSelectionSucess: floorSelectionSucess,
+        wallSelectionSuccess: wallSelectionSuccess,
+        flatRoofSelectionSuccess: flatRoofSelectionSuccess,
+        pitchedRoofSelectionSuccess: pitchedRoofSelectionSuccess}, () => {console.log("Beam: " + this.state.beamSelect + "\n" + "Beam Length is: " + this.state.beamLengthText + "\n" + "Wall type: " + this.state.finalWallSelection +  "\n" + "wall height: " + this.state.wallHeightText + "\n" + "wall Selection Boolean: " + this.state.wallSelectionSuccess + "\n" + "floor type: " + this.state.finalFloorSelection + "\n" + "floor length: " + this.state.floorLengthText + "\n" + "floor selection boolean: " + this.state.floorSelectionSucess + "\n" + "Flat Roof type: " + this.state.finalFlatRoofSelection + "\n" + "Flat Roof length: " + this.state.flatRoofLengthText + "\n" + "Flat Roof selection boolean: " + this.state.flatRoofSelectionSuccess)})
     }
 
     udlDefCalc = (load, length, inertia) => {

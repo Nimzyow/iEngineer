@@ -53,7 +53,7 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightText: "1",
 
             wallSelectionSuccess: false,
-            FinalWallSelection:"",
+            finalWallSelection:"",
 
 //          ALL FLOOR STATES
 
@@ -139,7 +139,7 @@ export default class LoadDeterminationScreen extends React.Component {
             wallHeightText: "",
 
 //One thing to remember is that setState is usually Asynchronus. So all variables that I set to change will happen in exactly the same time, not 1 by 1 like when you normally call normal methods. if we want to call a method DIRECTLY AFTER setState, that is after the variables have been set, a callback function has to be created in the manner shown below. this will insure that the method will contain the newley set variables rather than the variables prior.
-            FinalWallSelection:""}, () => {this.beamCheckLogic()});
+            finalWallSelection:""}, () => {this.beamCheckLogic()});
             
     }
 
@@ -218,7 +218,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBrickPropSelect: false,
             wallHeightReady: false,
             wallHeightText: "",
-            FinalWallSelection: "",
+            finalWallSelection: "",
             brickBlockPropSelect: true,
             blockBlockPropSelect: true
 
@@ -240,7 +240,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBrickPropSelect: true,
             wallHeightReady: false,
             wallHeightText: "",
-            FinalWallSelection: "",
+            finalWallSelection: "",
             brickBlockPropSelect: false,
             blockBlockPropSelect: false
         })
@@ -261,7 +261,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBrickPropSelect: false,
             wallHeightReady: false,
             wallHeightText: "",
-            FinalWallSelection: "",
+            finalWallSelection: "",
             brickBlockPropSelect: false,
             blockBlockPropSelect: false
         })
@@ -274,7 +274,7 @@ export default class LoadDeterminationScreen extends React.Component {
             blockBlockSelect: false,
             blockBlockPropSelect: false,
             wallHeightReady: true,
-            FinalWallSelection: "Brick and Block Cavity Wall"
+            finalWallSelection: "Brick and Block Cavity Wall"
         })
     }
 
@@ -285,7 +285,7 @@ export default class LoadDeterminationScreen extends React.Component {
             blockBlockSelect: true,
             blockBlockPropSelect: true,
             wallHeightReady: true,
-            FinalWallSelection: "Block and Block Cavity Wall"
+            finalWallSelection: "Block and Block Cavity Wall"
         })
     }
 
@@ -296,7 +296,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBlockSelect: false,
             solidBlockPropSelect: false,
             wallHeightReady: true,
-            FinalWallSelection: "Solid Brick Wall"
+            finalWallSelection: "Solid Brick Wall"
         })
     }
 
@@ -307,7 +307,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBlockSelect: true,
             solidBlockPropSelect: true,
             wallHeightReady: true,
-            FinalWallSelection: "Solid Block Wall"
+            finalWallSelection: "Solid Block Wall"
         })
     }
 
@@ -318,7 +318,7 @@ export default class LoadDeterminationScreen extends React.Component {
             timberExternalSelect: false,
             timberExternalPropSelect: false,
             wallHeightReady: true,
-            FinalWallSelection: "Internal timber wall"
+            finalWallSelection: "Internal timber wall"
         })
     }
 
@@ -329,7 +329,7 @@ export default class LoadDeterminationScreen extends React.Component {
             timberExternalSelect: true,
             timberExternalPropSelect: true,
             wallHeightReady: true,
-            FinalWallSelection: "External timber wall"
+            finalWallSelection: "External timber wall"
         })
     }
 
@@ -603,7 +603,7 @@ export default class LoadDeterminationScreen extends React.Component {
                     current={this.state.wallHeightText}/>
                 <FinalSelections 
                     selected="Wall Selected = "
-                    selectedType={this.state.FinalWallSelection}
+                    selectedType={this.state.finalWallSelection}
                     units="m"
                     selectedParam="Wall Height = "
                     selectedParamValue={this.state.wallHeightText}/>
@@ -782,7 +782,7 @@ export default class LoadDeterminationScreen extends React.Component {
                         {
                         sectionSize: beamSelect,
                         sectionLength: this.state.beamLengthText,
-                        wallType: this.state.FinalWallSelection,
+                        wallType: this.state.finalWallSelection,
                         wallHeight: this.state.wallHeightText,
                         floorType: this.state.finalFloorSelection,
                         floorLength: this.state.floorLengthText,
