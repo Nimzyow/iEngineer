@@ -50,7 +50,7 @@ export default class LoadDeterminationScreen extends React.Component {
             solidBlockPropSelect: false,
 
             wallHeightReady: false,
-            wallHeightText: "1",
+            wallHeightText: "",
 
             wallSelectionSuccess: false,
             finalWallSelection:"",
@@ -63,7 +63,7 @@ export default class LoadDeterminationScreen extends React.Component {
             concreteFloorProp: false,
 
             floorLengthReady:false,
-            floorLengthText: "1",
+            floorLengthText: "",
             finalFloorSelection: "",
 
             floorSelectionSucess: false,
@@ -82,14 +82,14 @@ export default class LoadDeterminationScreen extends React.Component {
             concreteFlatRoofProp: false,
 
             flatRoofLengthReady: false,
-            flatRoofLengthText: "1",
-            FinalFlatRoofSelection: "",
+            flatRoofLengthText: "",
+            finalFlatRoofSelection: "",
             flatRoofSelectionSuccess: false,
 
             // Pitched Roof states
-            PitchedRoofLengthReady: false,
-            PitchedRoofLengthText: "1",
-            FinalPitchedRoofSelection: "",
+            pitchedRoofLengthReady: false,
+            pitchedRoofLengthText: "",
+            finalPitchedRoofSelection: "",
             pitchedRoofSelectionSuccess: false,
 
             
@@ -169,7 +169,7 @@ export default class LoadDeterminationScreen extends React.Component {
 
             flatRoofLengthReady: false,
             flatRoofLengthText: "",
-            FinalFlatRoofSelection: ""
+            finalFlatRoofSelection: ""
         })
     }
     
@@ -381,7 +381,7 @@ export default class LoadDeterminationScreen extends React.Component {
         concreteFlatRoofSelect: false,
         concreteFlatRoofProp: false,
         flatRoofLengthReady: true,
-        FinalFlatRoofSelection: "Timber Flat Roof"
+        finalFlatRoofSelection: "Timber Flat Roof"
     })
     }
 
@@ -392,7 +392,7 @@ export default class LoadDeterminationScreen extends React.Component {
             concreteFlatRoofSelect: true,
             concreteFlatRoofProp: true,
             flatRoofLengthReady: true,
-            FinalFlatRoofSelection: "Concrete Flat Roof"
+            finalFlatRoofSelection: "Concrete Flat Roof"
         })
     }
 
@@ -409,7 +409,7 @@ export default class LoadDeterminationScreen extends React.Component {
     }
 
     changePitchedRoofLength = (PitchedRoofLengthText) => {
-        this.setState({PitchedRoofLengthText: PitchedRoofLengthText}, () => this.beamCheckLogic());
+        this.setState({pitchedRoofLengthText: pitchedRoofLengthText}, () => this.beamCheckLogic());
     }
 
     changeBeamLength = (beamLengthText) => {
@@ -417,7 +417,7 @@ export default class LoadDeterminationScreen extends React.Component {
     }
 
     beamCheckLogic = () => {
-        if((this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.PitchedRoofLengthText > 0) && this.state.beamSelected !== this.state.beamSelect){
+        if((this.state.wallHeightText > 0 || this.state.floorLengthText > 0 || this.state.flatRoofLengthText > 0 || this.state.pitchedRoofLengthText > 0) && this.state.beamSelected !== this.state.beamSelect){
             this.setState({beamCheckReady: true});
             console.log("beamCheckReady is true");
         } else {
@@ -431,7 +431,7 @@ export default class LoadDeterminationScreen extends React.Component {
 
         this.state.flatRoofLengthText > 0 ? this.setState({flatRoofSelectionSuccess: true}) : this.setState({flatRoofSelectionSuccess: false});
 
-        this.state.PitchedRoofLengthText > 0 ? this.setState({pitchedRoofSelectionSuccess: true}) : this.setState({pitchedRoofSelectionSuccess: false});
+        this.state.pitchedRoofLengthText > 0 ? this.setState({pitchedRoofSelectionSuccess: true}) : this.setState({pitchedRoofSelectionSuccess: false});
     }
 
     navigateTo = (nav) => {
@@ -733,7 +733,7 @@ export default class LoadDeterminationScreen extends React.Component {
                         current={this.state.flatRoofLengthText}/>        
                     <FinalSelections 
                         selected="Flat Roof Selected = "
-                        selectedType={this.state.FinalFlatRoofSelection}
+                        selectedType={this.state.finalFlatRoofSelection}
                         units="m"
                         selectedParam="Flat Roof Length = "
                         selectedParamValue={this.state.flatRoofLengthText}/>
@@ -786,7 +786,7 @@ export default class LoadDeterminationScreen extends React.Component {
                         wallHeight: this.state.wallHeightText,
                         floorType: this.state.finalFloorSelection,
                         floorLength: this.state.floorLengthText,
-                        flatRoofType: this.state.FinalFlatRoofSelection,
+                        flatRoofType: this.state.finalFlatRoofSelection,
                         flatRoofLength: this.state.flatRoofLengthText,
                         wallSuccess: this.state.wallSelectionSuccess,
                         floorSuccess: this.state.floorSelectionSucess,

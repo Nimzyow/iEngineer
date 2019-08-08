@@ -5,9 +5,7 @@ import { LineChart, Grid, AreaChart, Path } from "react-native-svg-charts";
 import { Defs, ClipPath, LinearGradient, Rect, Stop } from "react-native-svg";
 import * as shape from "d3-shape"
 
-import ReactionCalc from '../assets/Scripts/ReactionCalc';
-
-var reactionA, reactionB;
+let reactionA, reactionB;
 reactionA = 0.00;
 reactionB = 0.00;
 const moments = [];
@@ -36,15 +34,10 @@ export default class SteelBeamCalcScreen extends React.Component {
 
             MaxBendingText: " ", MinBendingText: " "
         }
-    obj = new ReactionCalc();
     }
 
     componentWillMount(){
         this.resetValues();
-    }
-
-    callFunction = () => {
-        obj.beamCalculation();
     }
 
     resetValues = () => {
@@ -130,21 +123,21 @@ export default class SteelBeamCalcScreen extends React.Component {
         
     this.resetValues();
     
-    var span = this.state.beamSpan;
+    let span = this.state.beamSpan;
     
-    var uDL = this.state.uDLValue;
+    let uDL = this.state.uDLValue;
     
-    var pointValue = this.state.pointValue;
+    let pointValue = this.state.pointValue;
     
-    var pointValueSpan = this.state.pointValueSpan;
+    let pointValueSpan = this.state.pointValueSpan;
     
-    var partialUDL = this.state.partialUDL;
+    let partialUDL = this.state.partialUDL;
     
-    var partialUDLStart = this.state.partialUDLStart;
+    let partialUDLStart = this.state.partialUDLStart;
     
-    var partialUDLEnd = this.state.partialUDLEnd;
+    let partialUDLEnd = this.state.partialUDLEnd;
     
-    var loadUnitsText = this.state.loadUnitsText;
+    let loadUnitsText = this.state.loadUnitsText;
 
     if (span === " " || span === ""){
         this.setState({beamSpan: 0})
@@ -193,9 +186,9 @@ export default class SteelBeamCalcScreen extends React.Component {
             // **********************UDL*************************
             
             if (uDL > 0){
-            var convertUDLToPoint = uDL * span;
-            var reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
-            var reactionAUDL = reactionBUDL;
+            let convertUDLToPoint = uDL * span;
+            let reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
+            let reactionAUDL = reactionBUDL;
             reactionB = reactionBUDL;
             reactionA = reactionAUDL;
             }
@@ -203,8 +196,8 @@ export default class SteelBeamCalcScreen extends React.Component {
     
             if (pointValue > 0){
                     
-                    var reactionBPointLoad = (pointValueSpan * pointValue)/span;
-                    var reactionAPointLoad = (pointValue - reactionBPointLoad);
+                    let reactionBPointLoad = (pointValueSpan * pointValue)/span;
+                    let reactionAPointLoad = (pointValue - reactionBPointLoad);
                     reactionB = reactionB + reactionBPointLoad;
                     reactionA = reactionA + reactionAPointLoad;
                 } 
@@ -217,11 +210,11 @@ export default class SteelBeamCalcScreen extends React.Component {
                     
                     if (partialUDLStart >= 0 && partialUDLEnd > 0){
                         //TODO: Enter formula to perform the partial UDL load only here.
-                        var convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
-                        var newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
+                        let convertPUDLtoPoint = partialUDL * (partialUDLEnd - partialUDLStart);
+                        let newPointPosition = ((partialUDLEnd - partialUDLStart)/2) +  partialUDLStart;
                         
-                        var reactionBPUDL = ((newPointPosition * convertPUDLtoPoint)/span);
-                        var reactionAPUDL = (convertPUDLtoPoint - reactionBPUDL);
+                        let reactionBPUDL = ((newPointPosition * convertPUDLtoPoint)/span);
+                        let reactionAPUDL = (convertPUDLtoPoint - reactionBPUDL);
 
                         reactionB = reactionB + reactionBPUDL;
                         reactionA = reactionA + reactionAPUDL;
@@ -267,14 +260,14 @@ export default class SteelBeamCalcScreen extends React.Component {
     shearForceCalcualtion = () => {
         
 
-        var sFRA = reactionA;
-        var span = this.state.beamSpan;
-        var uDL = this.state.uDLValue;
-        var pointValue = this.state.pointValue;
-        var pointValueSpan = this.state.pointValueSpan;
-        var partialUDL = this.state.partialUDL;
-        var partialUDLStart = this.state.partialUDLStart;
-        var partialUDLEnd = this.state.partialUDLEnd;
+        let sFRA = reactionA;
+        let span = this.state.beamSpan;
+        let uDL = this.state.uDLValue;
+        let pointValue = this.state.pointValue;
+        let pointValueSpan = this.state.pointValueSpan;
+        let partialUDL = this.state.partialUDL;
+        let partialUDLStart = this.state.partialUDLStart;
+        let partialUDLEnd = this.state.partialUDLEnd;
 
         if (span === " " || span === ""){
             this.setState({beamSpan: 0})
@@ -307,7 +300,7 @@ export default class SteelBeamCalcScreen extends React.Component {
             partialUDLEnd = 0.00;
         }
         
-        var loadUnitsText = "KN";
+        let loadUnitsText = "KN";
         //reset shearforce array if it was already populated. This is so we dont add to the array from previous calculation
         //shearForce.length = 0;
 
@@ -346,14 +339,14 @@ export default class SteelBeamCalcScreen extends React.Component {
 
     bendingMomentCalculation = () => {
 
-        var sFRA = reactionA;
-        var span = this.state.beamSpan;
-        var uDL = this.state.uDLValue;
-        var pointValue = this.state.pointValue;
-        var pointValueSpan = this.state.pointValueSpan;
-        var partialUDL = this.state.partialUDL;
-        var partialUDLStart = this.state.partialUDLStart;
-        var partialUDLEnd = this.state.partialUDLEnd;
+        let sFRA = reactionA;
+        let span = this.state.beamSpan;
+        let uDL = this.state.uDLValue;
+        let pointValue = this.state.pointValue;
+        let pointValueSpan = this.state.pointValueSpan;
+        let partialUDL = this.state.partialUDL;
+        let partialUDLStart = this.state.partialUDLStart;
+        let partialUDLEnd = this.state.partialUDLEnd;
 
         if (span === " " || span === ""){
             this.setState({beamSpan: 0.00})
