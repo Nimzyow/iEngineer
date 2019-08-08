@@ -95,98 +95,116 @@ export default class beamCheckScreen extends React.Component {
     loadingDeterminationDead = () => {
       let deadLoad = 0; // KN/m2
       //let liveLoad = 0; // KN/m2
+      const state = this.state;
+      const beamSelect = state.beamSelect;
+      const wallHeightText = state.wallHeightText;
+      const finalWallSelection = state.finalWallSelection;
+      const floorLengthText = state.floorLengthText;
+      const finalFloorSelection = state.finalFloorSelection;
+      const flatRoofLengthText = state.flatRoofLengthText;
+      const finalFlatRoofSelection = state.finalFlatRoofSelection;
+      //                ***** BOOLEAN *****
+      const floorSelectionSucess = state.floorSelectionSucess;
+      const wallSelectionSuccess = state.wallSelectionSuccess;
+      const flatRoofSelectionSuccess = state.flatRoofSelectionSuccess;
+      const pitchedRoofSelectionSuccess = state.pitchedRoofSelectionSuccess; 
 
-      if (wallSuccess){
-        if(wallType === "Brick and Block Cavity Wall"){
+      if (wallSelectionSuccess){
+        if(finalWallSelection === "Brick and Block Cavity Wall"){
           let thicknessBlock = 0.11 // m
           let thicknessBrick = 0.11 // m
           let weightBrick = 20; // KN/m3
           let weightBlock = 14; // KN/m3
-          deadLoad = (weightBrick * thicknessBrick) + (weightBlock * thicknessBlock);
+          let height = wallHeightText;
+          deadLoad = (((weightBrick * thicknessBrick) + (weightBlock * thicknessBlock)) * height) + deadLoad;
           console.log("Brick Block load = " + deadLoad);      
         } 
-        else if (wallType === "Block and Block Cavity Wall") {
+        else if (finalWallSelection === "Block and Block Cavity Wall") {
           let thickness = 0.22 // m
           let weight = 14; // KN/m3
-          deadLoad = weight * thickness; 
+          let height = wallHeightText;
+          deadLoad = (weight * thickness * height) + deadLoad; 
           console.log("Block Block load = " + deadLoad);          
         }
-        else if (wallType === "Solid Brick Wall") {
+        else if (finalWallSelection === "Solid Brick Wall") {
           let thickness = 0.35 // m
           let weight = 20; // KN/m3
-          deadLoad = weight * thickness;
+          let height = wallHeightText;
+          deadLoad = (weight * thickness * height) + deadLoad;
           console.log("Solid Brick load = " + deadLoad);    
         }
-        else if (wallType === "Solid Block Wall") {
+        else if (finalWallSelection === "Solid Block Wall") {
           let thickness = 0.35 // m
           let weight = 14; // KN/m3
-          deadLoad = weight * thickness;
+          let height = wallHeightText;
+          deadLoad = (weight * thickness * height) + deadLoad;
           console.log("Solid Block wall = " + deadLoad); 
         }
-        else if (wallType === "Internal timber wall") {      
+        else if (finalWallSelection === "Internal timber wall") {      
           let weight = 0.63; // KN/m2
-          deadLoad = weight; 
+          let height = wallHeightText;
+          deadLoad = (weight * height) + deadLoad; 
+          
           console.log("Internal timber load = " + deadLoad);  
         }
-        else if (wallType === "External timber wall") {
+        else if (finalWallSelection === "External timber wall") {
           let weight = 1.18; // KN/m2
-          deadLoad = weight;  
+          let height = wallHeightText;
+          deadLoad = (weight * height) + deadLoad;  
           console.log("External timber load = " + deadLoad);        
         }
-      } else if (floorSuccess) {
-          if(floorType === "Timber Floor Joist") {
+      } else if (floorSelectionSucess) {
+          if(finalFloorSelection === "Timber Floor Joist") {
             let deadWeight = 0.79 //KN/m2
-            //let liveWeight = 1.5 //KN/m2
-            deadLoad = deadLoad + deadWeight;
-            //liveLoad = liveLoad + liveWeight;
-          } else if (floorType === "Reinforced Concrete Floor") {
+            let length = floorLengthText;         
+            deadLoad = deadLoad + (deadWeight * length);
+          } else if (finalFloorSelection === "Reinforced Concrete Floor") {
             let deadWeight = 3 //KN/m2
-            //let liveWeight = 1.5 //KN/m2
-            deadLoad = deadLoad + deadWeight;
-            //liveLoad = liveLoad + liveWeight;
+            let length = floorLengthText;
+            deadLoad = deadLoad + (deadWeight * length);
           }
-      } else if (flatRoofSuccess) {
-            if (flatRoofType === "Timber Flat Roof"){
+      } else if (flatRoofSelectionSuccess) {
+            if (finalFlatRoofSelection === "Timber Flat Roof"){
               let deadWeight = 0.83 //KN/m2
-              //let liveWeight = 0.94 //KN/m2
-              deadLoad = deadLoad + deadWeight;
-              //liveLoad = liveLoad + liveWeight;
-            } else if (flatRoofType === "Concrete Flat Roof"){
+              let length = flatRoofLengthText;
+              deadLoad = deadLoad + (deadWeight * length);
+            } else if (finalFlatRoofSelection === "Concrete Flat Roof"){
                 let deadWeight = 3 //KN/m2
-                //let liveWeight = 0.94 //KN/m2
-                deadLoad = deadLoad + deadWeight;
-                //liveLoad = liveLoad + liveWeight; 
+                let length = flatRoofLengthText;
+                deadLoad = deadLoad + (deadWeight * length);
             }
       }
       return deadLoad;
     }
 
     loadingDeterminationLive = () => {
-      //let deadLoad = 0; // KN/m2
       let liveLoad = 0; // KN/m2
+      const state = this.state;
+      const beamSelect = state.beamSelect;
+      const floorLengthText = state.floorLengthText;
+      const finalFloorSelection = state.finalFloorSelection;
+      const flatRoofLengthText = state.flatRoofLengthText;
+      const finalFlatRoofSelection = state.finalFlatRoofSelection;
+      //                ***** BOOLEAN *****
+      const floorSelectionSucess = state.floorSelectionSucess;
+      const wallSelectionSuccess = state.wallSelectionSuccess;
+      const flatRoofSelectionSuccess = state.flatRoofSelectionSuccess;
+      const pitchedRoofSelectionSuccess = state.pitchedRoofSelectionSuccess;
 
-      if (floorSuccess !== "" || floorSuccess !== 0) {
-          if(floorSuccess === "Timber Floor Joist") {
-            //let deadWeight = 0.79 //KN/m2
+      if (floorSelectionSucess) {
+          if(finalFloorSelection === "Timber Floor Joist") {
             let liveWeight = 1.5 //KN/m2
-            //deadLoad = deadLoad + deadWeight;
             liveLoad = liveLoad + liveWeight;
-          } else if (floorSuccess === "Reinforced Concrete Floor") {
-            //let deadWeight = 3 //KN/m2
+          } else if (finalFloorSelection === "Reinforced Concrete Floor") {
             let liveWeight = 1.5 //KN/m2
-            //deadLoad = deadLoad + deadWeight;
             liveLoad = liveLoad + liveWeight;
           }
-      } else if (flatRoofSuccess !== "" || flatRoofSuccess !== 0) {
-            if (flatRoofSuccess === "Timber Flat Roof"){
-              //let deadWeight = 0.83 //KN/m2
+      } else if (flatRoofSelectionSuccess) {
+            if (finalFlatRoofSelection === "Timber Flat Roof"){
               let liveWeight = 0.94 //KN/m2
-              //deadLoad = deadLoad + deadWeight;
               liveLoad = liveLoad + liveWeight;
-            } else if (flatRoofSuccess === "Concrete Flat Roof"){
-                //let deadWeight = 3 //KN/m2
+            } else if (finalFlatRoofSelection === "Concrete Flat Roof"){
                 let liveWeight = 0.94 //KN/m2
-                //deadLoad = deadLoad + deadWeight;
                 liveLoad = liveLoad + liveWeight; 
             }
       }
