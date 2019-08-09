@@ -6,7 +6,7 @@ let deadLoad, liveLoad, reactionA, reactionB;
 reactionA = 0.00;
 reactionB = 0.00;
 deadLoad = 0.00;
-liveLoad = 0.00
+liveLoad = 0.00;
 const moments = [];
 const shearForce = [];
 
@@ -43,6 +43,19 @@ export default class beamCheckScreen extends React.Component {
               pitchedRoofLengthText: "1",
               finalPitchedRoofSelection: "",
               pitchedRoofSelectionSuccess: false,
+
+              // Load Factors
+
+              deadFactor: 1.4,
+              liveFactor: 1.6,
+
+              // Loads
+
+              pointLoad: 1.4,
+              
+              // Units
+
+              loadUnitsText: "KN"
            
         };
     }
@@ -103,57 +116,139 @@ export default class beamCheckScreen extends React.Component {
       this.resetValues();
       
       let span = this.state.beamLengthText;
+      let deadFactor = this.state.deadFactor;
+      let liveFactor = this.state.liveFactor;
+      let pointLoad = this.state.pointLoad;
+      let pointValueSpan = span/2; //assuming point load is in middle of beam
+      let units = this.state.loadUnitsText;
       
       span = parseFloat(span);
       deadLoad = parseFloat(deadLoad);
       liveLoad = parseFloat(liveLoad);
-  
+      
+
+      deadLoad = deadLoad * deadFactor;
+      liveLoad = liveLoad * liveFactor;
+
       //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
-     
-              //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
       
-              // **********************UDL*************************
+      //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
+
+      // **********************UDL*************************
+      
+      let convertUDLToPointDead = deadLoad * span;
+      let convertUDLToPointLive = liveLoad * span;
+      let reactionBUDLDead = (convertUDLToPointDead*(span / 2))/(span);
+      let reactionBUDLLive = (convertUDLToPointLive*(span / 2)) / (span);
+      let totalUDLReactionB = reactionBUDLDead + reactionBUDLLive;
+      let totalUDLReactionA = totalUDLReactionB;
+      reactionB = totalUDLReactionB;
+      reactionA = totalUDLReactionA;
+
+      console.log("Reaction A: " + reactionA + "\n" + "Reaction B: " + reactionB);
+      
+      // **********************POINT LOAD *************************
               
-              if (uDL > 0){
-              let convertUDLToPoint = uDL * span;
-              let reactionBUDL = (convertUDLToPoint*(span / 2))/(span);
-              let reactionAUDL = reactionBUDL;
-              reactionB = reactionBUDL;
-              reactionA = reactionAUDL;
-              }
-              // **********************POINT LOAD *************************
+      let reactionBPointLoad = (pointValueSpan * pointLoad)/span;
+      let reactionAPointLoad = (pointLoad - reactionBPointLoad);
+      reactionB = reactionB + reactionBPointLoad;
+      reactionA = reactionA + reactionAPointLoad;
+                  
+      //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
       
-              if (pointValue > 0){
-                      
-                      let reactionBPointLoad = (pointValueSpan * pointValue)/span;
-                      let reactionAPointLoad = (pointValue - reactionBPointLoad);
-                      reactionB = reactionB + reactionBPointLoad;
-                      reactionA = reactionA + reactionAPointLoad;
-                  } 
+      
+      reactionTextA = "RA = " + reactionA.toFixed(2) + units;
+      reactionTextB = "RB = " + reactionB.toFixed(2) + units;
+      console.log(reactionTextA + "\n" + reactionTextB);
   
-                  //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
+      //this.shearForceCalcualtion();
+    }                    
       
-          loadUnitsText = "KN";
-          this.setState({
-              loadUnitsText
-          });
-          reactionTextA = "RA = " + reactionA.toFixed(2) + loadUnitsText;
-          reactionTextB = "RB = " + reactionB.toFixed(2) + loadUnitsText;
-          console.log("Do we get to set all state for reactions? YES!")
-          
-          this.setState({
-              reactionTextA,
-              reactionTextB,
-          });
-  
-          this.shearForceCalcualtion();                    
-              
-                                     
-      
-                                                              
-      
-      
-      }
+      shearForceCalcualtion = () => {
+        
+
+        let span = this.state.beamLengthText;
+        let deadFactor = this.state.deadFactor;
+        let liveFactor = this.state.liveFactor;
+        let pointLoad = this.state.pointLoad;
+        let pointValueSpan = span/2; //assuming point load is in middle of beam
+        let units = this.state.loadUnitsText;
+
+        let sFRA = reactionA;
+        let uDL = this.state.uDLValue;
+        let pointValue = this.state.pointValue;
+        
+        let partialUDL = this.state.partialUDL;
+        let partialUDLStart = this.state.partialUDLStart;
+        let partialUDLEnd = this.state.partialUDLEnd;
+
+        if (span === " " || span === ""){
+            this.setState({beamSpan: 0})
+            span = 0.00;
+            //span = this.state.beamSpan;
+        }
+        if (uDL === " " || uDL === ""){
+            this.setState({uDLValue: 0});
+            uDL = 0.00;
+        }
+        if (pointValue === " " || pointValue === ""){
+            this.setState({pointValue: 0});
+            pointValue = 0.00;
+        }
+        if (pointValueSpan === " " || pointValueSpan === ""){
+            this.setState({pointValueSpan: 0.00});
+            pointValueSpan = 0.00;
+        }
+        if (partialUDL === " " || partialUDL === ""){
+            this.setState({partialUDL: 0.00});
+            partialUDL = 0.00;
+        }
+        if (partialUDLStart === " " || partialUDLStart === ""){
+            this.setState({partialUDLStart: 0.00});
+            partialUDLStart = 0.00;
+            //console.log("partialUDLStart = " + partialUDLStart);
+        }
+        if (partialUDLEnd === " " || partialUDLEnd === ""){
+            this.setState({partialUDLEnd: 0.00});
+            partialUDLEnd = 0.00;
+        }
+        
+        let loadUnitsText = "KN";
+        //reset shearforce array if it was already populated. This is so we dont add to the array from previous calculation
+        //shearForce.length = 0;
+
+        span = parseFloat(span);
+        uDL = parseFloat(uDL);
+        pointValue = parseFloat(pointValue);
+        pointValueSpan = parseFloat(pointValueSpan);
+        partialUDL = parseFloat(partialUDL);
+        partialUDLStart = parseFloat(partialUDLStart);
+        partialUDLEnd = parseFloat(partialUDLEnd);
+        pointLeft = parseFloat(0);
+        pointRight = parseFloat(0);
+        uDLMiddleSF = parseFloat(0);
+        sFPUDL = parseFloat(0);
+        sFPUDR = parseFloat(0);
+        atRA = parseFloat(0);
+        atRB = parseFloat(0);
+        sFRA = parseFloat(sFRA);
+       
+        for (let i = 0.00; i <= span; i += 0.01){
+            let shearCalc = this.shearForceReaction(sFRA) - this.shearForcePointCalc(i, pointValue, pointValueSpan) - this.shearForcePartialUDL(i, partialUDLStart, partialUDLEnd, partialUDL) - this.shearForceFullUDL(i, uDL);
+            shearForce.push(shearCalc);
+        }
+
+        let shearMax = (Math.max.apply(null, shearForce)).toFixed(2);
+        let shearMin = (Math.min.apply(null, shearForce)).toFixed(2);
+        ShearForceTextA = "SFMax = " + shearMax + loadUnitsText;
+        ShearForceTextB = "SFMin = " + shearMin + loadUnitsText;
+
+        this.setState({
+            ShearForceTextA,
+            ShearForceTextB,
+        });
+        this.bendingMomentCalculation();
+    }
 
     udlDefCalc = (load, length, inertia) => {
         let deflection = ((5 * load * length * length * length) / (384 * 210 * inertia))/1000000
