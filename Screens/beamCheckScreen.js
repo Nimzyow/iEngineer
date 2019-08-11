@@ -20,6 +20,8 @@ export default class beamCheckScreen extends React.Component {
               beamLengthText: "",
               inertia: 0,
               maxThickness: 0,
+              depth: 0,
+              width: 0,
   
   //          ALL WALL STATES
  
@@ -71,6 +73,8 @@ export default class beamCheckScreen extends React.Component {
       const beamSelect = navigation.getParam("sectionSize", 0);
       const maxThickness = navigation.getParam("maxThickness", 0)
       const inertia = navigation.getParam("inertia", 0);
+      const depth = navigation.getParam("depth", 0);
+      const width = navigation.getParam("width", 0);
       const beamLengthText = navigation.getParam("sectionLength", 0);
       const finalWallSelection = navigation.getParam("wallType", 0);
       const wallHeightText = navigation.getParam("wallHeight", 0);
@@ -89,6 +93,8 @@ export default class beamCheckScreen extends React.Component {
         beamLengthText: beamLengthText,
         maxThickness: maxThickness,
         inertia: inertia,
+        depth: depth,
+        width: width,
         wallHeightText: wallHeightText,
         finalWallSelection: finalWallSelection,
         floorLengthText: floorLengthText,
@@ -105,6 +111,8 @@ export default class beamCheckScreen extends React.Component {
           "Beam Length: " + this.state.beamLengthText + "\n" +
           "Max Thickness: " + this.state.maxThickness + "\n" +
           "Beam inertia: " + this.state.inertia + "\n" + 
+          "Beam width: " + this.state.width + "\n" + 
+          "Beam depth: " + this.state.depth + "\n" + 
           "Wall type: " + this.state.finalWallSelection +  "\n" + 
           "Wall height: " + this.state.wallHeightText + "\n" + 
           "Wall Selection Boolean: " + this.state.wallSelectionSuccess + "\n" + 

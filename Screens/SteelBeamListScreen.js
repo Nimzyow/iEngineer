@@ -10,6 +10,7 @@ export default class SteelBeamListScreen extends React.Component {
             inertia: 0,
             maxThickness: 0,
             depth: 0,
+            width: 0,
         };
     }
 //the below will add a header, whose properties, ike fontsize, color etc... can be controlled in the App.js
@@ -34,13 +35,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "152x152x23kg",
                         inertia: 1250,
                         maxThickness: 6.8,
-                        depth: 152.4
+                        depth: 152.4,
+                        width: 152.2,
                 }, () => {
                     this.props.navigation.navigate("LoadDetermination",{
                         beamSelect: this.state.beamSelect,
                         inertia: this.state.inertia,
                         maxThickness: this.state.maxThickness,
-                        depth: this.state.depth
+                        depth: this.state.depth,
+                        width: this.state.width
                     });})}}> 
                     <Text>152 x 152 x 23kg</Text>
                 </ListItem>
@@ -49,13 +52,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "152x152x30kg",
                         inertia: 1748,
                         maxThickness: 9.4,
-                        depth: 157.6
+                        depth: 157.6,
+                        width: 152.9,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>152 x 152 x 30kg</Text>
                 </ListItem>
@@ -64,13 +69,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "152x152x37kg",
                         inertia: 2210,
                         maxThickness: 11.5,
-                        depth: 161.8
+                        depth: 161.8,
+                        width: 154.4,
             }, () => {
                 this.props.navigation.navigate("LoadDetermination",{
                     beamSelect: this.state.beamSelect,
                     inertia: this.state.inertia,
                     maxThickness: this.state.maxThickness,
-                    depth: this.state.depth
+                    depth: this.state.depth,
+                    width: this.state.width
                     });})}}>   
                     <Text>152 x 152 x 37kg</Text>
                 </ListItem>
@@ -82,13 +89,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "203x203x46kg",
                         inertia: 4605,
                         maxThickness: 11.0,
-                        depth: 203.2
+                        depth: 203.2,
+                        width: 203.6,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>203 x 203 x 46kg</Text>
                 </ListItem>
@@ -97,13 +106,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "203x203x52kg",
                         inertia: 5296,
                         maxThickness: 12.5,
-                        depth: 206.2
+                        depth: 206.2,
+                        width: 204.3,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>203 x 203 x 52kg</Text>
                 </ListItem>
@@ -112,13 +123,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "203x203x60kg",
                         inertia: 6162,
                         maxThickness: 14.2,
-                        depth: 209.6
+                        depth: 209.6,
+                        width: 205.8,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>203 x 203 x 60kg</Text>
                 </ListItem>
@@ -127,13 +140,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "203x203x71kg",
                         inertia: 7655,
                         maxThickness: 17.3,
-                        depth: 215.8
+                        depth: 215.8,
+                        width: 206.4,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>203 x 203 x 71kg</Text>
                 </ListItem>
@@ -142,13 +157,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "203x203x86kg",
                         inertia: 9486,
                         maxThickness: 20.5,
-                        depth: 222.2
+                        depth: 222.2,
+                        width: 209.1,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>203 x 203 x 86kg</Text>
                 </ListItem>
@@ -160,13 +177,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "254x254x73kg",
                         inertia: 11643,
                         maxThickness: 14.2,
-                        depth: 254.1
+                        depth: 254.1,
+                        width: 254.6,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>254 x 254 x 73kg</Text>
                 </ListItem>
@@ -175,13 +194,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "254x254x89kg",
                         inertia: 14504,
                         maxThickness: 17.3,
-                        depth: 260.3 
+                        depth: 260.3,
+                        width: 256.3, 
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>254 x 254 x 89kg</Text>
                 </ListItem>
@@ -190,13 +211,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "254x254x107kg",
                         inertia: 17747,
                         maxThickness: 20.5,
-                        depth: 266.7
+                        depth: 266.7,
+                        width: 258.8,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>254 x 254 x 107kg</Text>
                 </ListItem>
@@ -205,13 +228,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "254x254x132kg",
                         inertia: 22765,
                         maxThickness: 25.3,
-                        depth: 276.3
+                        depth: 276.3,
+                        width: 261.3,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>254 x 254 x 132kg</Text>
                 </ListItem>
@@ -219,14 +244,16 @@ export default class SteelBeamListScreen extends React.Component {
                     this.setState({
                         beamSelect: "254x254x167kg",
                         inertia: 30234,
-                        maxThickness: 31.7 ,
-                        depth: 289.1  
+                        maxThickness: 31.7,
+                        depth: 289.1,
+                        width: 265.2, 
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>254 x 254 x 167kg</Text>
                 </ListItem>
@@ -238,13 +265,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x97kg",
                         inertia:22504,
                         maxThickness: 15.4,
-                        depth: 307.9
+                        depth: 307.9,
+                        width: 305.3,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 97kg</Text>
                 </ListItem> 
@@ -253,13 +282,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x118kg",
                         inertia: 27927,
                         maxThickness: 18.7,
-                        depth: 314.5
+                        depth: 314.5,
+                        width: 307.4,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 118kg</Text>
                 </ListItem>
@@ -268,13 +299,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x137kg",
                         inertia: 33070,
                         maxThickness: 21.7,
-                        depth: 320.5
+                        depth: 320.5,
+                        width: 309.2,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 137kg</Text>
                 </ListItem>
@@ -283,13 +316,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x158kg",
                         inertia: 39002,
                         maxThickness: 25.0,
-                        depth: 327.1
+                        depth: 327.1,
+                        width: 311.2,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 158kg</Text>
                 </ListItem>
@@ -298,13 +333,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x198kg",
                         inertia: 51159,
                         maxThickness: 31.4,
-                        depth: 339.9
+                        depth: 339.9,
+                        width: 314.5,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 198kg</Text>
                 </ListItem>
@@ -313,13 +350,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x240kg",
                         inertia: 64458,
                         maxThickness: 37.7,
-                        depth: 352.5
+                        depth: 352.5,
+                        width: 318.4,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>305 x 305 x 240kg</Text>
                 </ListItem>
@@ -328,13 +367,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "305x305x283kg",
                         inertia: 79127,
                         maxThickness: 44.1,
-                        depth: 365.3
+                        depth: 365.3,
+                        width: 322.2,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                             });})}}> 
                     <Text>305 x 305 x 283kg</Text>
                 </ListItem>
@@ -346,13 +387,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x368x129kg",
                         inertia: 40591,
                         maxThickness: 17.5,
-                        depth: 362.0
+                        depth: 355.6,
+                        width: 368.6,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 368 x 129kg</Text>
                 </ListItem>
@@ -361,13 +404,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x368x153kg",
                         inertia: 48935,
                         maxThickness: 20.7,
-                        depth: 362.0
+                        depth: 362.0,
+                        width: 370.5,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 368 x 153kg</Text>
                 </ListItem>
@@ -376,13 +421,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x368x177kg",
                         inertia: 57464,
                         maxThickness: 23.8,
-                        depth: 368.2
+                        depth: 368.2,
+                        width: 372.6,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                             });})}}> 
                     <Text>356 x 368 x 177kg</Text>
                 </ListItem>
@@ -391,13 +438,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x368x202kg",
                         inertia: 66607,
                         maxThickness: 27.0,
-                        depth: 374.6
+                        depth: 374.6,
+                        width: 374.7,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 368 x 202kg</Text>
                 </ListItem>
@@ -409,13 +458,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x235kg",
                         inertia: 79431,
                         maxThickness: 30.2,
-                        depth: 381.0
+                        depth: 381.0,
+                        width: 394.8,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 235kg</Text>
                 </ListItem>
@@ -424,13 +475,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x287kg",
                         inertia: 100221,
                         maxThickness: 36.5,
-                        depth: 393.6
+                        depth: 393.6,
+                        width: 399.0,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 287kg</Text>
                 </ListItem>
@@ -439,13 +492,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x340kg",
                         inertia: 122889,
                         maxThickness: 42.9,
-                        depth: 406.4
+                        depth: 406.4,
+                        width: 403.0,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 340kg</Text>
                 </ListItem>
@@ -454,13 +509,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x393kg",
                         inertia: 146964,
                         maxThickness: 49.2,
-                        depth: 419.0
+                        depth: 419.0,
+                        width: 407.0,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 393kg</Text>
                 </ListItem>
@@ -469,13 +526,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x467kg",
                         inertia: 183349,
                         maxThickness: 58.0,
-                        depth: 436.6
+                        depth: 436.6,
+                        width: 412.2,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 467kg</Text>
                 </ListItem>
@@ -484,13 +543,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x551kg",
                         inertia: 227284,
                         maxThickness: 67.5,
-                        depth: 455.6
+                        depth: 455.6,
+                        width: 418.5,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                         });})}}> 
                     <Text>356 x 406 x 551kg</Text>
                 </ListItem>
@@ -499,13 +560,15 @@ export default class SteelBeamListScreen extends React.Component {
                         beamSelect: "356x406x634kg",
                         inertia: 275191,
                         maxThickness: 77.0,
-                        depth: 474.6
+                        depth: 474.6,
+                        width: 424.0,
                     }, () => {
                         this.props.navigation.navigate("LoadDetermination",{
                             beamSelect: this.state.beamSelect,
                             inertia: this.state.inertia,
                             maxThickness: this.state.maxThickness,
-                            depth: this.state.depth
+                            depth: this.state.depth,
+                            width: this.state.width
                             });})}}> 
                     <Text>356 x 406 x 634kg</Text>
                 </ListItem>

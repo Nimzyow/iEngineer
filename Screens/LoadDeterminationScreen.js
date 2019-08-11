@@ -28,6 +28,7 @@ export default class LoadDeterminationScreen extends React.Component {
             inertia: 0,
             maxThickness: 0,
             depth: 0,
+            width: 0,
 
 //          ALL SWITCHES
             toggleSwitch: false,
@@ -459,6 +460,7 @@ export default class LoadDeterminationScreen extends React.Component {
         const inertia = navigation.getParam("inertia", this.state.inertia);
         const maxThickness = navigation.getParam("maxThickness", this.state.maxThickness);
         const depth = navigation.getParam("depth", this.state.depth);
+        const width = navigation.getParam("width", this.state.width);
         
   return (
     <KeyboardAvoidingView 
@@ -788,6 +790,10 @@ export default class LoadDeterminationScreen extends React.Component {
                         {
                         sectionSize: beamSelect,
                         sectionLength: this.state.beamLengthText,
+                        inertia: inertia,
+                        maxThickness: maxThickness,
+                        depth: depth,
+                        width: width,
                         wallType: this.state.finalWallSelection,
                         wallHeight: this.state.wallHeightText,
                         floorType: this.state.finalFloorSelection,
@@ -797,9 +803,7 @@ export default class LoadDeterminationScreen extends React.Component {
                         wallSuccess: this.state.wallSelectionSuccess,
                         floorSuccess: this.state.floorSelectionSucess,
                         flatRoofSuccess: this.state.flatRoofSelectionSuccess,
-                        pitchedRoofSuccess: this.state.pitchedRoofSelectionSuccess,
-                        inertia: inertia,
-                        maxThickness: maxThickness 
+                        pitchedRoofSuccess: this.state.pitchedRoofSelectionSuccess
                         })
                     }
                 }
