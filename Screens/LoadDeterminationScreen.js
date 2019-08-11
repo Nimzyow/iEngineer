@@ -25,6 +25,9 @@ export default class LoadDeterminationScreen extends React.Component {
             beamSelect: "Please tap to select beam",
             beamSelected: "",
             beamLengthText: "1",
+            inertia: 0,
+            maxThickness: 0,
+            depth: 0,
 
 //          ALL SWITCHES
             toggleSwitch: false,
@@ -453,6 +456,9 @@ export default class LoadDeterminationScreen extends React.Component {
         Now that we have reached step 2, we need to get props from the previous screen. we get it here by defining a const called beamSelect, in this case, and using the method navigation.getParam("beamSelect", "Tap to select steel beam") which accepts two arguments. The first is the "beamSelect which is the name within the object, labelled in the previous screen. the second is the default value we want to set this const variable to be. so in the end, the beamSelect in the previous screen is stored in the const beamSelect.  " */}
         const {navigation} = this.props;
         const beamSelect = navigation.getParam("beamSelect", this.state.beamSelect);
+        const inertia = navigation.getParam("inertia", this.state.inertia);
+        const maxThickness = navigation.getParam("maxThickness", this.state.maxThickness);
+        const depth = navigation.getParam("depth", this.state.depth);
         
   return (
     <KeyboardAvoidingView 
@@ -791,7 +797,9 @@ export default class LoadDeterminationScreen extends React.Component {
                         wallSuccess: this.state.wallSelectionSuccess,
                         floorSuccess: this.state.floorSelectionSucess,
                         flatRoofSuccess: this.state.flatRoofSelectionSuccess,
-                        pitchedRoofSuccess: this.state.pitchedRoofSelectionSuccess 
+                        pitchedRoofSuccess: this.state.pitchedRoofSelectionSuccess,
+                        inertia: inertia,
+                        maxThickness: maxThickness 
                         })
                     }
                 }

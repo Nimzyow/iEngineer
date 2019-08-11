@@ -18,6 +18,8 @@ export default class beamCheckScreen extends React.Component {
   //          BEAM SELECTION
               beamSelect: "",
               beamLengthText: "",
+              inertia: 0,
+              maxThickness: 0,
   
   //          ALL WALL STATES
  
@@ -67,6 +69,8 @@ export default class beamCheckScreen extends React.Component {
     componentWillMount(){
       const {navigation} = this.props;
       const beamSelect = navigation.getParam("sectionSize", 0);
+      const maxThickness = navigation.getParam("maxThickness", 0)
+      const inertia = navigation.getParam("inertia", 0);
       const beamLengthText = navigation.getParam("sectionLength", 0);
       const finalWallSelection = navigation.getParam("wallType", 0);
       const wallHeightText = navigation.getParam("wallHeight", 0);
@@ -83,6 +87,8 @@ export default class beamCheckScreen extends React.Component {
       this.setState({
         beamSelect: beamSelect,
         beamLengthText: beamLengthText,
+        maxThickness: maxThickness,
+        inertia: inertia,
         wallHeightText: wallHeightText,
         finalWallSelection: finalWallSelection,
         floorLengthText: floorLengthText,
@@ -96,7 +102,9 @@ export default class beamCheckScreen extends React.Component {
         pitchedRoofSelectionSuccess: pitchedRoofSelectionSuccess}, () => {
           console.log(
           "Beam: " + this.state.beamSelect + "\n" + 
-          "Beam Length: " + this.state.beamLengthText + "\n" + 
+          "Beam Length: " + this.state.beamLengthText + "\n" +
+          "Max Thickness: " + this.state.maxThickness + "\n" +
+          "Beam inertia: " + this.state.inertia + "\n" + 
           "Wall type: " + this.state.finalWallSelection +  "\n" + 
           "Wall height: " + this.state.wallHeightText + "\n" + 
           "Wall Selection Boolean: " + this.state.wallSelectionSuccess + "\n" + 
@@ -108,12 +116,13 @@ export default class beamCheckScreen extends React.Component {
           "Flat Roof selection boolean: " + this.state.flatRoofSelectionSuccess);
           this.loadingDeterminationDead();
           this.loadingDeterminationLive();
+          this.beamCalculation();
       })
     }
 
     beamCalculation = () => {
         
-      this.resetValues();
+      //this.resetValues();
       
       let span = this.state.beamLengthText;
       let deadFactor = this.state.deadFactor;
@@ -121,21 +130,22 @@ export default class beamCheckScreen extends React.Component {
       let pointLoad = this.state.pointLoad;
       let pointValueSpan = span/2; //assuming point load is in middle of beam
       let units = this.state.loadUnitsText;
+      let inertia = this.state.inertia;
       
       span = parseFloat(span);
       deadLoad = parseFloat(deadLoad);
       liveLoad = parseFloat(liveLoad);
-      
+      inertia = parseFloat(inertia);
 
       deadLoad = deadLoad * deadFactor;
       liveLoad = liveLoad * liveFactor;
 
       //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
-      
+
       //if only a UDL value is entered and beam span, we will do a simple UDL reaction calc.
 
       // **********************UDL*************************
-      
+
       let convertUDLToPointDead = deadLoad * span;
       let convertUDLToPointLive = liveLoad * span;
       let reactionBUDLDead = (convertUDLToPointDead*(span / 2))/(span);
@@ -156,15 +166,20 @@ export default class beamCheckScreen extends React.Component {
                   
       //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
       
-      
       reactionTextA = "RA = " + reactionA.toFixed(2) + units;
       reactionTextB = "RB = " + reactionB.toFixed(2) + units;
+
       console.log(reactionTextA + "\n" + reactionTextB);
   
+      console.log(
+        "Deflection from UDL(live load): " + this.udlDefCalc(liveLoad, span, inertia) + "\n" +
+        "Deflection from Point Load (live load): " + this.pointDefCalc(1.4, span, inertia));
+      
       //this.shearForceCalcualtion();
+    
     }                    
       
-      shearForceCalcualtion = () => {
+    shearForceCalcualtion = () => {
         
 
         let span = this.state.beamLengthText;
@@ -248,10 +263,14 @@ export default class beamCheckScreen extends React.Component {
             ShearForceTextB,
         });
         this.bendingMomentCalculation();
+
     }
 
     udlDefCalc = (load, length, inertia) => {
-        let deflection = ((5 * load * length * length * length) / (384 * 210 * inertia))/1000000
+      length = length * 1000;
+      inertia = inertia * 10000;
+      console.log("load: " + load + "\n" + "length: " + length + "\n" + "inertia: " + inertia)
+        let deflection = ((5 * load * length * length * length) / (384 * 210 * inertia))
         return deflection;
     }
     pointDefCalc = (load, length, inertia) => {
@@ -348,7 +367,6 @@ export default class beamCheckScreen extends React.Component {
     loadingDeterminationLive = () => {
       liveLoad = 0; // KN/m2
       const state = this.state;
-      const beamSelect = state.beamSelect;
       const floorLengthText = state.floorLengthText;
       const finalFloorSelection = state.finalFloorSelection;
       const flatRoofLengthText = state.flatRoofLengthText;
