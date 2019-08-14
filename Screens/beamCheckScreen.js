@@ -63,8 +63,8 @@ export default class beamCheckScreen extends React.Component {
 
               // Shear Force
 
-              shearMax = 0.00,
-              shearMin = 0.00
+              shearMax: 0.00,
+              shearMin: 0.00
            
         };
     }
@@ -253,7 +253,7 @@ export default class beamCheckScreen extends React.Component {
     pointDefCalc = (load, length, inertia) => {
         let a = length / 2;
         let b = length / 2;
-        let inertia = inertia * 10000;
+        inertia = inertia * 10000;
         let c = Math.sqrt((1/3) * b * (length + a));
         let deflection = (load * a * c * c * c) / (3 * length * 200000 * inertia) ;
         return deflection;
