@@ -278,11 +278,11 @@ export default class beamCheckScreen extends React.Component {
       length = length * 1000;
       inertia = inertia * 10000;
       console.log("load: " + load + "\n" + "length: " + length + "\n" + "inertia: " + inertia)
-        let deflection = ((5 * load * length * length * length) / (384 * 210 * inertia))
+        let deflection = ((5 * load * length * length * length * length) / (384 * 200000 * inertia))
         return deflection;
     }
     pointDefCalc = (load, length, inertia) => {
-        let deflection = ((1 * load * length * length * length) / (48 * 210 * inertia)) / 1000000
+        let deflection = ((1 * load * length * length * length) / (48 * 200000 * inertia)) / 1000000
         return deflection;
     }
 
