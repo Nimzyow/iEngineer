@@ -59,7 +59,12 @@ export default class beamCheckScreen extends React.Component {
               
               // Units
 
-              loadUnitsText: "KN"
+              loadUnitsText: "KN",
+
+              // Shear Force
+
+              shearMax = 0.00,
+              shearMin = 0.00
            
         };
     }
@@ -147,6 +152,7 @@ export default class beamCheckScreen extends React.Component {
 
       deadLoad = deadLoad * deadFactor;
       liveLoad = liveLoad * liveFactor;
+      pointLoad = pointLoad * liveFactor;
 
       //as long as someone enters a beam span, we will be able to go with the calcualtion. otherwise, an alert will pop up to enter span.
 
@@ -174,8 +180,8 @@ export default class beamCheckScreen extends React.Component {
                   
       //if only a Partial UDL value is entered and beam span, we will do a simple UDL reaction calc.
       
-      reactionTextA = "RA = " + reactionA.toFixed(2) + units;
-      reactionTextB = "RB = " + reactionB.toFixed(2) + units;
+      let reactionTextA = "RA = " + reactionA.toFixed(2) + units;
+      let reactionTextB = "RB = " + reactionB.toFixed(2) + units;
 
       console.log(reactionTextA + "\n" + reactionTextB);
   
@@ -183,96 +189,58 @@ export default class beamCheckScreen extends React.Component {
         "Deflection from UDL(live load): " + this.udlDefCalc(liveLoad, span, inertia) + "\n" +
         "Deflection from Point Load (live load): " + this.pointDefCalc(1.4, span, inertia));
       
-      //this.shearForceCalcualtion();
+      //this.shearForceCalcualtion(span, pointLoad, units,  );
     
     }                    
       
-    shearForceCalcualtion = () => {
-        
-
-        let span = this.state.beamLengthText;
-        let deadFactor = this.state.deadFactor;
-        let liveFactor = this.state.liveFactor;
-        let pointLoad = this.state.pointLoad;
-        let pointValueSpan = span/2; //assuming point load is in middle of beam
-        let units = this.state.loadUnitsText;
-
+    shearForceCalcualtion = (span, pointLoad, deadLoad, liveLoad, units ) => {
+      
+        let pointLoadSpan = span/2 ; //assuming point load is in middle of beam
         let sFRA = reactionA;
-        let uDL = this.state.uDLValue;
-        let pointValue = this.state.pointValue;
-        
-        let partialUDL = this.state.partialUDL;
-        let partialUDLStart = this.state.partialUDLStart;
-        let partialUDLEnd = this.state.partialUDLEnd;
 
-        if (span === " " || span === ""){
-            this.setState({beamSpan: 0})
-            span = 0.00;
-            //span = this.state.beamSpan;
-        }
-        if (uDL === " " || uDL === ""){
-            this.setState({uDLValue: 0});
-            uDL = 0.00;
-        }
-        if (pointValue === " " || pointValue === ""){
-            this.setState({pointValue: 0});
-            pointValue = 0.00;
-        }
-        if (pointValueSpan === " " || pointValueSpan === ""){
-            this.setState({pointValueSpan: 0.00});
-            pointValueSpan = 0.00;
-        }
-        if (partialUDL === " " || partialUDL === ""){
-            this.setState({partialUDL: 0.00});
-            partialUDL = 0.00;
-        }
-        if (partialUDLStart === " " || partialUDLStart === ""){
-            this.setState({partialUDLStart: 0.00});
-            partialUDLStart = 0.00;
-            //console.log("partialUDLStart = " + partialUDLStart);
-        }
-        if (partialUDLEnd === " " || partialUDLEnd === ""){
-            this.setState({partialUDLEnd: 0.00});
-            partialUDLEnd = 0.00;
-        }
-        
-        let loadUnitsText = "KN";
         //reset shearforce array if it was already populated. This is so we dont add to the array from previous calculation
         //shearForce.length = 0;
 
-        span = parseFloat(span);
-        uDL = parseFloat(uDL);
-        pointValue = parseFloat(pointValue);
-        pointValueSpan = parseFloat(pointValueSpan);
-        partialUDL = parseFloat(partialUDL);
-        partialUDLStart = parseFloat(partialUDLStart);
-        partialUDLEnd = parseFloat(partialUDLEnd);
-        pointLeft = parseFloat(0);
-        pointRight = parseFloat(0);
-        uDLMiddleSF = parseFloat(0);
-        sFPUDL = parseFloat(0);
-        sFPUDR = parseFloat(0);
-        atRA = parseFloat(0);
-        atRB = parseFloat(0);
-        sFRA = parseFloat(sFRA);
-       
         for (let i = 0.00; i <= span; i += 0.01){
-            let shearCalc = this.shearForceReaction(sFRA) - this.shearForcePointCalc(i, pointValue, pointValueSpan) - this.shearForcePartialUDL(i, partialUDLStart, partialUDLEnd, partialUDL) - this.shearForceFullUDL(i, uDL);
-            shearForce.push(shearCalc);
-        }
+          let totalLoad = deadLoad + liveLoad;
+          let shearCalc = sFRA - this.shearForcePointCalc(i, pointLoad, pointLoadSpan) - this.shearForceFullUDL(i, totalLoad);
+          shearForce.push(shearCalc);
+      }
 
         let shearMax = (Math.max.apply(null, shearForce)).toFixed(2);
         let shearMin = (Math.min.apply(null, shearForce)).toFixed(2);
-        ShearForceTextA = "SFMax = " + shearMax + loadUnitsText;
-        ShearForceTextB = "SFMin = " + shearMin + loadUnitsText;
+        let shearForceTextA = "SFMax = " + shearMax + units;
+        let shearForceTextB = "SFMin = " + shearMin + units;
+
+        console.log(shearForceTextA + "\n" + shearForceTextB);
 
         this.setState({
-            ShearForceTextA,
-            ShearForceTextB,
+            shearMax: shearMax,
+            shearMin: shearMin,
         });
-        this.bendingMomentCalculation();
 
+        //this.bendingMomentCalculation();
     }
+
+    shearForcePointCalc = (currentDistance, pointLoad, pointLoadSpan) => {
+      if(pointLoad > 0){
+        if (currentDistance < pointLoadSpan){
+          return 0.00;
+          } else if (currentDistance >= pointLoadSpan){
+            return pointLoad;
+            }
+      } else { 
+        return 0.00;
+        }
+      };
+
+    shearForceFullUDL = (currentDistance, totalLoad) => {
+      if (totalLoad > 0){
+        return totalLoad * currentDistance;
+      } else { 
+        return 0.00;
+      }
+    };
 
     udlDefCalc = (load, length, inertia) => {
       length = length * 1000;
@@ -386,9 +354,7 @@ export default class beamCheckScreen extends React.Component {
       const finalFlatRoofSelection = state.finalFlatRoofSelection;
       //                ***** BOOLEAN *****
       const floorSelectionSucess = state.floorSelectionSucess;
-      const wallSelectionSuccess = state.wallSelectionSuccess;
       const flatRoofSelectionSuccess = state.flatRoofSelectionSuccess;
-      const pitchedRoofSelectionSuccess = state.pitchedRoofSelectionSuccess;
 
       if (floorSelectionSucess) {
           if(finalFloorSelection === "Timber Floor Joist") {
