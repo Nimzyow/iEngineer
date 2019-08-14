@@ -281,8 +281,13 @@ export default class beamCheckScreen extends React.Component {
         let deflection = ((5 * load * length * length * length * length) / (384 * 200000 * inertia))
         return deflection;
     }
+
     pointDefCalc = (load, length, inertia) => {
-        let deflection = ((1 * load * length * length * length) / (48 * 200000 * inertia)) / 1000000
+        let a = length / 2;
+        let b = length / 2;
+        let inertia = inertia * 10000;
+        let c = Math.sqrt((1/3) * b * (length + a));
+        let deflection = (load * a * c * c * c) / (3 * length * 200000 * inertia) ;
         return deflection;
     }
 
