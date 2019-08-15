@@ -189,7 +189,7 @@ export default class beamCheckScreen extends React.Component {
         "Deflection from UDL(live load): " + this.udlDefCalc(liveLoad, span, inertia) + "\n" +
         "Deflection from Point Load (live load): " + this.pointDefCalc(1.4, span, inertia));
       
-      //this.shearForceCalcualtion(span, pointLoad, units,  );
+      this.shearForceCalcualtion(span, pointLoad, deadLoad, liveLoad ,units  );
     
     }                    
       
@@ -199,7 +199,7 @@ export default class beamCheckScreen extends React.Component {
         let sFRA = reactionA;
 
         //reset shearforce array if it was already populated. This is so we dont add to the array from previous calculation
-        //shearForce.length = 0;
+        shearForce.length = 0;
 
         for (let i = 0.00; i <= span; i += 0.01){
           let totalLoad = deadLoad + liveLoad;
