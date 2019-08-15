@@ -186,8 +186,8 @@ export default class beamCheckScreen extends React.Component {
       console.log(reactionTextA + "\n" + reactionTextB);
   
       console.log(
-        "Deflection from UDL(live load): " + this.udlDefCalc(liveLoad, span, inertia) + "\n" +
-        "Deflection from Point Load (live load): " + this.pointDefCalc(1.4, span, inertia));
+        "Deflection from UDL(live load): " + this.udlDefCalc(liveLoad, span, inertia) + "mm" + "\n" +
+        "Deflection from Point Load (live load): " + this.pointDefCalc(1.4, span, inertia) + "mm");
       
       this.shearForceCalcualtion(span, pointLoad, deadLoad, liveLoad ,units  );
     
@@ -246,7 +246,7 @@ export default class beamCheckScreen extends React.Component {
       length = length * 1000;
       inertia = inertia * 10000;
       console.log("load: " + load + "\n" + "length: " + length + "\n" + "inertia: " + inertia)
-        let deflection = ((5 * load * length * length * length * length) / (384 * 200000 * inertia))
+        let deflection = ((5 * load * length * length * length * length) / (384 * 200000 * inertia)).toFixed(2);
         return deflection;
     }
 
@@ -255,7 +255,7 @@ export default class beamCheckScreen extends React.Component {
         let b = length / 2;
         inertia = inertia * 10000;
         let c = Math.sqrt((1/3) * b * (length + a));
-        let deflection = (load * a * c * c * c) / (3 * length * 200000 * inertia) ;
+        let deflection = ((load * a * c * c * c) / (3 * length * 200000 * inertia)).toFixed(2);
         return deflection;
     }
 
